@@ -1,0 +1,8 @@
+/vendor
+._*
+composer.lock
+*.log
+
+/config
+!/config/config.php
+

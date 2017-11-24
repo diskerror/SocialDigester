@@ -1,0 +1,4 @@
+#!/usr/bin/env php
+<?php
+
+require APP_PATH . '/cli.php';
