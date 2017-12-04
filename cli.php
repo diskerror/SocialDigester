@@ -39,13 +39,13 @@ $di->setShared('config', function () use ($config) {
     return $config;
 });
 
-// $di->set('mongo', function() {
-// 	static $mongo;
-// 	if( !isset($mongo) ) {
-// 		$mongo = new MongoDB\Client();
-// 	}
-//     return $mongo;
-// }, true);
+$di->set('mongo', function() {
+	static $mongo;
+	if( !isset($mongo) ) {
+		$mongo = new MongoDB\Client($config->mongo);
+	}
+    return $mongo;
+}, true);
 
 ////////////////////////////////////////////////////////////////////////////////
 

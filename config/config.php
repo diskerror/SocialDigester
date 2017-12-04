@@ -18,6 +18,28 @@ $config = new \Phalcon\Config([
 		'oauth_token_secret'	=> ''
 	],
 
+	'tracking_data' => [
+		'chuckschumer',
+		'democrat',
+		'donald',
+		'donaldtrump',
+		'kevinmccarthy',
+		'mccarthy',
+		'mcconnell',
+		'mikepence',
+		'mitch',
+		'mitchmcconnell',
+		'nancypelosi',
+		'paulryan',
+		'pelosi',
+		'pence',
+		'potus',
+		'republican',
+		'schumer',
+		'scotus',
+		'trump'
+	],
+
 	'application' => array(
 		'modelsDir'		 => APP_PATH . '/models/',
 		'viewsDir'		 => APP_PATH . '/views/',

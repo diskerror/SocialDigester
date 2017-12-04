@@ -31,6 +31,10 @@ $loader->registerDirs([
  */
 $di = new Phalcon\Di\FactoryDefault();
 
+$di->setShared('config', function () use ($config) {
+    return $config;
+});
+
 /**
  * Sets the view component
  */
@@ -52,13 +56,13 @@ $di->setShared('view', function () use ($config) {
 /**
  * Database connection is created based in the parameters defined in the configuration file
  */
-// $di->set('mongo', function() {
-// 	static $mongo;
-// 	if( !isset($mongo) ) {
-// 		$mongo = new MongoDB\Client();
-// 	}
-//     return $mongo;
-// }, true);
+$di->set('mongo', function() {
+	static $mongo;
+	if( !isset($mongo) ) {
+		$mongo = new MongoDB\Client($config->mongo);
+	}
+    return $mongo;
+}, true);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //	This is what makes up a controller for our simple application.

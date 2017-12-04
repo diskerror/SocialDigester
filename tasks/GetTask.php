@@ -14,7 +14,9 @@ class GetTask extends \Phalcon\Cli\Task
 // 		$logger = new Logger(APP_PATH . '/tweets.log');
 		$logger = Logger::getStream();
 
-		LoadTwitterStream::filter(Registry::get('twitter'), Registry::get('tracking_data'), $logger );
+		$config = $this->getDI()->get('config');
+
+		LoadTwitterStream::filter((array)$config->twitter, (array)$config->tracking_data, $logger );
     }
 
     public function testAction()
