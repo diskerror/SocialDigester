@@ -2,25 +2,36 @@
 
 class LoadTwitterStream
 {
+	protected $_mongo;
+	protected $_twitterStream;
+
+	/**
+	 * @param MongoDB\Client $mongo
+	 * @param Twitter\Api\Stream $stream
+	 */
+	function __construct(MongoDB\Client $mongo, Twitter\Api\Stream $stream)
+	{
+		$this->_mongo = $mongo;
+		$this->_twitterStream = $stream;
+	}
+
 	/**
 	 * Open and save a stream of tweets.
 	 *
-	 * @param array $auth
-	 * @param array $track
+	 * @param \Phalcon\Config $track
 	 * @param stdClass $logger should be a Logger or Phalcon\Logger\Abstract derivitave
 	 * @param string $processLabel
 	 *
 	 */
-    public static function filter(array $auth, array $track, $logger, $processLabel='tweets')
+    public function filter(\Phalcon\Config $track, $logger, $processLabel='tweets')
     {
     	$pid = new PidHandler($processLabel);
-		$stream = new Twitter\Api\Stream( $auth );
-		$mongo = new MongoDB\Client( Diskerror\Utilities\Registry::get('mongo') );
-		$twit = $mongo->feed->twitter;
+		$stream = $this->_twitterStream;
+		$twit = $this->_mongo->feed->twitter;
 // 		$sh = new StemHandler;
 
 		try {
-			$stream->filter(['track'=>implode(',', $track),'language'=>'en','stall_warnings'=>true]);
+			$stream->filter(['track'=>implode(',', (array)$track),'language'=>'en','stall_warnings'=>true]);
 			$logger->info('Started capturing tweets.');
 
 			while( !$stream->isEOF() ) {

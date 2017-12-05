@@ -9,7 +9,7 @@ class Stream extends ApiAbstract
      */
     protected $_fp;
 
-	public function __construct(array $auth)
+	public function __construct(\Phalcon\Config $auth)
 	{
 		parent::__construct($auth);
 		$this->_baseURL .= 'statuses/';

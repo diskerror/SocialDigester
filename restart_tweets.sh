@@ -1,9 +1,9 @@
 #!/bin/sh
 
-/var/www/html/cli.php stop tweets
+/var/www/html/cli.php tweets stop
 sleep 1
-if [ ! -e /var/run/harvest ]
+if [ ! -e /var/run/politicator ]
 then
-    mkdir -pm 777 /var/run/harvest
+    mkdir -pm 777 /var/run/politicator
 fi
-/var/www/html/cli.php get tweets &
+/var/www/html/cli.php tweets get &

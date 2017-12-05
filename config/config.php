@@ -11,7 +11,7 @@ $config = new \Phalcon\Config([
 
 	'mongo' => 'mongodb://localhost:27017',
 
-	'twitter' => [
+	'twitter_auth' => [
 		'consumer_key'			=> '',
 		'consumer_secret'		=> '',
 		'oauth_token'			=> '',

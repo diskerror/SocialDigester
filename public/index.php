@@ -39,8 +39,11 @@ $di->setShared('config', function () use ($config) {
  * Sets the view component
  */
 $di->setShared('view', function () use ($config) {
-    $view = new Phalcon\Mvc\View\Simple();
-    $view->setViewsDir($config->application->viewsDir);
+	static $view;
+	if( !isset($view) ) {
+		$view = new Phalcon\Mvc\View\Simple();
+		$view->setViewsDir($config->application->viewsDir);
+	}
     return $view;
 });
 
@@ -56,7 +59,7 @@ $di->setShared('view', function () use ($config) {
 /**
  * Database connection is created based in the parameters defined in the configuration file
  */
-$di->set('mongo', function() {
+$di->set('mongo', function() use ($config) {
 	static $mongo;
 	if( !isset($mongo) ) {
 		$mongo = new MongoDB\Client($config->mongo);

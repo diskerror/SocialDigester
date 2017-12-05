@@ -31,7 +31,7 @@ class PidHandler
 	public static function getBase()
 	{
 		if( !isset(self::$_baseName) ) {
-			self::$_baseName = '/var/run/harvest';
+			self::$_baseName = '/var/run/politicator';
 		}
 		return self::$_baseName;
 	}

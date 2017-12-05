@@ -5,7 +5,7 @@ namespace Twitter\Api;
 abstract class ApiAbstract
 {
     /**
-     * @var array
+     * @var \Phalcon\Config
      */
     protected $_auth;
 
@@ -20,15 +20,15 @@ abstract class ApiAbstract
     protected $_baseURL;
 
 
-	public function __construct(array $auth)
+	public function __construct(\Phalcon\Config $auth)
 	{
 		$this->_auth = $auth;
 		$this->_baseURL = 'https://stream.twitter.com/1.1/';
 
 		$this->_baseOauth = [
-            'oauth_consumer_key' => $this->_auth['consumer_key'],
+            'oauth_consumer_key' => $this->_auth->consumer_key,
             'oauth_signature_method' => 'HMAC-SHA1',
-            'oauth_token' => $this->_auth['oauth_token'],
+            'oauth_token' => $this->_auth->oauth_token,
             'oauth_version' => '1.0'
 		];
 	}
@@ -51,7 +51,7 @@ abstract class ApiAbstract
         $oauth['oauth_signature'] = base64_encode(hash_hmac(
         	'sha1',
         	$method . "&" . rawurlencode($url) . '&' . rawurlencode(implode('&', $rawEncoded)),
-        	rawurlencode($this->_auth['consumer_secret']) . '&' . rawurlencode($this->_auth['oauth_token_secret']),
+        	rawurlencode($this->_auth->consumer_secret) . '&' . rawurlencode($this->_auth->oauth_token_secret),
         	true
         ));
 
