@@ -59,13 +59,13 @@ $di->setShared('view', function () use ($config) {
 /**
  * Database connection is created based in the parameters defined in the configuration file
  */
-$di->set('mongo', function() use ($config) {
+$di->setShared('mongo', function() use ($config) {
 	static $mongo;
 	if( !isset($mongo) ) {
 		$mongo = new MongoDB\Client($config->mongo);
 	}
     return $mongo;
-}, true);
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //	This is what makes up a controller for our simple application.
@@ -100,7 +100,7 @@ $app->get('/', function () use ($app) {
 		->addJs('js/jquery.qtip.min.js')
 		->addJs('js/imagesloaded.pkg.min.js');
 
-	$app->view->setVar('terms', implode(', ', \Diskerror\Utilities\Registry::get('tracking_data')));
+	$app->view->setVar('terms', implode(', ', (array)$app->config->tracking_data));
 
 	echo $app->view->render('index');
 });
@@ -110,11 +110,13 @@ $app->get('/', function () use ($app) {
  * Returns JSON of hashtags.
  */
 $app->get('/tag-cloud', function () use ($app) {
-	$app->view->setVar('obj', GetData::hashtags());
+	$data = new GetData($app->mongo);
+	$app->view->setVar('obj', $data->hashtags());
 	echo $app->view->render('js');
 });
 $app->get('/hashtags', function () use ($app) {
-	$app->view->setVar('obj', GetData::hashtags());
+	$data = new GetData($app->mongo);
+	$app->view->setVar('obj', $data->hashtags());
 	echo $app->view->render('js');
 });
 

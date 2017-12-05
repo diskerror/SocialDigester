@@ -39,13 +39,13 @@ $di->setShared('config', function () use ($config) {
     return $config;
 });
 
-$di->set('mongo', function() use ($config) {
+$di->setShared('mongo', function() use ($config) {
 	static $mongo;
 	if( !isset($mongo) ) {
 		$mongo = new MongoDB\Client($config->mongo);
 	}
     return $mongo;
-}, true);
+});
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -81,6 +81,6 @@ catch ( Exception $e ) {
 	echo $e;
 }
 
-if (array_key_exists('printNewLine', $config) && $config['printNewLine']) {
+if (array_key_exists('printNewLine', $config) && $config->printNewLine) {
 	cout(PHP_EOL);
 }

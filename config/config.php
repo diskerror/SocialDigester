@@ -1,5 +1,22 @@
 <?php
 
+/**
+ * All nested arrays are also converted to Phalcon\Config objects.
+ *
+ * To add to or override these values create another file that ends in '.php' with contents like:
+ *
+ * $config->offsetSet(
+ *     'twitter_auth',
+ *     [
+ *         'consumer_key'          => 'wwww',
+ *         'consumer_secret'       => 'xxxx',
+ *         'oauth_token'           => 'yyyy',
+ *         'oauth_token_secret'    => 'zzzz'
+ *     ]
+ * );
+ *
+ */
+
 $config = new \Phalcon\Config([
 
 	'version' => '0.2',
@@ -46,35 +63,4 @@ $config = new \Phalcon\Config([
 		'baseUri'		 => '/html/',
 	)
 
-]);
-
-\Diskerror\Utilities\Registry::set('mongo', 'mongodb://localhost:27017');
-
-// \Diskerror\Utilities\Registry::set('twitter', [
-// 	'consumer_key'			=> '',
-// 	'consumer_secret'		=> '',
-// 	'oauth_token'			=> '',
-// 	'oauth_token_secret'	=> ''
-// ]);
-
-\Diskerror\Utilities\Registry::set('tracking_data', [
-	'chuckschumer',
-	'democrat',
-	'donald',
-	'donaldtrump',
-	'kevinmccarthy',
-	'mccarthy',
-	'mcconnell',
-	'mikepence',
-	'mitch',
-	'mitchmcconnell',
-	'nancypelosi',
-	'paulryan',
-	'pelosi',
-	'pence',
-	'potus',
-	'republican',
-	'schumer',
-	'scotus',
-	'trump'
 ]);

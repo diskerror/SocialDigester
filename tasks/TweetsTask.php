@@ -9,15 +9,13 @@ class TweetsTask extends \Phalcon\Cli\Task
 
     public function getAction()
     {
-		$config = $this->getDI()->get('config');
-
-		$stream = new Twitter\Api\Stream( $config->twitter_auth );
-		$load	= new LoadTwitterStream( $this->getDI()->getShared('mongo'), $stream );
+		$stream = new Twitter\Api\Stream( $this->config->twitter_auth );
+		$load	= new LoadTwitterStream( $this->mongo, $stream );
 
 // 		$logger = new Logger(APP_PATH . '/tweets.log');
 		$logger = Logger::getStream();
 
-		$load->filter( $config->tracking_data, $logger );
+		$load->filter( $this->config->tracking_data, $logger );
     }
 
     public function stopAction()

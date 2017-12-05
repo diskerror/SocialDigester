@@ -2,6 +2,15 @@
 
 class GetData
 {
+	protected $_twit;
+
+	/**
+	 * @param MongoDB\Client $mongo
+	 */
+	function __construct(MongoDB\Client $mongo)
+	{
+		$this->_twit = $mongo->feed->twitter;
+	}
 
 	/**
 	 * Return count of each current hashtag.
@@ -9,12 +18,9 @@ class GetData
 	 * @param int $howMany
 	 * @return array
 	 */
-	static function hashtags($howMany=120)
+	function hashtags($howMany=120)
 	{
-		$mongo = new MongoDB\Client( Diskerror\Utilities\Registry::get('mongo') );
-		$twit = $mongo->feed->twitter;
-
-		$hashtags = $twit->find([
+		$hashtags = $this->_twit->find([
 			'hashtags' => ['$gt' => ''],
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime('300 seconds ago')*1000 )]
 		], [
