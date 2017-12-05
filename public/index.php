@@ -90,11 +90,12 @@ $app->notFound(function () use ($app) {
  * Index.
  */
 $app->get('/', function () use ($app) {
-	$app->assets->addCss('css/jqcloud.min.css')
+	$app->assets
+		->addCss('css/jqcloud.min.css')
 		->addCss('css/jquery.qtip.min.css');
 
 	$app->assets
-		->addJs('js/jquery.js')
+		->addJs('js/jquery-3.2.1.min.js')
 		->addJs('js/jqcloud.min.js')
 		->addJs('js/cloud1.js')
 		->addJs('js/jquery.qtip.min.js')
