@@ -15,14 +15,14 @@ class GetData
 	/**
 	 * Return count of each current hashtag.
 	 *
-	 * @param int $howMany
+	 * @param Phalcon\Config $config
 	 * @return array
 	 */
-	function hashtags($howMany=120)
+	function hashtags($config)
 	{
 		$hashtags = $this->_twit->find([
 			'hashtags' => ['$gt' => ''],
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime('300 seconds ago')*1000 )]
+			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime($config->window . ' seconds ago')*1000 )]
 		], [
 			'projection' => ['hashtags' => 1]
 		]);
@@ -74,7 +74,7 @@ class GetData
 		}
 
 		arsort($normTally);
-		$normTally = array_slice($normTally, 0, $howMany);
+		$normTally = array_slice($normTally, 0, $config->count);
 		ksort($normTally, SORT_NATURAL | SORT_FLAG_CASE);
 
 		$count = 0;

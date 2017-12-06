@@ -20,22 +20,22 @@ class LoadTwitterStream
 	 *
 	 * @param \Phalcon\Config $track
 	 * @param stdClass $logger should be a Logger or Phalcon\Logger\Abstract derivitave
-	 * @param string $processLabel
+	 * @param PidHandler $pid_handler
 	 *
 	 */
-    public function filter(\Phalcon\Config $track, $logger, $processLabel='tweets')
+    public function exec(\Phalcon\Config $track, $logger, $pidHandler)
     {
-    	$pid = new PidHandler($processLabel);
 		$stream = $this->_twitterStream;
 		$twit = $this->_mongo->feed->twitter;
 // 		$sh = new StemHandler;
 
 		try {
 			$stream->filter(['track'=>implode(',', (array)$track),'language'=>'en','stall_warnings'=>true]);
+			$pidHandler->setFile();
 			$logger->info('Started capturing tweets.');
 
 			while( !$stream->isEOF() ) {
-				if ( !$pid->exists() ) { break; }
+				if ( !$pidHandler->exists() ) { break; }
 
 				//	get tweet
 				try {

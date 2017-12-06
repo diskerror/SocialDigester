@@ -1,12 +1,14 @@
 <?php
 
 /**
- * All nested arrays are also converted to Phalcon\Config objects.
+ * All nested arrays are converted to nested Phalcon\Config objects.
  *
- * To add to or override these values create another file that ends in '.php' with contents like:
+ * To add to or override these values
+ * create another file in this directory
+ * that ends in '.php' with contents like:
  *
- * $config->offsetSet(
- *     'twitter_auth',
+ * $config->twitter->offsetSet(
+ *     'auth',
  *     [
  *         'consumer_key'          => 'wwww',
  *         'consumer_secret'       => 'xxxx',
@@ -28,39 +30,53 @@ $config = new \Phalcon\Config([
 
 	'mongo' => 'mongodb://localhost:27017',
 
-	'twitter_auth' => [
-		'consumer_key'			=> '',
-		'consumer_secret'		=> '',
-		'oauth_token'			=> '',
-		'oauth_token_secret'	=> ''
+	'hashtags' => [
+		'count'		=> 120,
+		'window'	=> 300, // seconds
 	],
 
-	'tracking_data' => [
-		'chuckschumer',
-		'democrat',
-		'donald',
-		'donaldtrump',
-		'kevinmccarthy',
-		'mccarthy',
-		'mcconnell',
-		'mikepence',
-		'mitch',
-		'mitchmcconnell',
-		'nancypelosi',
-		'paulryan',
-		'pelosi',
-		'pence',
-		'potus',
-		'republican',
-		'schumer',
-		'scotus',
-		'trump'
+	'twitter' => [
+		'auth' => [
+			'consumer_key'			=> '',
+			'consumer_secret'		=> '',
+			'oauth_token'			=> '',
+			'oauth_token_secret'	=> ''
+		],
+
+		'track' => [
+			'chuckschumer',
+			'democrat',
+			'donald',
+			'donaldtrump',
+			'kevinmccarthy',
+			'mccarthy',
+			'mcconnell',
+			'mikepence',
+			'mitch',
+			'mitchmcconnell',
+			'nancypelosi',
+			'paulryan',
+			'pelosi',
+			'pence',
+			'potus',
+			'republican',
+			'schumer',
+			'scotus',
+			'trump'
+		],
+
 	],
 
-	'application' => array(
+	'process' => [
+		'name' => 'tweets',
+		'path' => '/var/run/twitter_digester',
+		'procDir' => '/proc/'		//	location of actual PID
+	],
+
+	'application' => [
 		'modelsDir'		 => APP_PATH . '/models/',
 		'viewsDir'		 => APP_PATH . '/views/',
 		'baseUri'		 => '/html/',
-	)
+	]
 
 ]);

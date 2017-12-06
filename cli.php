@@ -47,6 +47,14 @@ $di->setShared('mongo', function() use ($config) {
     return $mongo;
 });
 
+$di->setShared('pidHandler', function() use ($config) {
+	static $pidHandler;
+	if( !isset($pidHandler) ) {
+		$pidHandler = new PidHandler($config->process);
+	}
+    return $pidHandler;
+});
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /**

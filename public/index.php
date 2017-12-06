@@ -1,7 +1,7 @@
 <?php
 
-// ini_set('display_errors', '1');
-// error_reporting(E_ALL);
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 
 define('APP_PATH', realpath(__DIR__ . '/..'));
 
@@ -19,7 +19,6 @@ require APP_PATH . '/functions/config.php';
  * Registering the application autoloader
  */
 $loader = new \Phalcon\Loader();
-
 $loader->registerDirs([
     $config->application->modelsDir
 ])->register();
@@ -101,7 +100,7 @@ $app->get('/', function () use ($app) {
 		->addJs('js/jquery.qtip.min.js')
 		->addJs('js/imagesloaded.pkg.min.js');
 
-	$app->view->setVar('terms', implode(', ', (array)$app->config->tracking_data));
+	$app->view->setVar('terms', implode(', ', (array)$app->config->twitter->track));
 
 	echo $app->view->render('index');
 });
@@ -112,12 +111,12 @@ $app->get('/', function () use ($app) {
  */
 $app->get('/tag-cloud', function () use ($app) {
 	$data = new GetData($app->mongo);
-	$app->view->setVar('obj', $data->hashtags());
+	$app->view->setVar('obj', $data->hashtags($app->config->hashtags));
 	echo $app->view->render('js');
 });
 $app->get('/hashtags', function () use ($app) {
 	$data = new GetData($app->mongo);
-	$app->view->setVar('obj', $data->hashtags());
+	$app->view->setVar('obj', $data->hashtags($app->config->hashtags));
 	echo $app->view->render('js');
 });
 

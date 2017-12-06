@@ -9,18 +9,20 @@ class TweetsTask extends \Phalcon\Cli\Task
 
     public function getAction()
     {
-		$stream = new Twitter\Api\Stream( $this->config->twitter_auth );
+    	$tConfig = $this->config->twitter;
+
+		$stream = new Twitter\Api\Stream( $tConfig->auth );
 		$load	= new LoadTwitterStream( $this->mongo, $stream );
 
-// 		$logger = new Logger(APP_PATH . '/tweets.log');
+// 		$logger = new Logger(APP_PATH . '/' . $this->config->process->name . '.log');
 		$logger = Logger::getStream();
 
-		$load->filter( $this->config->tracking_data, $logger );
+		$load->exec( $tConfig->track, $logger, $this->pidHandler);
     }
 
     public function stopAction()
     {
-    	if ( PidHandler::removeIfExists('tweets') ) {
+    	if ( $this->pidHandler->removeIfExists() ) {
     		cout('Process was stopped.');
     	}
     	else {

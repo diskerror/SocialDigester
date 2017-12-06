@@ -2,57 +2,66 @@
 
 class PidHandler
 {
-	protected $_pidFileName;
+	protected $_fullProcessFileName;
 
-	protected static $_baseName;
+	protected $_basePath;
 
-	function __construct($procName)
+	protected $_procDir;
+
+	/**
+	 * @param Phalcon\Config $config
+	 */
+	function __construct(Phalcon\Config $config)
 	{
-		$this->_pidFileName = self::getPath($procName);
-
-		if( file_exists($this->_pidFileName) ) {
-			throw new Exception('process "' . $procName . '" is already running or not stopped properly');
+		$this->_procDir = $config->procDir;
+		if( substr($this->_procDir, -1) !== '/') {
+			$this->_procDir .= '/';
 		}
 
-		if ( !file_exists(self::getBase()) ) {
-			throw new Exception(PHP_EOL . PHP_EOL . 'Create directory with proper permissions: sudo mkdir -pm 777 ' . self::getBase() . PHP_EOL . PHP_EOL);
+		$this->_basePath = $config->path;
+		if( substr($this->_basePath, -1) !== '/') {
+			$this->_basePath .= '/';
 		}
 
-		file_put_contents($this->_pidFileName, getmypid());
+		$this->_fullProcessFileName = $this->_basePath . $config->name . '.pid';
 	}
 
 	function __destruct()
 	{
-		if ( file_exists($this->_pidFileName) ) {
-			unlink($this->_pidFileName);
+		if ( file_exists($this->_fullProcessFileName) ) {
+			unlink($this->_fullProcessFileName);
 		}
 	}
 
-	public static function getBase()
+	function setFile()
 	{
-		if( !isset(self::$_baseName) ) {
-			self::$_baseName = '/var/run/politicator';
+		if( file_exists($this->_fullProcessFileName) ) {
+			throw new Exception('process "' . $config->name . '" is already running or not stopped properly');
 		}
-		return self::$_baseName;
+
+		if ( !file_exists($this->_basePath) ) {
+			throw new Exception(PHP_EOL . PHP_EOL . 'Create directory with proper permissions: sudo mkdir -pm 777 ' . $this->_basePath . PHP_EOL . PHP_EOL);
+		}
+
+		file_put_contents($this->_fullProcessFileName, getmypid());
 	}
 
-	public static function getPath($procName)
-	{
-		return self::getBase() . '/' . (string) $procName . '.pid';
-	}
-
+	/**
+	 * @return boolean
+	 */
 	public function exists()
 	{
-		return file_exists($this->_pidFileName);
+		return file_exists($this->_fullProcessFileName);
 	}
 
-	public static function removeIfExists($procName)
+	/**
+	 * @return boolean
+	 */
+	public function removeIfExists()
 	{
-		$pidFile = self::getPath($procName);
-
-		if( file_exists($pidFile) ) {
-			$running = file_exists( '/proc/' . file_get_contents($pidFile) );
-			unlink($pidFile);
+		if( file_exists($this->_fullProcessFileName) ) {
+			$running = file_exists( $this->_procDir . file_get_contents($this->_fullProcessFileName) );
+			unlink($this->_fullProcessFileName);
 			return $running;
 		}
 
