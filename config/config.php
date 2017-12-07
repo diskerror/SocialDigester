@@ -21,7 +21,7 @@
 
 $config = new \Phalcon\Config([
 
-	'version' => '0.2',
+	'version' => '0.3',
 
 	/**
 	 * CLI: if true, then we print a new line at the end of each execution

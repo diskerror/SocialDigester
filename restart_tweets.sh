@@ -1,11 +1,13 @@
 #!/bin/bash
 
-PID_PATH=$(/var/www/html/cli.php get processPath);
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-/var/www/html/cli.php tweets stop
+PID_PATH=$(${DIR}/cli.php get pidPath);
+
+${DIR}/cli.php tweets stop
 sleep 1
 if [ ! -e "$PID_PATH" ]
 then
     mkdir -pm 777 "$PID_PATH"
 fi
-/var/www/html/cli.php tweets get &
+${DIR}/cli.php tweets get &
