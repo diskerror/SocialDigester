@@ -20,7 +20,7 @@ require APP_PATH . '/functions/config.php';
  */
 $loader = new \Phalcon\Loader();
 $loader->registerDirs([
-    $config->application->modelsDir
+	$config->application->modelsDir
 ])->register();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ $loader->registerDirs([
 $di = new Phalcon\Di\FactoryDefault();
 
 $di->setShared('config', function () use ($config) {
-    return $config;
+	return $config;
 });
 
 /**
@@ -43,16 +43,16 @@ $di->setShared('view', function () use ($config) {
 		$view = new Phalcon\Mvc\View\Simple();
 		$view->setViewsDir($config->application->viewsDir);
 	}
-    return $view;
+	return $view;
 });
 
 /**
  * The URL component is used to generate all kind of urls in the application
  */
 // $di->setShared('url', function () use ($config) {
-//     $url = new Phalcon\Mvc\Url();
-//     $url->setBaseUri($config->application->baseUri);
-//     return $url;
+//	   $url = new Phalcon\Mvc\Url();
+//	   $url->setBaseUri($config->application->baseUri);
+//	   return $url;
 // });
 
 /**
@@ -63,7 +63,7 @@ $di->setShared('mongo', function() use ($config) {
 	if( !isset($mongo) ) {
 		$mongo = new MongoDB\Client($config->mongo);
 	}
-    return $mongo;
+	return $mongo;
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,8 +81,8 @@ $app = new Phalcon\Mvc\Micro($di);
  * Not found handler
  */
 $app->notFound(function () use ($app) {
-    $app->response->setStatusCode(404, "Not Found")->sendHeaders();
-    echo $app['view']->render('404');
+	$app->response->setStatusCode(404, "Not Found")->sendHeaders();
+	echo $app['view']->render('404');
 });
 
 /**

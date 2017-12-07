@@ -2,13 +2,13 @@
 
 class QueryTask extends \Phalcon\Cli\Task
 {
-    public function mainAction()
-    {
-    	cout(PHP_EOL . 'Query what?');
+	public function mainAction()
+	{
+		cout(PHP_EOL . 'Query what?');
 	}
 
-    public function hashtagsAction()
-    {
+	public function hashtagsAction()
+	{
 		$twitDb = $this->di->get('mongo')->feed->twitter;
 
 		$hashtags = $twitDb->find([
@@ -32,10 +32,10 @@ class QueryTask extends \Phalcon\Cli\Task
 
 		asort($tally, SORT_NUMERIC);
 		print_r($tally);
-    }
+	}
 
-    public function wordsAction()
-    {
+	public function wordsAction()
+	{
 		$twitDb = $this->di->get('mongo')->feed->twitter;
 
 		$hashtags = $twitDb->find([
@@ -58,10 +58,10 @@ class QueryTask extends \Phalcon\Cli\Task
 
 		asort($tally, SORT_NUMERIC);
 		print_r($tally);
-    }
+	}
 
-    public function pairsAction()
-    {
+	public function pairsAction()
+	{
 		$twitDb = $this->di->get('mongo')->feed->twitter;
 
 		$hashtags = $twitDb->find([
@@ -84,6 +84,6 @@ class QueryTask extends \Phalcon\Cli\Task
 
 		asort($tally, SORT_NUMERIC);
 		print_r($tally);
-    }
+	}
 
 }
