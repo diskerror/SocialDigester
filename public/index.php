@@ -5,10 +5,10 @@ error_reporting(E_ALL);
 
 define('APP_PATH', realpath(__DIR__ . '/..'));
 
+try {
+
 require APP_PATH . '/functions/errorHandler.php';
 require APP_PATH . '/vendor/autoload.php';
-
-try {
 
 /**
  * Read the configs
@@ -130,4 +130,7 @@ $app->handle();
 }
 catch ( Exception $e ) {
 	echo $e;
+}
+catch ( Throable $t ) {
+	echo $t;
 }

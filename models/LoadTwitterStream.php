@@ -25,22 +25,24 @@ class LoadTwitterStream
 	 */
     public function exec(\Phalcon\Config $track, $logger, $pidHandler)
     {
-		$stream = $this->_twitterStream;
-		$twit = $this->_mongo->feed->twitter;
 // 		$sh = new StemHandler;
 
 		try {
-			$stream->filter(['track'=>implode(',', (array)$track),'language'=>'en','stall_warnings'=>true]);
+			$this->_twitterStream->filter([
+				'track'=>implode(',', (array)$track),
+				'language'=>'en',
+				'stall_warnings'=>true
+			]);
 			$pidHandler->setFile();
 			$logger->info('Started capturing tweets.');
 
-			while( !$stream->isEOF() ) {
+			while( !$this->_twitterStream->isEOF() ) {
 				if ( !$pidHandler->exists() ) { break; }
 
 				//	get tweet
 				try {
-					$raw = $stream->read();
-					if ( !((boolean)$raw) ) {
+					$twitterPacket = $this->_twitterStream->read();
+					if ( !((boolean)$twitterPacket) ) {
 						continue;
 					}
 				}
@@ -49,18 +51,20 @@ class LoadTwitterStream
 					continue;
 				}
 
-				if ( $stream::_isMessage($raw) ) {
-					$logger->info(json_encode($raw));
+// file_put_contents('messages.txt', print_r($twitterPacket, true)."\n\n", FILE_APPEND);continue;
+
+				if ( Twitter\Api\Stream::_isMessage($twitterPacket) ) {
+// 					$logger->info(json_encode($twitterPacket));
 					continue;
 				}
 
 				//	Reject non-english.
-// 				if ( property_exists($raw, 'lang') && $raw->lang !== 'en' ) {
+// 				if ( property_exists($twitterPacket, 'lang') && $twitterPacket->lang !== 'en' ) {
 // 					continue;
 // 				}
 
 				//	filter tweet structure
-				$tweet = new Twitter\Tweet\Tweet( $raw );
+				$tweet = new Twitter\Tweet( $twitterPacket );
 
 				//	copy up hashtag text
 				if ( isset($tweet->entities) && isset($tweet->entities->hashtags) ) {
@@ -70,6 +74,8 @@ class LoadTwitterStream
 						}
 					}
 				}
+
+// file_put_contents('messages.txt', print_r($tweet->toArray(), true)."\n\n", FILE_APPEND);continue;
 
 				//	remove URLs from text
 // 				$text = preg_replace('#https?:[^ ]+#', '', $tweet->text);
@@ -90,7 +96,7 @@ class LoadTwitterStream
 
 				try {
 					//	convert to Mongo compatible object and insert
-					$twit->insertOne( $tweet->getSpecialObj() );
+					$this->_mongo->feed->twitter->insertOne( $tweet->getSpecialObj() );
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();
@@ -100,7 +106,7 @@ class LoadTwitterStream
 					}
 					else {
 						if ( preg_match('/duplicate.*key/i', $m) ) {
-							$logger->warning('dup');
+// 							$logger->warning('dup');
 						}
 						else {
 							$logger->warning('Mongo ' . $m);

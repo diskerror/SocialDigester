@@ -1,6 +1,6 @@
 <?php
 
-namespace Twitter\Tweet;
+namespace Twitter\Tweet\Entities;
 
 class UserMentions extends \Diskerror\Typed\TypedClass
 {

@@ -7,7 +7,7 @@ class Stream extends ApiAbstract
     /**
      * @var resource
      */
-    protected $_fp;
+    protected $_proc;
 
 	public function __construct(\Phalcon\Config $auth)
 	{
@@ -17,20 +17,20 @@ class Stream extends ApiAbstract
 
 	public function __destruct()
 	{
-		$this->_initFp();
+		$this->_closeProcIfOpen();
 	}
 
-	protected function _initFp()
+	protected function _closeProcIfOpen()
 	{
-		if ( isset($this->_fp) ) {
-			fclose($this->_fp);
-			unset($this->_fp);
+		if ( isset($this->_proc) ) {
+			pclose($this->_proc);
+			unset($this->_proc);
 		}
 	}
 
 	public function isEOF()
 	{
-		return feof($this->_fp);
+		return feof($this->_proc);
 	}
 
 	/**
@@ -38,7 +38,7 @@ class Stream extends ApiAbstract
 	 */
 	public function read()
 	{
-		$drop = trim( fgets($this->_fp, 16384) );
+		$drop = trim( fgets($this->_proc, 16384) );
 // 		return $drop . "\n\n";
 
 		if ( !isset($drop[0]) || $drop[0] !== '{' ) {
@@ -66,7 +66,7 @@ class Stream extends ApiAbstract
 			throw new LogicException('bad function name');
 		}
 
-		$this->_initFp();
+		$this->_closeProcIfOpen();
 
 		$url = $this->_baseURL . $function . '.json';
 
@@ -80,9 +80,9 @@ class Stream extends ApiAbstract
 
 		$header = $this->_getHeader($url, 'GET', $params[0]);
 // 		cout('curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n");die;
-		$this->_fp = expect_popen( 'curl --get ' . $url . $data . ' --header \'' . $header . '\'' );
+		$this->_proc = popen( 'curl --get ' . $url . $data . ' --header \'' . $header . '\'', 'r' );
 
-		return (bool) $this->_fp;
+		return (bool) $this->_proc;
 	}
 
 	public static function _isMessage(\stdClass $tweet)
