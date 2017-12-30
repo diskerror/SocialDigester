@@ -21,12 +21,12 @@ class TweetsTask extends \Phalcon\Cli\Task
 	public function getAction()
 	{
 		$stream = new Twitter\Api\Stream( $this->config->twitter->auth );
-		$load	= new LoadTwitterStream( $this->mongo, $stream );
+		$consumer = new ConsumeTweets( $this->mongo, $stream );
 
-// 		$logger = new Logger(APP_PATH . '/' . $this->config->process->name . '.log');
-		$logger = Logger::getStream();
+// 		$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $this->config->process->name . '.log');
+		$logger = LoggerFactory::getStreamLogger();
 
-		$load->exec( $this->config->twitter->track, $logger, $this->_getPidHandler());
+		$consumer->exec( $this->config->twitter->track, $logger, $this->_getPidHandler());
 	}
 
 	public function stopAction()
@@ -39,9 +39,33 @@ class TweetsTask extends \Phalcon\Cli\Task
 		}
 	}
 
+	public function indexAction()
+	{
+		//	These only needs to be run on a new collection.
+		$this->mongo->feed->twitter->createIndex(
+			['created_at' => 1],
+			['expireAfterSeconds' => $this->config->mongo_expire]
+		);
+
+		$this->mongo->feed->twitter->createIndex(
+			['entities.hashtags.0.text' => 1]
+		);
+	}
+
 	public function testAction()
 	{
-		cout(Phalcon\Version::get());
+		$tweets = $this->mongo->feed->twitter->find([
+// 			'entities.hashtags.0.text' => ['$gt' => ''],
+			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime('10 seconds ago')*1000 )]
+		]);
+
+		$t = 0;
+		foreach ( $tweets as $tweet ) {
+			$tweet = new Twitter\Tweet($tweet);
+			print_r( $tweet->getSpecialObj(['dateToBsonDate'=>false]) );
+			$t++;
+		}
+		echo $t;
 	}
 
 }

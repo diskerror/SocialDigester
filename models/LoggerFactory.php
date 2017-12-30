@@ -6,7 +6,7 @@
  * @copyright  Copyright (c) 2016 Reid Woodbury Jr.
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
-class Logger
+class LoggerFactory
 {
     /**
 	 * Log message output format.
@@ -45,14 +45,14 @@ class Logger
 		return self::$_format;
 	}
 
-	public static function getFile($fileName)
+	public static function getFileLogger($fileName)
 	{
 		$file = new Phalcon\Logger\Adapter\File($fileName);
 		$file->setFormatter( self::getFormatter() );
 		return $file;
 	}
 
-	public static function getStream()
+	public static function getStreamLogger()
 	{
 		$stream = new Phalcon\Logger\Adapter\Stream('php://stderr');
 		$stream->setFormatter( self::getFormatter() );

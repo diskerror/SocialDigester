@@ -20,34 +20,33 @@ class GetData
 	 */
 	function hashtags($config)
 	{
-		$hashtags = $this->_twit->find([
-			'hashtags' => ['$gt' => ''],
+		$tweets = $this->_twit->find([
+			'entities.hashtags.0.text' => ['$gt' => ''],
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime($config->window . ' seconds ago')*1000 )]
-		], [
-			'projection' => ['hashtags' => 1]
 		]);
 
 		$tally = [];
 		$normTally = [];	//	tally of normalized words
-		foreach ( $hashtags as $ht ) {
-			foreach ( $ht['hashtags'] as $h ) {
-				if ( preg_match('/(^039|^rt$)/i', $h) ) {
+		foreach ( $tweets as $tweet ) {
+			foreach ( $tweet['entities']['hashtags'] as $h ) {
+				$t = $h['text'];
+				if ( preg_match('/(^039|^rt$)/i', $t) ) {
 					continue;
 				}
 
-				if ( array_key_exists( $h, $tally ) ) {
-					++$tally[$h];
+				if ( array_key_exists( $t, $tally ) ) {
+					++$tally[$t];
 				}
 				else {
-					$tally[$h] = 1;
+					$tally[$t] = 1;
 				}
 
-				$h = strtolower($h);
-				if ( array_key_exists( $h, $normTally ) ) {
-					++$normTally[$h];
+				$t = strtolower($t);
+				if ( array_key_exists( $t, $normTally ) ) {
+					++$normTally[$t];
 				}
 				else {
-					$normTally[$h] = 1;
+					$normTally[$t] = 1;
 				}
 			}
 		}

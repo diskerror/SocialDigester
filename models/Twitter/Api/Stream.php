@@ -2,6 +2,8 @@
 
 namespace Twitter\Api;
 
+use Twitter\Tweet;
+
 class Stream extends ApiAbstract
 {
     /**
@@ -34,18 +36,50 @@ class Stream extends ApiAbstract
 	}
 
 	/**
-	 * Read a drop from the stream.
+	 * Get a raw object from the JSON encoded stream.
+	 *
+	 * @return null|boolean|stdClass
 	 */
 	public function read()
 	{
-		$drop = trim( fgets($this->_proc, 16384) );
-// 		return $drop . "\n\n";
+		$json = trim( fgets($this->_proc, 16384), "\x00..\x20" );
 
-		if ( !isset($drop[0]) || $drop[0] !== '{' ) {
-			return false;
+		return json_decode( $json );
+	}
+
+	/**
+	 * Get a Tweet structure from the stream.
+	 *
+	 * @param stdClass|null $logger should be a Logger or Phalcon\Logger\Abstract derivitave
+	 * @return null|Twitter\Tweet
+	 */
+	public function readTweet($logger=null)
+	{
+		try {
+			$packet = $this->read();
+
+			if ( !is_object($packet) ) {
+				return null;
+			}
+
+			if ( self::isMessage($packet) ) {
+				if ( $logger !== null ) {
+					$logger->info($packet->getSpecialObj(['dateToBsonDate'=>false]));
+				}
+
+// 				file_put_contents('messages.txt', print_r($packet->getSpecialObj(['dateToBsonDate'=>false]), true)."\n\n", FILE_APPEND);
+
+				return null;
+			}
+		}
+		catch (Exception $e) {
+			if ( $logger !== null ) {
+				$logger->info((string) $e);
+			}
+			return null;
 		}
 
-		return json_decode( $drop );
+		return new Tweet($packet);
 	}
 
 	/**
@@ -59,7 +93,6 @@ class Stream extends ApiAbstract
 		switch ( $function ) {
 			case 'filter':
 			case 'sample':
-			case 'firehose':	//	untested
 			break;
 
 			default:
@@ -80,28 +113,28 @@ class Stream extends ApiAbstract
 
 		$header = $this->_getHeader($url, 'GET', $params[0]);
 // 		cout('curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n");die;
-		$this->_proc = popen( 'curl --get ' . $url . $data . ' --header \'' . $header . '\'', 'r' );
+		$this->_proc = popen( 'curl -s --compressed --get ' . $url . $data . ' --header \'' . $header . '\'', 'r' );
 
 		return (bool) $this->_proc;
 	}
 
-	public static function _isMessage(\stdClass $tweet)
+	public static function isMessage(\stdClass $packet)
 	{
 		if (
-			property_exists($tweet, 'control') ||
-			property_exists($tweet, 'delete') ||
-			property_exists($tweet, 'disconnect') ||
-			property_exists($tweet, 'errors') ||
-			property_exists($tweet, 'event') ||
-			property_exists($tweet, 'for_user_str') ||
-			property_exists($tweet, 'for_user') ||
-			property_exists($tweet, 'friends_str') ||
-			property_exists($tweet, 'friends') ||
-			property_exists($tweet, 'limit') ||
-			property_exists($tweet, 'scrub_geo') ||
-			property_exists($tweet, 'status_withheld') ||
-			property_exists($tweet, 'user_withheld') ||
-			property_exists($tweet, 'warning')
+			property_exists($packet, 'control') ||
+			property_exists($packet, 'delete') ||
+			property_exists($packet, 'disconnect') ||
+			property_exists($packet, 'errors') ||
+			property_exists($packet, 'event') ||
+			property_exists($packet, 'for_user_str') ||
+			property_exists($packet, 'for_user') ||
+			property_exists($packet, 'friends_str') ||
+			property_exists($packet, 'friends') ||
+			property_exists($packet, 'limit') ||
+			property_exists($packet, 'scrub_geo') ||
+			property_exists($packet, 'status_withheld') ||
+			property_exists($packet, 'user_withheld') ||
+			property_exists($packet, 'warning')
 			) {
 			return true;
 		}

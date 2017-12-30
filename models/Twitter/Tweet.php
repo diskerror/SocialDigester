@@ -5,7 +5,8 @@ namespace Twitter;
 class Tweet extends \Diskerror\Typed\TypedClass
 {
 	protected $_map = [
-		'id' => 'id_'
+		'id' => 'id_',	//	from Twitter
+		'_id' => 'id_',	//	from Mongo
 	];
 
 	//	Only this top level "id" is used for the MongoDb "_id" auto index.
@@ -33,7 +34,6 @@ class Tweet extends \Diskerror\Typed\TypedClass
 	protected $user = '__class__Twitter\Tweet\User';
 
 	//	Additional fields for start of analysis.
-	protected $hashtags = '__class__Diskerror\Typed\TypedArray(null, "string")';
 // 	protected $words = '__class__Diskerror\Typed\TypedArray(null, "string")';
 // 	protected $pairs = '__class__Diskerror\Typed\TypedArray(null, "string")';
 
