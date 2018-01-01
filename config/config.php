@@ -33,9 +33,10 @@ $config = new \Phalcon\Config([
 	//	Save tweets for 30 minutes.
 	'mongo_expire' => 1800,
 
-	'hashtags' => [
+	'word_stats' => [
 		'count'		=> 120,
 		'window'	=> 300, // seconds
+		'stop'		=> [],
 	],
 
 	'twitter' => [

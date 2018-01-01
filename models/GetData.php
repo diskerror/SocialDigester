@@ -25,14 +25,15 @@ class GetData
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime($config->window . ' seconds ago')*1000 )]
 		]);
 
-		$tally = [];
-		$normTally = [];	//	tally of normalized words
+		$tally = [];		//	tally of hashtags as written
+		$normTally = [];	//	tally of normalized hashtags, all lower case
 		foreach ( $tweets as $tweet ) {
+			if ( preg_match('/(^039|^rt$)/i', $tweet['text']) ) {
+				continue;
+			}
+
 			foreach ( $tweet['entities']['hashtags'] as $h ) {
 				$t = $h['text'];
-				if ( preg_match('/(^039|^rt$)/i', $t) ) {
-					continue;
-				}
 
 				if ( array_key_exists( $t, $tally ) ) {
 					++$tally[$t];
@@ -51,7 +52,68 @@ class GetData
 			}
 		}
 
-		//	match the typed hashtags to the normalized hashtags
+		return $this->_buildTagCloudWord($tally, $normTally, $config, 300);
+	}
+
+	/**
+	 * Return count of each word in text field.
+	 *
+	 * @param Phalcon\Config $config
+	 * @return array
+	 */
+	function words($config)
+	{
+		$tweets = $this->_twit->find([
+			'text' => ['$gt' => ''],
+			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime($config->window . ' seconds ago')*1000 )]
+		]);
+
+		$tally = [];		//	tally of words as written
+		$normTally = [];	//	tally of normalized words, all lower case
+		foreach ( $tweets as $tweet ) {
+			if ( preg_match('/(^039|^rt$)/i', $tweet['text']) ) {
+				continue;
+			}
+
+			$words = explode(' ', preg_replace('/[^0-9a-zA-Z\']+/', ' ', $tweet->text));
+
+			foreach ( $words as $word ) {
+				if ( ( strlen($word) < 3 && !is_numeric($word) ) || in_array(strtolower($word), $config->stop) ) {
+					continue;
+				}
+
+				if ( array_key_exists( $word, $tally ) ) {
+					++$tally[$word];
+				}
+				else {
+					$tally[$word] = 1;
+				}
+
+				$word = strtolower($word);
+				if ( array_key_exists( $word, $normTally ) ) {
+					++$normTally[$word];
+				}
+				else {
+					$normTally[$word] = 1;
+				}
+			}
+		}
+
+		return $this->_buildTagCloudWord($tally, $normTally, $config, 800);
+	}
+
+	/**
+	 * Format data with TagCloud object.
+	 *
+	 * @param array $tally
+	 * @param array $normTally
+	 * @param Phalcon\Config $config
+	 * @param int $weightLimit
+	 * @return array
+	 */
+	protected function _buildTagCloudWord($tally, $normTally, $config, $weightLimit)
+	{
+		//	match the as-written words to the normalized words
 		$properName = [];
 		foreach ( $tally as $k=>$v ) {
 			$properName[strtolower($k)][$k] = $v;
@@ -81,7 +143,7 @@ class GetData
 		foreach ( $normTally as $k=>$v ) {
 			$ret[$count] = [
 				'text' => $properName[$k],
-				'weight' => ($v>300 ? 300 : $v),
+				'weight' => ($v>$weightLimit ? $weightLimit : $v),
 				'link' => 'javascript:ToTwitter("' . $k . '")',
 				'html' => [
 					'title' => $v
