@@ -5,6 +5,8 @@ error_reporting(E_ALL);
 
 define('APP_PATH', realpath(__DIR__ . '/..'));
 
+////////////////////////////////////////////////////////////////////////////////
+
 try {
 
 require APP_PATH . '/functions/errorHandler.php';
@@ -20,10 +22,11 @@ require APP_PATH . '/functions/config.php';
  */
 $loader = new \Phalcon\Loader();
 $loader->registerDirs([
-	$config->application->modelsDir
+	$config->application->modelsDir,
+	$config->application->viewsDir
 ])->register();
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Services are globally registered here
@@ -66,10 +69,10 @@ $di->setShared('mongo', function() use ($config) {
 	return $mongo;
 });
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //	This is what makes up a controller for our simple application.
 //		Map URLs to our models.
-////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Starting the application
@@ -110,22 +113,22 @@ $app->get('/', function () use ($app) {
  * Returns JSON of hashtags.
  */
 $app->get('/tag-cloud', function () use ($app) {
-	$data = new GetTally($app->mongo);
-	$app->view->setVar('obj', $data->hashtags($app->config->word_stats));
+	$tally = new Tally\WordCloud\HashTags($app->mongo);
+	$app->view->setVar('obj', $tally->get($app->config->word_stats));
 	echo $app->view->render('js');
 });
 $app->get('/hashtags', function () use ($app) {
-	$data = new GetTally($app->mongo);
-	$app->view->setVar('obj', $data->hashtags($app->config->word_stats));
+	$tally = new Tally\WordCloud\HashTags($app->mongo);
+	$app->view->setVar('obj', $tally->get($app->config->word_stats));
 	echo $app->view->render('js');
 });
-$app->get('/words', function () use ($app) {
-	$data = new GetTally($app->mongo);
-	$app->view->setVar('obj', $data->words($app->config->word_stats));
+$app->get('/text', function () use ($app) {
+	$tally = new Tally\WordCloud\Text($app->mongo);
+	$app->view->setVar('obj', $tally->get($app->config->word_stats));
 	echo $app->view->render('js');
 });
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Handle the request
@@ -133,9 +136,6 @@ $app->get('/words', function () use ($app) {
 $app->handle();
 
 }
-catch ( Exception $e ) {
-	echo $e;
-}
-catch ( Throable $t ) {
+catch ( Throwable $t ) {
 	echo $t;
 }

@@ -1,19 +1,12 @@
 <?php
 
-namespace GetTally;
+namespace Tally\WordCloud;
 
-class WordCloud extends GetTally
+use Diskerror\Typed\TypedArray;
+
+class AbstractWordCloud extends \TweetTallyAbstract
 {
-	protected $_normTally;
-
-	/**
-	 * @param MongoDB\Client $mongo
-	 */
-	function __construct(MongoDB\Client $mongo)
-	{
-		self::parent($mongo);
-		$this->_normTally = [];
-	}
+	protected $_normTally = [];
 
 	/**
 	 * Format data with TagCloud object.
@@ -50,7 +43,7 @@ class WordCloud extends GetTally
 		ksort($this->_normTally, SORT_NATURAL | SORT_FLAG_CASE);
 
 		$count = 0;
-		$ret = new Diskerror\Typed\TypedArray(null, 'TagCloudWord');
+		$ret = new TypedArray(null, 'TagCloudWord');
 		foreach ( $this->_normTally as $k=>$v ) {
 			$ret[$count] = [
 				'text' => $properName[$k],

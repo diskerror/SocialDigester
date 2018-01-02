@@ -78,9 +78,10 @@ $config = new \Phalcon\Config([
 	],
 
 	'application' => [
-		'modelsDir'		 => APP_PATH . '/models/',
-		'viewsDir'		 => APP_PATH . '/views/',
-		'baseUri'		 => '/html/',
+		'tasksDir'	=> APP_PATH . '/tasks/',
+		'modelsDir'	=> APP_PATH . '/models/',
+		'viewsDir'	=> APP_PATH . '/views/',
+		'baseUri'	=> '/html/',
 	]
 
 ]);

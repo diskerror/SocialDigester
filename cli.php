@@ -6,13 +6,13 @@ error_reporting(E_ALL);
 
 define('APP_PATH', realpath(__DIR__));
 
-require APP_PATH . '/functions/errorHandler.php';
-require APP_PATH . '/functions/cli.php';
-require APP_PATH . '/vendor/autoload.php';
-
 ////////////////////////////////////////////////////////////////////////////////
 
 try {
+
+require APP_PATH . '/functions/errorHandler.php';
+require APP_PATH . '/functions/cli.php';
+require APP_PATH . '/vendor/autoload.php';
 
 /**
  * Read the configs
@@ -24,8 +24,8 @@ require APP_PATH . '/functions/config.php';
  */
 $loader = new \Phalcon\Loader();
 $loader->registerDirs([
-	APP_PATH . '/tasks/',
-	APP_PATH . '/models/'
+	$config->application->tasksDir,
+	$config->application->modelsDir
 ])->register();
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ $loader->registerDirs([
 $di = new Phalcon\Di\FactoryDefault\Cli();
 
 $di->setShared('config', function () use ($config) {
-    return $config;
+	return $config;
 });
 
 $di->setShared('mongo', function() use ($config) {
@@ -44,7 +44,7 @@ $di->setShared('mongo', function() use ($config) {
 	if( !isset($mongo) ) {
 		$mongo = new MongoDB\Client($config->mongo);
 	}
-    return $mongo;
+	return $mongo;
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -77,8 +77,8 @@ if ( array_key_exists(1, $argv) ) {
 $console->handle($arguments);
 
 }
-catch ( Exception $e ) {
-	echo $e;
+catch ( Throwable $t ) {
+	echo $t;
 }
 
 if (array_key_exists('printNewLine', $config) && $config->printNewLine) {
