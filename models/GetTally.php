@@ -1,8 +1,9 @@
 <?php
 
-class GetData
+class GetTally
 {
 	protected $_twit;
+	protected $_tally;
 
 	/**
 	 * @param MongoDB\Client $mongo
@@ -10,6 +11,17 @@ class GetData
 	function __construct(MongoDB\Client $mongo)
 	{
 		$this->_twit = $mongo->feed->twitter;
+		$this->_tally = [];
+	}
+
+	protected static function _doTally(array &$tally, $word)
+	{
+		if ( array_key_exists( $word, $tally ) ) {
+			++$tally[$word];
+		}
+		else {
+			$tally[$word] = 1;
+		}
 	}
 
 	/**
@@ -52,7 +64,7 @@ class GetData
 			}
 		}
 
-		return $this->_buildTagCloudWord($tally, $normTally, $config, 300);
+		return $this->_buildTagCloud($tally, $normTally, $config, 300);
 	}
 
 	/**
@@ -99,7 +111,7 @@ class GetData
 			}
 		}
 
-		return $this->_buildTagCloudWord($tally, $normTally, $config, 800);
+		return $this->_buildTagCloud($tally, $normTally, $config, 800);
 	}
 
 	/**
@@ -111,7 +123,7 @@ class GetData
 	 * @param int $weightLimit
 	 * @return array
 	 */
-	protected function _buildTagCloudWord($tally, $normTally, $config, $weightLimit)
+	protected function _buildTagCloud($tally, $normTally, $config, $weightLimit)
 	{
 		//	match the as-written words to the normalized words
 		$properName = [];

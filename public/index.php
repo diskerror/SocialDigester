@@ -110,17 +110,17 @@ $app->get('/', function () use ($app) {
  * Returns JSON of hashtags.
  */
 $app->get('/tag-cloud', function () use ($app) {
-	$data = new GetData($app->mongo);
+	$data = new GetTally($app->mongo);
 	$app->view->setVar('obj', $data->hashtags($app->config->word_stats));
 	echo $app->view->render('js');
 });
 $app->get('/hashtags', function () use ($app) {
-	$data = new GetData($app->mongo);
+	$data = new GetTally($app->mongo);
 	$app->view->setVar('obj', $data->hashtags($app->config->word_stats));
 	echo $app->view->render('js');
 });
 $app->get('/words', function () use ($app) {
-	$data = new GetData($app->mongo);
+	$data = new GetTally($app->mongo);
 	$app->view->setVar('obj', $data->words($app->config->word_stats));
 	echo $app->view->render('js');
 });
