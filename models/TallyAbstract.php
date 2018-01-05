@@ -1,6 +1,6 @@
 <?php
 
-abstract class TweetTallyAbstract
+abstract class TallyAbstract
 {
 	protected $_twit;
 	protected $_tally;

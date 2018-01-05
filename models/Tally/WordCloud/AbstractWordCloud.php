@@ -4,7 +4,7 @@ namespace Tally\WordCloud;
 
 use Diskerror\Typed\TypedArray;
 
-class AbstractWordCloud extends \TweetTallyAbstract
+class AbstractWordCloud extends \TallyAbstract
 {
 	protected $_normTally = [];
 
