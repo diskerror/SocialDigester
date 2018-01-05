@@ -1,6 +1,6 @@
 <?php
 
-namespace Tweet;
+namespace Tweet\Entities;
 
 class Entities extends \Diskerror\Typed\TypedClass
 {

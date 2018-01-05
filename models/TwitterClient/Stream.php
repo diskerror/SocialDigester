@@ -46,41 +46,6 @@ class Stream extends ClientAbstract
 	}
 
 	/**
-	 * Get a Tweet structure from the stream.
-	 *
-	 * @param stdClass|null $logger should be a Logger or Phalcon\Logger\Abstract derivitave
-	 * @return null|Tweet
-	 */
-	public function readTweet($logger=null)
-	{
-		try {
-			$packet = $this->read();
-
-			if ( !is_object($packet) ) {
-				return null;
-			}
-
-			if ( self::isMessage($packet) ) {
-				if ( $logger !== null ) {
-					$logger->info($packet->getSpecialObj(['dateToBsonDate'=>false]));
-				}
-
-//				file_put_contents('messages.txt', print_r($packet->getSpecialObj(['dateToBsonDate'=>false]), true)."\n\n", FILE_APPEND);
-
-				return null;
-			}
-		}
-		catch (Exception $e) {
-			if ( $logger !== null ) {
-				$logger->info((string) $e);
-			}
-			return null;
-		}
-
-		return new \Tweet($packet);
-	}
-
-	/**
 	 * Start a stream.
 	 * https://dev.twitter.com/streaming/overview
 	 *
@@ -133,7 +98,7 @@ class Stream extends ClientAbstract
 			property_exists($packet, 'status_withheld') ||
 			property_exists($packet, 'user_withheld') ||
 			property_exists($packet, 'warning')
-			) {
+		) {
 			return true;
 		}
 

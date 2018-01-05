@@ -38,9 +38,27 @@ class ConsumeTweets
 				if ( !$pidHandler->exists() ) { break; }
 
 				//	get tweet
-				$tweet = $this->_twitterStream->readTweet();
+				try {
+					$packet = $this->_twitterStream->read();
 
-				if ( $tweet === null || get_class($tweet) !== 'Tweet' ) {
+					if ( !is_object($packet) ) {
+						continue;
+					}
+
+					if ( $this->_twitterStream::isMessage($packet) ) {
+						if ( $logger !== null ) {
+							$logger->info(json_encode($packet));
+						}
+
+						continue;
+					}
+
+					$tweet = new \Tweet\Tweet($packet);
+				}
+				catch (Exception $e) {
+					if ( $logger !== null ) {
+						$logger->info((string) $e);
+					}
 					continue;
 				}
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Tweet;
+
 class Tweet extends \Diskerror\Typed\TypedClass
 {
 	protected $_map = [
@@ -13,7 +15,7 @@ class Tweet extends \Diskerror\Typed\TypedClass
 	protected $created_at = '__class__Diskerror\Utilities\DateTime';
 
 	protected $contributors = null;
-	protected $entities = '__class__Tweet\Entities';
+	protected $entities = '__class__Tweet\Entities\Entities';
 // 	protected $extended_entities = '__class__Tweet\ExtendedEntities';
 	protected $favorite_count = 0;
 	protected $filter_level = 'low';
@@ -25,7 +27,7 @@ class Tweet extends \Diskerror\Typed\TypedClass
 	protected $place = '__class__Tweet\Place';
 	protected $possibly_sensitive = false;
 	protected $retweet_count = 0;
-// 	protected $retweeted_status = '__class__Tweet';
+// 	protected $retweeted_status = '__class__Tweet\Tweet';
 	protected $source = '';
 	protected $text = '';
 	protected $truncated = false;
