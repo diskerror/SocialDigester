@@ -1,10 +1,8 @@
 <?php
 
-namespace Twitter\Api;
+namespace TwitterClient;
 
-use Twitter\Tweet;
-
-class Stream extends ApiAbstract
+class Stream extends ClientAbstract
 {
 	/**
 	 * @var resource
@@ -51,7 +49,7 @@ class Stream extends ApiAbstract
 	 * Get a Tweet structure from the stream.
 	 *
 	 * @param stdClass|null $logger should be a Logger or Phalcon\Logger\Abstract derivitave
-	 * @return null|Twitter\Tweet
+	 * @return null|Tweet
 	 */
 	public function readTweet($logger=null)
 	{
@@ -79,7 +77,7 @@ class Stream extends ApiAbstract
 			return null;
 		}
 
-		return new Tweet($packet);
+		return new \Tweet($packet);
 	}
 
 	/**

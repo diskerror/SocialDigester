@@ -1,8 +1,8 @@
 <?php
 
-namespace Twitter\Api;
+namespace TwitterClient;
 
-class Rest extends Twitter\Api\ApiAbstract
+class Rest extends ClientAbstract
 {
 
 	/**

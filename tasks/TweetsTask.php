@@ -20,7 +20,7 @@ class TweetsTask extends \Phalcon\Cli\Task
 
 	public function getAction()
 	{
-		$stream = new Twitter\Api\Stream( $this->config->twitter->auth );
+		$stream = new TwitterClient\Stream( $this->config->twitter->auth );
 		$consumer = new ConsumeTweets( $this->mongo, $stream );
 
 // 		$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $this->config->process->name . '.log');
@@ -61,7 +61,7 @@ class TweetsTask extends \Phalcon\Cli\Task
 
 		$t = 0;
 		foreach ( $tweets as $tweet ) {
-			$tweet = new Twitter\Tweet($tweet);
+			$tweet = new Tweet($tweet);
 			print_r( $tweet->getSpecialObj(['dateToBsonDate'=>false]) );
 			$t++;
 		}

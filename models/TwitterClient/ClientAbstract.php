@@ -1,8 +1,8 @@
 <?php
 
-namespace Twitter\Api;
+namespace TwitterClient;
 
-abstract class ApiAbstract
+abstract class ClientAbstract
 {
 	/**
 	 * @var \Phalcon\Config

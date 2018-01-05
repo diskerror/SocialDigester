@@ -7,9 +7,9 @@ class ConsumeTweets
 
 	/**
 	 * @param MongoDB\Client $mongo
-	 * @param Twitter\Api\Stream $stream
+	 * @param TwitterClient\Stream $stream
 	 */
-	function __construct(MongoDB\Client $mongo, Twitter\Api\Stream $stream)
+	function __construct(MongoDB\Client $mongo, TwitterClient\Stream $stream)
 	{
 		$this->_mongo = $mongo;
 		$this->_twitterStream = $stream;
@@ -40,7 +40,7 @@ class ConsumeTweets
 				//	get tweet
 				$tweet = $this->_twitterStream->readTweet();
 
-				if ( $tweet === null || get_class($tweet) !== 'Twitter\Tweet' ) {
+				if ( $tweet === null || get_class($tweet) !== 'Tweet' ) {
 					continue;
 				}
 

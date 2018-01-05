@@ -1,7 +1,5 @@
 <?php
 
-namespace Twitter;
-
 class Tweet extends \Diskerror\Typed\TypedClass
 {
 	protected $_map = [
@@ -15,8 +13,8 @@ class Tweet extends \Diskerror\Typed\TypedClass
 	protected $created_at = '__class__Diskerror\Utilities\DateTime';
 
 	protected $contributors = null;
-	protected $entities = '__class__Twitter\Tweet\Entities';
-// 	protected $extended_entities = '__class__Twitter\Tweet\ExtendedEntities';
+	protected $entities = '__class__Tweet\Entities';
+// 	protected $extended_entities = '__class__Tweet\ExtendedEntities';
 	protected $favorite_count = 0;
 	protected $filter_level = 'low';
 	protected $in_reply_to_screen_name = '';
@@ -24,14 +22,14 @@ class Tweet extends \Diskerror\Typed\TypedClass
 	protected $in_reply_to_user_id_str = '';
 	protected $is_quote_status = false;
 	protected $lang = 'en';
-	protected $place = '__class__Twitter\Tweet\Place';
+	protected $place = '__class__Tweet\Place';
 	protected $possibly_sensitive = false;
 	protected $retweet_count = 0;
-// 	protected $retweeted_status = '__class__Twitter\Tweet';
+// 	protected $retweeted_status = '__class__Tweet';
 	protected $source = '';
 	protected $text = '';
 	protected $truncated = false;
-	protected $user = '__class__Twitter\Tweet\User';
+	protected $user = '__class__Tweet\User';
 
 	//	Additional fields for start of analysis.
 // 	protected $words = '__class__Diskerror\Typed\TypedArray(null, "string")';

@@ -1,6 +1,6 @@
 <?php
 
-namespace Twitter\Tweet;
+namespace Tweet;
 
 class Place extends \Diskerror\Typed\TypedClass
 {

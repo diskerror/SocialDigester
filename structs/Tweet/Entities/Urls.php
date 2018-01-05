@@ -1,6 +1,6 @@
 <?php
 
-namespace Twitter\Tweet\Entities;
+namespace Tweet\Entities;
 
 class Urls extends \Diskerror\Typed\TypedClass
 {
