@@ -2,7 +2,7 @@
 
 namespace Tally\TopList;
 
-class Text extends \TallyAbstract
+class Text extends \Tally\AbstractTally
 {
 	/**
 	 * Return count of each word in text field.

@@ -4,7 +4,7 @@ namespace Tally\TopList;
 
 use Diskerror;
 
-class HashTags extends \TallyAbstract
+class HashTags extends \Tally\AbstractTally
 {
 	/**
 	 * Return count of each current hashtag.

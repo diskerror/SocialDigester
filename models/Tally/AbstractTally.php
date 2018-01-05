@@ -1,14 +1,16 @@
 <?php
 
-abstract class TallyAbstract
+namespace Tally;
+
+abstract class AbstractTally
 {
 	protected $_twit;
 	protected $_tally;
 
 	/**
-	 * @param MongoDB\Client $mongo
+	 * @param \MongoDB\Client $mongo
 	 */
-	function __construct(MongoDB\Client $mongo)
+	function __construct(\MongoDB\Client $mongo)
 	{
 		$this->_twit = $mongo->feed->twitter;
 		$this->_tally = [];

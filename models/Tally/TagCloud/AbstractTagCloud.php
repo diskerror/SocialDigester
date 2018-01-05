@@ -4,7 +4,7 @@ namespace Tally\TagCloud;
 
 use Diskerror\Typed\TypedArray;
 
-class AbstractTagCloud extends \TallyAbstract
+class AbstractTagCloud extends \Tally\AbstractTally
 {
 	protected $_normTally = [];
 
