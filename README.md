@@ -9,4 +9,4 @@ This started out a few years ago as a project to keep my programming chops up wh
 
 This is a work in progress but is fully functional. This code uses a more streamlined process to connect to Twitter than *fennb/phirehose* or *OwlyCode/StreamingBird*, but I'm not yet convinced my version is more stable. It‘s just simpler.
 
-It started out on PHP 5.6 but is currently running on Nginx and PHP 7.1.
+It started out on PHP 5.6 but is currently running on Nginx, PHP 7.1 , and Phalcon 3.3.
