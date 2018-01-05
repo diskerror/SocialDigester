@@ -1,4 +1,4 @@
-#Politicator.com
+# Politicator.com
 This started out a few years ago as a project to keep my programming chops up while unemployed. The programming focus was on learning:
 
 * the Phalcon framework,
