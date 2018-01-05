@@ -1,6 +1,10 @@
 <?php
 
-class TagCloudHtml extends Diskerror\Typed\TypedClass
+namespace TagCloud;
+
+use Diskerror\Typed\TypedClass;
+
+class Html extends TypedClass
 {
 	protected $url = '';
 	protected $class = '';

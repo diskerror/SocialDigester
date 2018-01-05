@@ -6,10 +6,10 @@ use Twitter\Tweet;
 
 class Stream extends ApiAbstract
 {
-    /**
-     * @var resource
-     */
-    protected $_proc;
+	/**
+	 * @var resource
+	 */
+	protected $_proc;
 
 	public function __construct(\Phalcon\Config $auth)
 	{
@@ -67,7 +67,7 @@ class Stream extends ApiAbstract
 					$logger->info($packet->getSpecialObj(['dateToBsonDate'=>false]));
 				}
 
-// 				file_put_contents('messages.txt', print_r($packet->getSpecialObj(['dateToBsonDate'=>false]), true)."\n\n", FILE_APPEND);
+//				file_put_contents('messages.txt', print_r($packet->getSpecialObj(['dateToBsonDate'=>false]), true)."\n\n", FILE_APPEND);
 
 				return null;
 			}
@@ -112,7 +112,7 @@ class Stream extends ApiAbstract
 		}
 
 		$header = $this->_getHeader($url, 'GET', $params[0]);
-// 		cout('curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n");die;
+//		cout('curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n");die;
 		$this->_proc = popen( 'curl -s --compressed --get ' . $url . $data . ' --header \'' . $header . '\'', 'r' );
 
 		return (bool) $this->_proc;

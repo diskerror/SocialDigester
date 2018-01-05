@@ -113,17 +113,17 @@ $app->get('/', function () use ($app) {
  * Returns JSON of hashtags.
  */
 $app->get('/tag-cloud', function () use ($app) {
-	$tally = new Tally\WordCloud\HashTags($app->mongo);
+	$tally = new Tally\TagCloud\Hashtags($app->mongo);
 	$app->view->setVar('obj', $tally->get($app->config->word_stats));
 	echo $app->view->render('js');
 });
 $app->get('/hashtags', function () use ($app) {
-	$tally = new Tally\WordCloud\HashTags($app->mongo);
+	$tally = new Tally\TagCloud\Hashtags($app->mongo);
 	$app->view->setVar('obj', $tally->get($app->config->word_stats));
 	echo $app->view->render('js');
 });
 $app->get('/text', function () use ($app) {
-	$tally = new Tally\WordCloud\Text($app->mongo);
+	$tally = new Tally\TagCloud\Text($app->mongo);
 	$app->view->setVar('obj', $tally->get($app->config->word_stats));
 	echo $app->view->render('js');
 });

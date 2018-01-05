@@ -1,10 +1,10 @@
 <?php
 
-namespace Tally\WordCloud;
+namespace Tally\TagCloud;
 
 use Diskerror\Typed\TypedArray;
 
-class AbstractWordCloud extends \TallyAbstract
+class AbstractTagCloud extends \TallyAbstract
 {
 	protected $_normTally = [];
 
@@ -43,7 +43,7 @@ class AbstractWordCloud extends \TallyAbstract
 		ksort($this->_normTally, SORT_NATURAL | SORT_FLAG_CASE);
 
 		$count = 0;
-		$ret = new TypedArray(null, 'TagCloudWord');
+		$ret = new TypedArray(null, 'TagCloud\Word');
 		foreach ( $this->_normTally as $k=>$v ) {
 			$ret[$count] = [
 				'text' => $properName[$k],

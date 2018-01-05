@@ -1,10 +1,10 @@
 <?php
 
-namespace Tally\WordCloud;
+namespace Tally\TagCloud;
 
 use Diskerror;
 
-class HashTags extends AbstractWordCloud
+class Hashtags extends AbstractTagCloud
 {
 	/**
 	 * Return count of each current hashtag.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Tally\WordCloud;
+namespace Tally\TagCloud;
 
-class Text extends AbstractWordCloud
+class Text extends AbstractTagCloud
 {
 	/**
 	 * Return count of each word in text field.
