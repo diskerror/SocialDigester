@@ -75,14 +75,6 @@ $config = new \Phalcon\Config([
 		'name' => 'tweets',
 		'path' => '/var/run/twitter_digester',
 		'procDir' => '/proc/'		//	location of actual PID
-	],
-
-	'application' => [
-		'tasksDir'		=> APP_PATH . '/tasks/',
-		'modelsDir'		=> APP_PATH . '/models/',
-		'structsDir'	=> APP_PATH . '/structs/',
-		'viewsDir'		=> APP_PATH . '/views/',
-		'baseUri'		=> '/html/',
 	]
 
 ]);

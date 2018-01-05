@@ -24,9 +24,9 @@ require APP_PATH . '/functions/config.php';
  */
 $loader = new \Phalcon\Loader();
 $loader->registerDirs([
-	$config->application->tasksDir,
-	$config->application->modelsDir,
-	$config->application->structsDir
+	APP_PATH . '/tasks/',
+	APP_PATH . '/models/',
+	APP_PATH . '/structs/'
 ])->register();
 
 ////////////////////////////////////////////////////////////////////////////////

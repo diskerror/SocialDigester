@@ -22,9 +22,9 @@ require APP_PATH . '/functions/config.php';
  */
 $loader = new \Phalcon\Loader();
 $loader->registerDirs([
-	$config->application->modelsDir,
-	$config->application->structsDir,
-	$config->application->viewsDir
+	APP_PATH . '/models/',
+	APP_PATH . '/structs/',
+	APP_PATH . '/views/'
 ])->register();
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ $di->setShared('view', function () use ($config) {
 	static $view;
 	if( !isset($view) ) {
 		$view = new Phalcon\Mvc\View\Simple();
-		$view->setViewsDir($config->application->viewsDir);
+		$view->setViewsDir(APP_PATH . '/views/');
 	}
 	return $view;
 });
