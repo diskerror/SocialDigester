@@ -30,11 +30,11 @@ $config = new \Phalcon\Config([
 
 	'mongo' => 'mongodb://localhost:27017',
 
-	//	Save tweets for 30 minutes.
+	//	In seconds. Save tweets for 30 minutes.
 	'mongo_expire' => 1800,
 
 	'word_stats' => [
-		'count'		=> 120,
+		'count'		=> 100,
 		'window'	=> 300, // seconds
 		'stop'		=> [],
 	],

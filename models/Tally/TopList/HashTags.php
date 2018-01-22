@@ -24,8 +24,8 @@ class HashTags extends \Tally\AbstractTally
 				continue;
 			}
 
-			foreach ( $tweet['entities']['hashtags'] as $h ) {
-				self::doTally(strtolower($h['text']), $this->_tally);
+			foreach ( $tweet['entities']['hashtags'] as $hashtag ) {
+				$this->doTally(strtolower($hashtag['text']));
 			}
 		}
 

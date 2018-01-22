@@ -33,6 +33,7 @@ class ConsumeTweets
 			]);
 			$pidHandler->setFile();
 			$logger->info('Started capturing tweets.');
+            $sh = new StemHandler;
 
 			while ( !$this->_twitterStream->isEOF() ) {
 				if ( !$pidHandler->exists() ) { break; }
@@ -61,6 +62,26 @@ class ConsumeTweets
 					}
 					continue;
 				}
+
+
+				//	remove URLs from text
+// 				$text = preg_replace('#https?:[^ ]+#', '', $tweet->text);
+// 				$words = [];
+//
+// 				//	build the two stem lists
+// 				$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
+// 				foreach( $split as $s ) {
+// 					$words[] = $sh->get( $s );
+// 				}
+
+				//	build stem pairs
+// 				$last = '';
+// 				foreach ( $tweet->words as $w ) {
+// 					$tweet->pairs[] = $last . $w;
+// 					$last = $w;
+// 				}
+// 				$tweet->pairs[] = $last;
+
 
 				try {
 					//	convert to Mongo compatible object and insert

@@ -32,7 +32,7 @@ $('#cloud1').jQCloud( [{text:'Politicator',weight:100,html:{title:'Politicator!'
 
 });
 
-function ToTwitter(hashtag)
+function ToTwitter(hashtags)
 {
-	window.open('https://twitter.com/search?f=tweets&vertical=news&q=%23' + hashtag, '_blank');
+	window.open('https://twitter.com/search?f=tweets&vertical=news&q=%23' + hashtags.join('%7c%23'), '_blank');
 };

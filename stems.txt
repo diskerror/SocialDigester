@@ -51401,7 +51401,7 @@
     "western": "western",
     "westernjo": "westernjo",
     "westernnevadacollege": "westernnevadacolleg",
-    "westeros": "westero",
+    "westeros": "westeros",
     "westjournalism": "westjourn",
     "westlancsuk": "westlancsuk",
     "westminster": "westminst",

@@ -16,13 +16,13 @@ abstract class AbstractTally
 		$this->_tally = [];
 	}
 
-	public static function doTally($word, array &$tally)
+	public function doTally($word)
 	{
-		if ( array_key_exists( $word, $tally ) ) {
-			++$tally[$word];
+		if ( array_key_exists( $word, $this->_tally ) ) {
+			++$this->_tally[$word];
 		}
 		else {
-			$tally[$word] = 1;
+			$this->_tally[$word] = 1;
 		}
 	}
 

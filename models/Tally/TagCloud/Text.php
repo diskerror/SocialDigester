@@ -29,12 +29,11 @@ class Text extends AbstractTagCloud
 					continue;
 				}
 
-				self::doTally($word, $this->_tally);
-				self::doTally(strtolower($word), $this->_normTally);
+				$this->doTally($word);
 			}
 		}
 
-		return $this->_buildTagCloud($config, 800);
+		return $this->_buildTagCloud($config);
 	}
 
 }
