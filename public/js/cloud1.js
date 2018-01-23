@@ -5,10 +5,17 @@ var cloudOptions = {
 	delay: 0
 };
 
+var doRun = false;
 
-$('#cloud1').jQCloud( [{text:'Politicator',weight:100,html:{title:'Politicator!'}},{text:'Cloud',weight:70},{text:'fun!',weight:1}], cloudOptions);
+$('#cloud1').jQCloud( [{text:'Politicator!',weight:10},{text:'What ARE they saying?',weight:5},{text:'Twitter!',weight:4},{text:' ',weight:1}], cloudOptions);
 
 (function getHashtags() {
+	if ( !doRun ) {
+		doRun = true;
+		setTimeout(getHashtags, 2700);
+		return;
+	}
+
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

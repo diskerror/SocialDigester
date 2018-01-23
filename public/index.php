@@ -23,8 +23,7 @@ require APP_PATH . '/functions/config.php';
 $loader = new \Phalcon\Loader();
 $loader->registerDirs([
 	APP_PATH . '/models/',
-	APP_PATH . '/structs/',
-	APP_PATH . '/views/'
+	APP_PATH . '/structs/'
 ])->register();
 
 ////////////////////////////////////////////////////////////////////////////////
