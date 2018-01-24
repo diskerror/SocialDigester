@@ -94,14 +94,17 @@ $app->notFound(function () use ($app) {
 $app->get('/', function () use ($app) {
 	$app->assets
 		->addCss('css/jqcloud.min.css')
-		->addCss('css/jquery.qtip.min.css');
+		->addCss('css/jquery.qtip.min.css')
+		->addCss('css/jquery-ui.min.css')
+		->addCss('css/jquery-ui.structure.min.css');
 
 	$app->assets
 		->addJs('js/jquery-3.3.1.min.js')
 		->addJs('js/jqcloud.min.js')
 		->addJs('js/cloud1.js')
 		->addJs('js/jquery.qtip.min.js')
-		->addJs('js/imagesloaded.pkg.min.js');
+		->addJs('js/imagesloaded.pkg.min.js')
+		->addJs('js/jquery-ui.min.js');
 
 	$app->view->setVar('terms', implode(', ', (array)$app->config->twitter->track));
 

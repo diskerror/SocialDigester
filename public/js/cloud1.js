@@ -39,6 +39,34 @@ $('#cloud1').jQCloud( [{text:'Politicator.com',weight:10},{text:'What ARE they s
 
 });
 
+$(function() {
+	$("#tag-count-slider" ).slider({
+		orientation: "vertical",
+		range: "min",
+		min: 20,
+		max: 120,
+		value: 100,
+		slide: function( event, ui ) {
+			$("#tag-count").val( ui.value );
+		}
+	});
+	$("#tag-count").val( $("#tag-count-slider" ).slider( "value" ));
+});
+
+$(function() {
+	$("#update-seconds-slider" ).slider({
+		orientation: "vertical",
+		range: "min",
+		min: 1000,
+		max: 10000,
+		value: 3500,
+		slide: function( event, ui ) {
+			$("#update-seconds").val( ui.value );
+		}
+	});
+	$("#update-seconds").val($("#update-seconds-slider").slider( "value" )/1000);
+});
+
 function ToTwitter(hashtags)
 {
 	window.open('https://twitter.com/search?f=tweets&vertical=news&q=%23' + hashtags.join('%7c%23'), '_blank');
