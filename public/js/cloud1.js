@@ -7,12 +7,12 @@ var cloudOptions = {
 
 var doRun = false;
 
-$('#cloud1').jQCloud( [{text:'Politicator!',weight:10},{text:'What ARE they saying?',weight:5},{text:'Twitter!',weight:4},{text:' ',weight:1}], cloudOptions);
+$('#cloud1').jQCloud( [{text:'Politicator.com',weight:10},{text:'What ARE they saying?',weight:5},{text:'Twitter!',weight:4},{text:' ',weight:1}], cloudOptions );
 
 (function getHashtags() {
 	if ( !doRun ) {
 		doRun = true;
-		setTimeout(getHashtags, 2700);
+		setTimeout(getHashtags, 2200);
 		return;
 	}
 

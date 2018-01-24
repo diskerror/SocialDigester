@@ -2,8 +2,8 @@
 
 class Test
 {
-	function __construct()
-	{
-		echo __CLASS__;
-	}
+    function __construct()
+    {
+        echo __CLASS__;
+    }
 }

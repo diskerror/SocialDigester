@@ -35,7 +35,7 @@ $config = new \Phalcon\Config([
 
 	'word_stats' => [
 		'count'		=> 100,
-		'window'	=> 300, // seconds
+		'window'	=> 180, // seconds
 		'stop'		=> [],
 	],
 

@@ -4,64 +4,65 @@ namespace TwitterClient;
 
 abstract class ClientAbstract
 {
-	/**
-	 * @var \Phalcon\Config
-	 */
-	protected $_auth;
+    /**
+     * @var \Phalcon\Config
+     */
+    protected $_auth;
 
-	/**
-	 * @var array
-	 */
-	protected $_baseOauth;
+    /**
+     * @var array
+     */
+    protected $_baseOauth;
 
-	/**
-	 * @var string
-	 */
-	protected $_baseURL;
+    /**
+     * @var string
+     */
+    protected $_baseURL;
 
 
-	public function __construct(\Phalcon\Config $auth)
-	{
-		$this->_auth = $auth;
-		$this->_baseURL = 'https://stream.twitter.com/1.1/';
+    public function __construct(\Phalcon\Config $auth)
+    {
+        $this->_auth = $auth;
+        $this->_baseURL = 'https://stream.twitter.com/1.1/';
 
-		$this->_baseOauth = [
-			'oauth_consumer_key' => $this->_auth->consumer_key,
-			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_token' => $this->_auth->oauth_token,
-			'oauth_version' => '1.0'
-		];
-	}
+        $this->_baseOauth = [
+            'oauth_consumer_key'     => $this->_auth->consumer_key,
+            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_token'            => $this->_auth->oauth_token,
+            'oauth_version'          => '1.0'
+        ];
+    }
 
-	protected function _getHeader($url, $method, array $params)
-	{
-		$oauth = $this->_baseOauth + [
-			'oauth_nonce' => base64_encode( md5(microtime(true), true) ),
-			'oauth_timestamp' => time()
-		];
+    protected function _getHeader($url, $method, array $params)
+    {
+        $oauth = $this->_baseOauth + [
+                'oauth_nonce'     => base64_encode(md5(microtime(true), true)),
+                'oauth_timestamp' => time()
+            ];
 
-		$params += $oauth;
-		$rawEncoded = [];
-		uksort($params, function($a, $b){return strcasecmp($a, $b);});
-		foreach($params as $k => $v) {
-			$rawEncoded[] = rawurlencode($k) . '=' . rawurlencode($v);
-		}
+        $params += $oauth;
+        $rawEncoded = [];
+        uksort($params, function ($a, $b) { return strcasecmp($a, $b); });
+        foreach ($params as $k => $v) {
+            $rawEncoded[] = rawurlencode($k) . '=' . rawurlencode($v);
+        }
 
-		$oauth['oauth_signature'] = base64_encode(hash_hmac(
-			'sha1',
-			$method . "&" . rawurlencode($url) . '&' . rawurlencode(implode('&', $rawEncoded)),
-			rawurlencode($this->_auth->consumer_secret) . '&' . rawurlencode($this->_auth->oauth_token_secret),
-			true
-		));
+        $oauth['oauth_signature'] = base64_encode(hash_hmac(
+                                                      'sha1',
+                                                      $method . "&" . rawurlencode($url) . '&' . rawurlencode(implode('&',
+                                                                                                                      $rawEncoded)),
+                                                      rawurlencode($this->_auth->consumer_secret) . '&' . rawurlencode($this->_auth->oauth_token_secret),
+                                                      true
+                                                  ));
 
-		$quoted = [];
-		uksort($oauth, function($a, $b){return strcasecmp($a, $b);});
-		foreach ($oauth as $k => $v) {
-			$quoted[] = rawurlencode($k) . '="' . rawurlencode($v) . '"';
-		}
+        $quoted = [];
+        uksort($oauth, function ($a, $b) { return strcasecmp($a, $b); });
+        foreach ($oauth as $k => $v) {
+            $quoted[] = rawurlencode($k) . '="' . rawurlencode($v) . '"';
+        }
 
-		return 'Authorization: OAuth ' . implode(', ', $quoted);
-		//	This is friggin' convoluted.
-	}
+        return 'Authorization: OAuth ' . implode(', ', $quoted);
+        //	This is friggin' convoluted.
+    }
 
 }

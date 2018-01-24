@@ -7,91 +7,92 @@ use Diskerror\Typed\TypedArray;
 
 class AbstractTagCloud extends \Tally\AbstractTally
 {
-	/**
-	 * Format data with TagCloud object.
-	 * Words are normalized and grouped under the same tag.
-	 *
-	 * @param Phalcon\Config $config
-	 * @return array
-	 */
-	protected function _buildTagCloud($config)
-	{
-		//	Group words by normalized value.
-		$normalizedGroup = [];
-		foreach ( $this->_tally as $k=>$v ) {
-			$normalizedGroup[self::_normalizeText($k)][$k] = $v;
-		}
+    private static function _sortCountSumDesc($a, $b)
+    {
+        $aSum = array_sum($a);
+        $bSum = array_sum($b);
 
-		//	Sort on size, decending.
-		uasort($normalizedGroup, 'self::_sortCountSumDesc');
+        if ($aSum === $bSum) {
+            return 0;
+        }
 
-		//	Get the first X number of members.
-		$normalizedGroup = array_slice($normalizedGroup, 0, $config->count);
+        return ($aSum > $bSum) ? -1 : 1;
+    }
 
-		//	Sort on key.
-		ksort($normalizedGroup, SORT_NATURAL | SORT_FLAG_CASE);
+    /**
+     * Format data with TagCloud object.
+     * Words are normalized and grouped under the same tag.
+     *
+     * @param Phalcon\Config $config
+     *
+     * @return array
+     */
+    protected function _buildTagCloud($config)
+    {
+        //	Group words by normalized value.
+        $normalizedGroup = [];
+        foreach ($this->_tally as $k => $v) {
+            $normalizedGroup[self::_normalizeText($k)][$k] = $v;
+        }
 
-		$cloudWords = new TypedArray(null, 'TagCloud\Word');
-		foreach ( $normalizedGroup as $group ) {
-			$largestTally = 0;
-			$totalTally = 0;
-			$htmlTitle = '';
-			$twitterLookup = new Set();
+        //	Sort on size, decending.
+        uasort($normalizedGroup, 'self::_sortCountSumDesc');
 
-			//	find the most used capitalization/spelling style in the word group
-			foreach ( $group as $origName => $thisTally ) {
-				$totalTally += $thisTally;
-				$twitterLookup->add(strtolower($origName));
+        //	Get the first X number of members.
+        $normalizedGroup = array_slice($normalizedGroup, 0, $config->count);
 
-				if ( $thisTally > $largestTally ) {
-					$popularName = $origName;
-					$largestTally = $thisTally;
-				}
+        //	Sort on key.
+        ksort($normalizedGroup, SORT_NATURAL | SORT_FLAG_CASE);
 
-				if ( count($group) > 1 ) {
-					$htmlTitle .= '<br>' . $origName . ': ' . (string)$thisTally;
-				}
-			}
+        $cloudWords = new TypedArray(null, 'TagCloud\Word');
+        foreach ($normalizedGroup as $group) {
+            $largestTally = 0;
+            $totalTally = 0;
+            $htmlTitle = '';
+            $twitterLookup = new Set();
 
-			$cloudWords[] = [
-				'text' => $popularName,
-				'weight' => (int) (log($totalTally)*50)+$totalTally,   //  A combination of log and linear.
-				'link' => 'javascript:ToTwitter(["' . implode('","', $twitterLookup->toArray()) . '"])',
-				'html' => [
-					'title' => $totalTally . $htmlTitle,
-// 					'url' => 'https://twitter.com/search?f=tweets&vertical=news&q=%23' . implode('%7c%23', $twitterLookup->toArray())
-				]
-			];
-		}
+            //	find the most used capitalization/spelling style in the word group
+            foreach ($group as $origName => $thisTally) {
+                $totalTally += $thisTally;
+                $twitterLookup->add(strtolower($origName));
 
-		return $cloudWords->getSpecialObj(['dateToBsonDate'=>false]);
-	}
+                if ($thisTally > $largestTally) {
+                    $popularName = $origName;
+                    $largestTally = $thisTally;
+                }
 
-	private static function _normalizeText($s)
-	{
-		//	So "Schumer" == "Shumer".
-		$s = preg_replace('/sch/i', 'sh', $s);
+                if (count($group) > 1) {
+                    $htmlTitle .= '<br>' . $origName . ': ' . (string)$thisTally;
+                }
+            }
 
-		//	Plural becomes singular for longer words.
-		if ( strlen($s) > 5) {
-			$s = preg_replace('/s+$/i', '', $s);
-		}
+            $cloudWords[] = [
+                'text'   => $popularName,
+                'weight' => (int)(log($totalTally) * 50) + $totalTally,   //  A combination of log and linear.
+                'link'   => 'javascript:ToTwitter(["' . implode('","', $twitterLookup->toArray()) . '"])',
+                'html'   => [
+                    'title' => $totalTally . $htmlTitle,
+                    // 					'url' => 'https://twitter.com/search?f=tweets&vertical=news&q=%23' . implode('%7c%23', $twitterLookup->toArray())
+                ]
+            ];
+        }
+
+        return $cloudWords->getSpecialObj(['dateToBsonDate' => false]);
+    }
+
+    private static function _normalizeText($s)
+    {
+        //	So "Schumer" == "Shumer".
+        $s = preg_replace('/sch/i', 'sh', $s);
+
+        //	Plural becomes singular for longer words.
+        if (strlen($s) > 5) {
+            $s = preg_replace('/s+$/i', '', $s);
+        }
 
 // 		return strtolower($s);
-		return metaphone($s);
+        return metaphone($s);
 // 		return soundex($s);
-	}
-
-	private static function _sortCountSumDesc($a, $b)
-	{
-		$aSum = array_sum($a);
-		$bSum = array_sum($b);
-
-		if ($aSum === $bSum) {
-			return 0;
-		}
-
-		return ($aSum > $bSum) ? -1 : 1;
-	}
+    }
 
 }

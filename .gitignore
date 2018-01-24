@@ -6,3 +6,5 @@ composer.lock
 /config
 !/config/config.php
 
+.idea
+

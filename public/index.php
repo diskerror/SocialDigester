@@ -97,7 +97,7 @@ $app->get('/', function () use ($app) {
 		->addCss('css/jquery.qtip.min.css');
 
 	$app->assets
-		->addJs('js/jquery-3.2.1.min.js')
+		->addJs('js/jquery-3.3.1.min.js')
 		->addJs('js/jqcloud.min.js')
 		->addJs('js/cloud1.js')
 		->addJs('js/jquery.qtip.min.js')

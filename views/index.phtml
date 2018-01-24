@@ -19,8 +19,8 @@ vertical-align:top;
 padding:0 0.5em;
 }
 svg.defs-only {
-display:block; position: absolute; 
-height:0; width:0; margin: 0; padding: 0; 
+display:block; position: absolute;
+height:0; width:0; margin: 0; padding: 0;
 border: none; overflow: hidden;
 }
 </style>
@@ -47,20 +47,31 @@ border: none; overflow: hidden;
 </symbol>
 </svg>
 
-<table style="width:100%;border-bottom:1px solid #CCC"><tr>
-	<td><svg viewBox="0 0 30 30" width="60" height="60" style="fill:#09F"><use xlink:href="#consume"/></svg></td>
-	<td style="margin:0 auto"><b>Hashtags found with: </b><br><?= $terms ?></td>
-</tr></table>
+<header style="width:100%;border-bottom:1px solid #AAC">
+	<div style="float:left;padding:1em">
+		<svg viewBox="0 0 30 30" width="60" height="60" style="fill:#09F"><use xlink:href="#consume"/></svg>
+	</div>
+	<div style="padding:1em;height:60px">
+		<p style="vertical-align:middle"><b>Hashtags found with: </b><?= $terms ?></p>
+	</div>
+</header>
 
-<div style="width:100%;text-align:center;vertical-align:top">
-	<div id="cloud1" style="height:800px;width:100%;margin:0 auto;position:fixed;top:0">
-		<svg viewBox="0 0 30 30" width="600" height="600" style="margin-top:120px;fill:#F8FBFF"><use xlink:href="#consume"/></svg>
+<div style="width:100%;text-align:center;vertical-align:middle">
+	<div id="cloud1" style="height:620px;width:100%;margin:0 auto">
+		<svg viewBox="0 0 30 30" width="600" height="600" style="vertical-align:middle;fill:#F8FBFF"><use xlink:href="#consume"/></svg>
 	</div>
 </div>
 
-<table style="width:100%;border-top:1px solid #CCC;position:relative;top:660px;"><tr>
-	<td style="text-align:center;vertical-align:middle;width:45%;padding:0.5em"><a href="http://www.twitter.com" target="_blank"><img src="img/twitter.png" alt="Twitter logo" style="width:46px;height:42px"></a> &nbsp; Consumes Twitter tweets and counts the hashtags.</td>
-</tr></table>
+<footer style="width:100%;border-top:1px solid #AAC;padding:1em">
+	<div style="text-align:center;margin:auto;width:420px;height:50px">
+		<div style="width:50px;height:100%;float:left">
+			<a href="http://www.twitter.com" target="_blank"><img src="img/twitter.png" alt="Twitter logo" style="width:46px;height:42px"></a>
+		</div>
+		<div style="height:100%;float:right">
+			<p style="vertical-align:bottom">Consumes Twitter tweets and counts the hashtags.</p>
+		</div>
+	</div>
+</footer>
 
 </body>
 </html>
