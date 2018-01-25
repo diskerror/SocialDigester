@@ -12,7 +12,7 @@ $('#cloud1').jQCloud( [{text:'Politicator.com',weight:10},{text:'What ARE they s
 (function getHashtags() {
 	if ( !doRun ) {
 		doRun = true;
-		setTimeout(getHashtags, 2200);
+		setTimeout(getHashtags, 2000);
 		return;
 	}
 
