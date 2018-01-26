@@ -9,7 +9,7 @@ require $configFile;
 /**
  * Open all other files ending with '.php' as a configuration file.
  */
-foreach( glob(APP_PATH . '/config/*.php') as $g ) {
+foreach (glob(APP_PATH . '/config/*.php') as $g) {
 	if ($g !== $configFile) {
 		require $g;
 	}

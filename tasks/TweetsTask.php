@@ -9,29 +9,29 @@ class TweetsTask extends \Phalcon\Cli\Task
 		cout(PHP_EOL . 'And do what?');
 	}
 
+	public function getAction()
+	{
+		$stream = new TwitterClient\Stream($this->config->twitter->auth);
+		$consumer = new ConsumeTweets($this->mongo, $stream);
+
+// 		$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $this->config->process->name . '.log');
+		$logger = LoggerFactory::getStreamLogger();
+
+		$consumer->exec($this->config->twitter->track, $logger, $this->_getPidHandler());
+	}
+
 	protected function _getPidHandler()
 	{
-		if( !isset($this->_pidHandler) ) {
+		if (!isset($this->_pidHandler)) {
 			$this->_pidHandler = new PidHandler($this->config->process);
 		}
 
 		return $this->_pidHandler;
 	}
 
-	public function getAction()
-	{
-		$stream = new TwitterClient\Stream( $this->config->twitter->auth );
-		$consumer = new ConsumeTweets( $this->mongo, $stream );
-
-// 		$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $this->config->process->name . '.log');
-		$logger = LoggerFactory::getStreamLogger();
-
-		$consumer->exec( $this->config->twitter->track, $logger, $this->_getPidHandler());
-	}
-
 	public function stopAction()
 	{
-		if ( $this->_getPidHandler()->removeIfExists() ) {
+		if ($this->_getPidHandler()->removeIfExists()) {
 			cout('Process was stopped.');
 		}
 		else {
@@ -56,13 +56,13 @@ class TweetsTask extends \Phalcon\Cli\Task
 	{
 		$tweets = $this->mongo->feed->twitter->find([
 // 			'entities.hashtags.0.text' => ['$gt' => ''],
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime('10 seconds ago')*1000 )]
+			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
 
 		$t = 0;
-		foreach ( $tweets as $tweet ) {
+		foreach ($tweets as $tweet) {
 			$tweet = new Tweet($tweet);
-			print_r( $tweet->getSpecialObj(['dateToBsonDate'=>false]) );
+			print_r($tweet->getSpecialObj(['dateToBsonDate' => false]));
 			$t++;
 		}
 		echo $t;

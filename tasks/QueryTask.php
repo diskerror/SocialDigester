@@ -12,20 +12,20 @@ class QueryTask extends \Phalcon\Cli\Task
 		$twitDb = $this->di->get('mongo')->feed->twitter;
 
 		$hashtags = $twitDb->find([
-			'hashtags' => ['$gt' => '']
+			'hashtags' => ['$gt' => ''],
 		], [
-			'projection' => ['hashtags' => 1]
+			'projection' => ['hashtags' => 1],
 		]);
 
 		$tally = [];
-		foreach ( $hashtags as $ht ) {
-			foreach ( $ht['hashtags'] as $h ) {
+		foreach ($hashtags as $ht) {
+			foreach ($ht['hashtags'] as $h) {
 				$h = strtolower($h);
-				if ( array_key_exists( $h, $tally ) ) {
-					++$tally[$h];
+				if (array_key_exists($h, $tally)) {
+					++$tally[ $h ];
 				}
 				else {
-					$tally[$h] = 1;
+					$tally[ $h ] = 1;
 				}
 			}
 		}
@@ -39,19 +39,19 @@ class QueryTask extends \Phalcon\Cli\Task
 		$twitDb = $this->di->get('mongo')->feed->twitter;
 
 		$hashtags = $twitDb->find([
-			'words' => ['$gt' => '']
+			'words' => ['$gt' => ''],
 		], [
-			'projection' => ['words' => 1]
+			'projection' => ['words' => 1],
 		]);
 
 		$tally = [];
-		foreach ( $hashtags as $ht ) {
-			foreach ( $ht['words'] as $h ) {
-				if ( array_key_exists( $h, $tally ) ) {
-					++$tally[$h];
+		foreach ($hashtags as $ht) {
+			foreach ($ht['words'] as $h) {
+				if (array_key_exists($h, $tally)) {
+					++$tally[ $h ];
 				}
 				else {
-					$tally[$h] = 1;
+					$tally[ $h ] = 1;
 				}
 			}
 		}
@@ -65,19 +65,19 @@ class QueryTask extends \Phalcon\Cli\Task
 		$twitDb = $this->di->get('mongo')->feed->twitter;
 
 		$hashtags = $twitDb->find([
-			'pairs' => ['$gt' => '']
+			'pairs' => ['$gt' => ''],
 		], [
-			'projection' => ['pairs' => 1]
+			'projection' => ['pairs' => 1],
 		]);
 
 		$tally = [];
-		foreach ( $hashtags as $ht ) {
-			foreach ( $ht['pairs'] as $h ) {
-				if ( array_key_exists( $h, $tally ) ) {
-					++$tally[$h];
+		foreach ($hashtags as $ht) {
+			foreach ($ht['pairs'] as $h) {
+				if (array_key_exists($h, $tally)) {
+					++$tally[ $h ];
 				}
 				else {
-					$tally[$h] = 1;
+					$tally[ $h ] = 1;
 				}
 			}
 		}

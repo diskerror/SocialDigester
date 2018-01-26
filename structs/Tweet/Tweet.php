@@ -5,8 +5,8 @@ namespace Tweet;
 class Tweet extends \Diskerror\Typed\TypedClass
 {
 	protected $_map = [
-		'id' => 'id_',	//	from Twitter
-		'_id' => 'id_',	//	from Mongo
+		'id'  => 'id_',    //	from Twitter
+		'_id' => 'id_',    //	from Mongo
 	];
 
 	//	Only this top level "id" is used for the MongoDb "_id" auto index.
@@ -40,7 +40,7 @@ class Tweet extends \Diskerror\Typed\TypedClass
 
 	protected function _set_text($v)
 	{
-		$this->text = preg_replace( '/\s+/', ' ', \Normalizer::normalize((string) $v, \Normalizer::FORM_D) );
+		$this->text = preg_replace('/\s+/', ' ', \Normalizer::normalize((string)$v, \Normalizer::FORM_D));
 	}
 
 }

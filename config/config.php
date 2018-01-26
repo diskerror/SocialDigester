@@ -13,7 +13,7 @@
  *         'consumer_key'          => 'wwww',
  *         'consumer_secret'       => 'xxxx',
  *         'oauth_token'           => 'yyyy',
- *         'oauth_token_secret'    => 'zzzz'
+ *         'oauth_token_secret'    => 'zzzz',
  *     ]
  * );
  *
@@ -21,30 +21,30 @@
 
 $config = new \Phalcon\Config([
 
-	'version' => '0.3',
+	'version'      => '0.3',
 
 	/**
 	 * CLI: if true, then we print a new line at the end of each execution
 	 */
 	'printNewLine' => true,
 
-	'mongo' => 'mongodb://localhost:27017',
+	'mongo'        => 'mongodb://localhost:27017',
 
 	//	In seconds. Save tweets for 30 minutes.
 	'mongo_expire' => 1800,
 
 	'word_stats' => [
-		'count'		=> 100,
-		'window'	=> 180, // seconds
-		'stop'		=> [],
+		'count'  => 100,
+		'window' => 180, // seconds
+		'stop'   => [],
 	],
 
 	'twitter' => [
 		'auth' => [
-			'consumer_key'			=> '',
-			'consumer_secret'		=> '',
-			'oauth_token'			=> '',
-			'oauth_token_secret'	=> ''
+			'consumer_key'       => '',
+			'consumer_secret'    => '',
+			'oauth_token'        => '',
+			'oauth_token_secret' => '',
 		],
 
 		'track' => [
@@ -66,15 +66,15 @@ $config = new \Phalcon\Config([
 			'republican',
 			'schumer',
 			'scotus',
-			'trump'
+			'trump',
 		],
 
 	],
 
 	'process' => [
-		'name' => 'tweets',
-		'path' => '/var/run/twitter_digester',
-		'procDir' => '/proc/'		//	location of actual PID
-	]
+		'name'    => 'tweets',
+		'path'    => '/var/run/twitter_digester',
+		'procDir' => '/proc/'        //	location of actual PID
+	],
 
 ]);

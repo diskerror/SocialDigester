@@ -1,12 +1,12 @@
 {
-    "require": {
-        "diskerror/utilities": "dev-master",
-        "diskerror/typed": "dev-master",
-        "zendframework/zend-json": "^3.0",
-        "mongodb/mongodb": "^1.0.0",
-        "ext-phalcon": "*"
-    },
-    "suggest": {
-    	"curl": "curl"
-    }
+	"require": {
+		"diskerror/utilities": "dev-master",
+		"diskerror/typed": "dev-master",
+		"zendframework/zend-json": "^3.0",
+		"mongodb/mongodb": "^1.0.0",
+		"ext-phalcon": "*"
+	},
+	"suggest": {
+		"curl": "curl"
+	}
 }
