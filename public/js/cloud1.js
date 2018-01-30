@@ -15,7 +15,7 @@ $(function() {
 	(function getHashtags() {
 		if (!doRun) {
 			doRun = true;
-			setTimeout(getHashtags, 2000);
+			setTimeout(getHashtags, 1800);
 			return;
 		}
 

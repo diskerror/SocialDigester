@@ -19,7 +19,7 @@ class ConsumeTweets
 	 * Open and save a stream of tweets.
 	 *
 	 * @param \Phalcon\Config $track
-	 * @param stdClass        $logger should be a Logger or Phalcon\Logger\Abstract derivitave
+	 * @param stdClass|null   $logger should be a Logger or Phalcon\Logger\Abstract derivitave
 	 * @param PidHandler      $pid_handler
 	 *
 	 */
@@ -33,7 +33,7 @@ class ConsumeTweets
 			]);
 			$pidHandler->setFile();
 			$logger->info('Started capturing tweets.');
-			$sh = new StemHandler();
+// 			$sh = new StemHandler();
 
 			while (!$this->_twitterStream->isEOF()) {
 				if (!$pidHandler->exists()) {

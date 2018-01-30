@@ -17,6 +17,11 @@ class GetTask extends \Phalcon\Cli\Task
 		cout($this->config->process->path);
 	}
 
+	public function cachePathAction()
+	{
+		cout($this->config->index_cache->back->cacheDir);
+	}
+
 	public function hashtagsAction()
 	{
 		print_r(array_slice((new Tally\TopList\HashTags($this->mongo))->get($this->config->word_stats), 0, 25));

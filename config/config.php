@@ -68,13 +68,38 @@ $config = new \Phalcon\Config([
 			'scotus',
 			'trump',
 		],
-
 	],
 
 	'process' => [
 		'name'    => 'tweets',
 		'path'    => '/var/run/twitter_digester',
-		'procDir' => '/proc/'        //	location of actual PID
+		'procDir' => '/proc/'    //	location of actual PID
+	],
+
+	'index_cache' => [
+		'front' => [
+			'lifetime' => 300,    //	five minutes
+			'adapter'  => 'data',
+		],
+		'back'  => [
+			'cacheDir' => '/dev/shm/twitter_digester/',
+			'prefix'   => 'index',
+			'frontend' => null,
+			'adapter'  => 'file',
+		],
+	],
+
+	'tag_cloud_cache' => [
+		'front' => [
+			'lifetime' => 2,    //	two seconds
+			'adapter'  => 'data',
+		],
+		'back'  => [
+			'cacheDir' => '/dev/shm/twitter_digester/',
+			'prefix'   => 'tag_cloud',
+			'frontend' => null,
+			'adapter'  => 'file',
+		],
 	],
 
 ]);

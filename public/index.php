@@ -92,23 +92,34 @@ try {
 	 * Index.
 	 */
 	$app->get('/', function() use ($app) {
-		$app->assets
-			->addCss('css/jqcloud.min.css')
-			->addCss('css/jquery.qtip.min.css')
-			->addCss('css/jquery-ui.min.css')
-			->addCss('css/jquery-ui.structure.min.css');
+		$indexCache = $app->config->index_cache;
+		$indexCache->back->frontend = Phalcon\Cache\Frontend\Factory::load($indexCache->front);
+		$cache = Phalcon\Cache\Backend\Factory::load($indexCache->back);
 
-		$app->assets
-			->addJs('js/jquery-3.3.1.min.js')
-			->addJs('js/jqcloud.min.js')
-			->addJs('js/cloud1.js')
-			->addJs('js/jquery.qtip.min.js')
-			->addJs('js/imagesloaded.pkg.min.js')
-			->addJs('js/jquery-ui.min.js');
+		$output = $cache->get('');
 
-		$app->view->setVar('terms', implode(', ', (array)$app->config->twitter->track));
+		if ($output === null) {
+			$app->assets
+				->addCss('css/jqcloud.min.css')
+				->addCss('css/jquery.qtip.min.css')
+				->addCss('css/jquery-ui.min.css')
+				->addCss('css/jquery-ui.structure.min.css');
 
-		echo $app->view->render('index');
+			$app->assets
+				->addJs('js/jquery-3.3.1.min.js')
+				->addJs('js/jqcloud.min.js')
+				->addJs('js/cloud1.js')
+				->addJs('js/jquery.qtip.min.js')
+				->addJs('js/imagesloaded.pkg.min.js')
+				->addJs('js/jquery-ui.min.js');
+
+			$app->view->setVar('terms', implode(', ', (array)$app->config->twitter->track));
+
+			$output = $app->view->render('index');
+			$cache->save('', $output);
+		}
+
+		echo $output;
 	});
 
 	/**
@@ -116,9 +127,20 @@ try {
 	 * Returns JSON of hashtags.
 	 */
 	$app->get('/tag-cloud', function() use ($app) {
-		$tally = new Tally\TagCloud\Hashtags($app->mongo);
-		$app->view->setVar('obj', $tally->get($app->config->word_stats));
-		echo $app->view->render('js');
+		$tagCloudCache = $app->config->tag_cloud_cache;
+		$tagCloudCache->back->frontend = Phalcon\Cache\Frontend\Factory::load($tagCloudCache->front);
+		$cache = Phalcon\Cache\Backend\Factory::load($tagCloudCache->back);
+
+		$output = $cache->get('');
+
+		if ($output === null) {
+			$tally = new Tally\TagCloud\Hashtags($app->mongo);
+			$app->view->setVar('obj', $tally->get($app->config->word_stats));
+			$output = $app->view->render('js');
+			$cache->save('', $output);
+		}
+
+		echo $output;
 	});
 	$app->get('/hashtags', function() use ($app) {
 		$tally = new Tally\TagCloud\Hashtags($app->mongo);
