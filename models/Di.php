@@ -1,5 +1,7 @@
 <?php
 
+use \Phalcon\Mvc\Dispatcher as PhDispatcher;
+
 class Di extends Phalcon\Di\FactoryDefault
 {
 	function __construct(\Phalcon\Config $config)
@@ -28,10 +30,38 @@ class Di extends Phalcon\Di\FactoryDefault
 		});
 
 // 		$this->setShared('url', function () use ($config) {
-// 		   $url = new Phalcon\Mvc\Url();
-// 		   $url->setBaseUri($config->application->baseUri);
-// 		   return $url;
+// 			$url = new Phalcon\Mvc\Url();
+// 			$url->setBaseUri($config->application->baseUri);
+// 			return $url;
 // 		});
+
+		$di = $this;
+		$this->setShared(
+			'dispatcher',
+			function() use ($di) {
+				$events = $di->getShared('eventsManager');
+
+				$events->attach(
+					"dispatch:beforeException",
+					function($event, $dispatcher, $exception)
+					{
+						switch ($exception->getCode()) {
+							case PhDispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+							case PhDispatcher::EXCEPTION_ACTION_NOT_FOUND:
+								$dispatcher->forward([
+									'controller' => 'error',
+									'action'     => 'show404',
+								]);
+								return false;
+						}
+					}
+				);
+
+				$dispatcher = new PhDispatcher();
+				$dispatcher->setEventsManager($events);
+				return $dispatcher;
+			}
+		);
 	}
 
 }
