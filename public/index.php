@@ -18,24 +18,8 @@ try {
 		->register();
 
 	require APP_PATH . '/functions/config.php';
-	$di = new Di\Web($config);
 
-	$di->setShared('view', function() {
-		static $view;
-		if (!isset($view)) {
-			$view = new Phalcon\Mvc\View\Simple();
-			$view->setViewsDir(APP_PATH . '/views/');
-		}
-		return $view;
-	});
-
-// $di->setShared('url', function () use ($config) {
-//	   $url = new Phalcon\Mvc\Url();
-//	   $url->setBaseUri($config->application->baseUri);
-//	   return $url;
-// });
-
-	echo (new Phalcon\Mvc\Application($di))
+	echo (new Phalcon\Mvc\Application( new Di($config) ))
 		->useImplicitView(false)
 		->handle()
 		->getContent();
