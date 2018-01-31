@@ -36,7 +36,7 @@ class PidHandler
 	function setFile()
 	{
 		if (file_exists($this->_fullProcessFileName)) {
-			throw new Exception('process "' . $config->name . '" is already running or not stopped properly');
+			throw new Exception('process "' . $this->_fullProcessFileName . '" is already running or not stopped properly');
 		}
 
 		if (!file_exists($this->_basePath)) {

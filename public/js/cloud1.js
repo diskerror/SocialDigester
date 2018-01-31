@@ -34,7 +34,7 @@ $(function() {
 		ga('send', 'pageview');
 
 		$.ajax({
-			url: '/tag-cloud',
+			url: '/index/tagcloud',
 			dataType: 'json',
 			success: function(data) {
 				$('#cloud1').jQCloud('update', data);

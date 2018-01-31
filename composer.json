@@ -4,7 +4,8 @@
 		"diskerror/typed": "dev-master",
 		"zendframework/zend-json": "^3.0",
 		"mongodb/mongodb": "^1.0.0",
-		"ext-phalcon": "*"
+		"ext-phalcon": "*",
+		"php-science/textrank": "^1.0"
 	},
 	"suggest": {
 		"curl": "curl"
