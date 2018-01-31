@@ -11,7 +11,7 @@ class Text extends AbstractTagCloud
 	 *
 	 * @return array
 	 */
-	function get($config)
+	function get(\Phalcon\Config $config)
 	{
 		$tweets = $this->_twit->find([
 			'text'       => ['$gt' => ''],

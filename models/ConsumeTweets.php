@@ -115,8 +115,4 @@ class ConsumeTweets
 		$pidHandler->removeIfExists();
 	}
 
-	public function testAction()
-	{
-	}
-
 }

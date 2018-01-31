@@ -32,4 +32,10 @@ class GetTask extends \Phalcon\Cli\Task
 		print_r(array_slice((new Tally\TopList\Text($this->mongo))->get($this->config->word_stats), 0, 25));
 	}
 
+	public function summaryAction()
+	{
+		$summary = new GenerateSummary($this->mongo);
+		cout(implode("\n", $summary->exec($this->config->word_stats)));
+	}
+
 }
