@@ -5,7 +5,7 @@ class GenerateSummary
 	protected $_twit;
 
 	/**
-	 * @param MongoDB\Client       $mongo
+	 * @param MongoDB\Client $mongo
 	 */
 	function __construct(MongoDB\Client $mongo)
 	{
@@ -32,12 +32,12 @@ class GenerateSummary
 				continue;
 			}
 
-			$text .= $tweet->text . "\n";
+			$text .= preg_replace('/\\bRT /i', '', $tweet->text) . "\n";
 		}
 
 		$tr = new PhpScience\TextRank\TextRankFacade();
 		$tr->setStopWords(new PhpScience\TextRank\Tool\StopWords\English());
-		return $tr->summarizeTextBasic($text);
+		return array_values($tr->summarizeTextBasic($text));
 	}
 
 }

@@ -52,4 +52,11 @@ class IndexController extends \Phalcon\Mvc\Controller
 		return $output;
 	}
 
+	public function summaryAction()
+	{
+		$summary = new GenerateSummary($this->mongo);
+		$this->view->setVar('obj', $summary->exec($this->config->word_stats));
+		return $this->view->render('js');
+	}
+
 }

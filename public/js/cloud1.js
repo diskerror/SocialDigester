@@ -41,8 +41,25 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			},
 			complete: function() {
-				// Schedule the next request when the current one's complete
 				setTimeout(getHashtags, 3500);
+			}
+		});
+	})();
+
+	(function getSummary() {
+		if (!doRun) {
+			setTimeout(getSummary, 4000);
+			return;
+		}
+
+		$.ajax({
+			url: '/index/summary',
+			dataType: 'json',
+			success: function(data) {
+				$('#text1').html('<p>' + data.join('</p><p>') + '</p>');
+			},
+			complete: function() {
+				setTimeout(getSummary, 9000);
 			}
 		});
 	})();

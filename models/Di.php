@@ -43,8 +43,7 @@ class Di extends Phalcon\Di\FactoryDefault
 
 				$events->attach(
 					"dispatch:beforeException",
-					function($event, $dispatcher, $exception)
-					{
+					function($event, $dispatcher, $exception) {
 						switch ($exception->getCode()) {
 							case PhDispatcher::EXCEPTION_HANDLER_NOT_FOUND:
 							case PhDispatcher::EXCEPTION_ACTION_NOT_FOUND:

@@ -19,7 +19,7 @@ try {
 
 	require APP_PATH . '/functions/config.php';
 
-	echo (new Phalcon\Mvc\Application( new Di($config) ))
+	echo (new Phalcon\Mvc\Application(new Di($config)))
 		->useImplicitView(false)
 		->handle()
 		->getContent();
