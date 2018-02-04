@@ -21,10 +21,22 @@ class GenerateSummary
 	 */
 	public function exec(Phalcon\Config $config)
 	{
-		$tweets = $this->_twit->find([
-			'text'       => ['$gt' => ''],
-			'created_at' => ['$gt' => new MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
-		]);
+		$tweets =
+			$this->_twit->find(
+				[
+					'created_at' =>
+						['$gt' => new MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+				],
+				[
+					'sort' => [
+						'created_at' => -1
+					],
+					'limit' => 10000,
+					'projection' => [
+						'text' => 1
+					]
+				]
+			);
 
 		$text = '';
 		foreach ($tweets as $tweet) {
@@ -37,7 +49,7 @@ class GenerateSummary
 
 		$tr = new PhpScience\TextRank\TextRankFacade();
 		$tr->setStopWords(new PhpScience\TextRank\Tool\StopWords\English());
-		return array_values($tr->summarizeTextBasic($text));
+		return array_values($tr->summarizeTextCompound($text));
 	}
 
 }

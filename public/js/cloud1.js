@@ -59,7 +59,7 @@ $(function() {
 				$('#text1').html('<p>' + data.join('</p><p>') + '</p>');
 			},
 			complete: function() {
-				setTimeout(getSummary, 9000);
+				setTimeout(getSummary, 7000);
 			}
 		});
 	})();

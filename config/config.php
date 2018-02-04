@@ -34,9 +34,9 @@ $config = new \Phalcon\Config([
 	'mongo_expire' => 1800,
 
 	'word_stats' => [
-		'count'  => 100,
-		'window' => 180, // seconds
-		'stop'   => [],
+		'count'  => 100,	//	return the top X items
+		'window' => 300,	//	summarize the last X seconds
+		'stop'   => [],		//	stop words
 	],
 
 	'twitter' => [

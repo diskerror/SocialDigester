@@ -35,7 +35,7 @@ class GetTask extends \Phalcon\Cli\Task
 	public function summaryAction()
 	{
 		$summary = new GenerateSummary($this->mongo);
-		cout(implode("\n", $summary->exec($this->config->word_stats)));
+		cout(implode("\n\n", $summary->exec($this->config->word_stats)));
 	}
 
 }
