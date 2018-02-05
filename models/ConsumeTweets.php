@@ -2,17 +2,18 @@
 
 class ConsumeTweets
 {
-	protected $_mongo;
-	protected $_twitterStream;
+	protected $_tweets;
+
+	protected $_stream;
 
 	/**
-	 * @param MongoDB\Client       $mongo
+	 * @param MongoDB\Collection   $tweets
 	 * @param TwitterClient\Stream $stream
 	 */
-	function __construct(MongoDB\Client $mongo, TwitterClient\Stream $stream)
+	function __construct(MongoDB\Collection $tweets, TwitterClient\Stream $stream)
 	{
-		$this->_mongo = $mongo;
-		$this->_twitterStream = $stream;
+		$this->_tweets = $tweets;
+		$this->_stream = $stream;
 	}
 
 	/**
@@ -26,7 +27,7 @@ class ConsumeTweets
 	public function exec(\Phalcon\Config $track, $logger, $pidHandler)
 	{
 		try {
-			$this->_twitterStream->filter([
+			$this->_stream->filter([
 				'track'          => implode(',', (array)$track),
 				'language'       => 'en',
 				'stall_warnings' => true,
@@ -35,27 +36,26 @@ class ConsumeTweets
 			$logger->info('Started capturing tweets.');
 // 			$sh = new StemHandler();
 
-			while (!$this->_twitterStream->isEOF()) {
+			while (!$this->_stream->isEOF()) {
 				if (!$pidHandler->exists()) {
 					break;
 				}
 
 				//	get tweet
 				try {
-					$packet = $this->_twitterStream->read();
+					$packet = $this->_stream->read();
 
 					if (!is_object($packet)) {
 						continue;
 					}
 
-					if ($this->_twitterStream::isMessage($packet)) {
+					if ($this->_stream::isMessage($packet)) {
 						if ($logger !== null) {
 							$logger->info(json_encode($packet));
 						}
 
 						continue;
 					}
-
 					$tweet = new \Tweet\Tweet($packet);
 				}
 				catch (Exception $e) {
@@ -87,7 +87,7 @@ class ConsumeTweets
 
 				try {
 					//	convert to Mongo compatible object and insert
-					$this->_mongo->feed->twitter->insertOne($tweet->getSpecialObj());
+					$this->_tweets->insertOne($tweet->getSpecialObj());
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();

@@ -28,12 +28,16 @@ try {
 		return $config;
 	});
 
-	$di->setShared('mongo', function() use ($config) {
-		static $mongo;
-		if (!isset($mongo)) {
-			$mongo = new MongoDB\Client($config->mongo);
+	$di->setShared('tweets', function() use ($config) {
+		static $collection;
+		if (!isset($collection)) {
+			$mongo = $config->mongo;
+			$collection =
+				(new MongoDB\Client($mongo->host))
+					->{$mongo->database}
+					->{$mongo->collection};
 		}
-		return $mongo;
+		return $collection;
 	});
 
 	$arguments = [];

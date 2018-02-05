@@ -13,7 +13,7 @@ class Text extends \Tally\AbstractTally
 	 */
 	function get($config)
 	{
-		$tweets = $this->_twit->find([
+		$tweets = $this->_tweets->find([
 			'text'       => ['$gt' => ''],
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 		]);
@@ -34,9 +34,9 @@ class Text extends \Tally\AbstractTally
 			}
 		}
 
-		arsort($this->_tally);
+		$this->_rSortTally();
 
-		return $this->_tally;
+		return $this->_getTally();
 	}
 
 }

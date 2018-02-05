@@ -1,15 +1,21 @@
 <?php
 
+use PhpScience\TextRank\Tool\Graph;
+use PhpScience\TextRank\Tool\Parser;
+use PhpScience\TextRank\Tool\Score;
+use PhpScience\TextRank\Tool\StopWords\English;
+use PhpScience\TextRank\Tool\Summarize;
+
 class GenerateSummary
 {
-	protected $_twit;
+	protected $_tweets;
 
 	/**
-	 * @param MongoDB\Client $mongo
+	 * @param MongoDB\Collection $tweets
 	 */
-	function __construct(MongoDB\Client $mongo)
+	function __construct(MongoDB\Collection $tweets)
 	{
-		$this->_twit = $mongo->feed->twitter;
+		$this->_tweets = $tweets;
 	}
 
 	/**
@@ -22,34 +28,70 @@ class GenerateSummary
 	public function exec(Phalcon\Config $config)
 	{
 		$tweets =
-			$this->_twit->find(
+			$this->_tweets->find(
 				[
 					'created_at' =>
 						['$gt' => new MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 				],
 				[
-					'sort' => [
-						'created_at' => -1
+					'sort'       => [
+						'created_at' => -1,
 					],
-					'limit' => 10000,
+					'limit'      => 10000,
 					'projection' => [
-						'text' => 1
-					]
+						'text' => 1,
+					],
 				]
 			);
 
 		$text = '';
 		foreach ($tweets as $tweet) {
-			if (preg_match('/(^039|^rt$)/i', $tweet['text'])) {
+			if (preg_match('/(^039|^rt)/i', $tweet['text'])) {
 				continue;
 			}
 
-			$text .= preg_replace('/\\bRT /i', '', $tweet->text) . "\n";
+			$text .= $tweet->text . "\n";
 		}
 
-		$tr = new PhpScience\TextRank\TextRankFacade();
-		$tr->setStopWords(new PhpScience\TextRank\Tool\StopWords\English());
-		return array_values($tr->summarizeTextCompound($text));
+		$parser = new Parser();
+		$parser->setMinimumWordLength(2);
+		$parser->setRawText($text);
+		$parser->setStopWords(new English());
+
+		$text = $parser->parse();
+
+		$graph = new Graph();
+		$graph->createGraph($text);
+
+		$scores = (new Score())->calculate($graph, $text);
+
+		$summaries = (new Summarize())->getSummarize(
+			$scores,
+			$graph,
+			$text,
+			10,
+			100,
+			Summarize::GET_ALL_IMPORTANT
+		);
+
+		$subSummaries = [];
+		$summaryCount = 0;
+		$outputArr = [];
+		foreach ($summaries as $summary) {
+			$sub = substr($summary, 10, 30);
+			if (in_array($sub, $subSummaries)) {
+				continue;
+			}
+
+			$subSummaries[] = $sub;
+			$outputArr[] = $summary;
+
+			if (++$summaryCount >= 3) {
+				break;
+			}
+		}
+
+		return $outputArr;
 	}
 
 }

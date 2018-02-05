@@ -12,12 +12,24 @@ class Di extends Phalcon\Di\FactoryDefault
 			return $config;
 		});
 
-		$this->setShared('mongo', function() use ($config) {
-			static $mongo;
-			if (!isset($mongo)) {
-				$mongo = new MongoDB\Client($config->mongo);
+// 		$this->setShared('mongo', function() use ($config) {
+// 			static $mongo;
+// 			if (!isset($mongo)) {
+// 				$mongo = new MongoDB\Client($config->mongo->host);
+// 			}
+// 			return $mongo;
+// 		});
+
+		$this->setShared('tweets', function() use ($config) {
+			static $collection;
+			if (!isset($collection)) {
+				$mongo = $config->mongo;
+				$collection =
+					(new MongoDB\Client($mongo->host))
+						->{$mongo->database}
+						->{$mongo->collection};
 			}
-			return $mongo;
+			return $collection;
 		});
 
 		$this->setShared('view', function() {

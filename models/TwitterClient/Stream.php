@@ -67,6 +67,7 @@ class Stream extends ClientAbstract
 		$json = trim(fgets($this->_proc, 16384), "\x00..\x20");
 
 		return json_decode($json);
+// 		return \Zend\Json\Json::decode($json);
 	}
 
 	/**
@@ -80,7 +81,7 @@ class Stream extends ClientAbstract
 		switch ($function) {
 			case 'filter':
 			case 'sample':
-				break;
+			break;
 
 			default:
 				throw new LogicException('bad function name');

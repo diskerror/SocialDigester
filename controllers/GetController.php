@@ -8,14 +8,14 @@ class GetController extends \Phalcon\Mvc\Controller
 
 	public function hashtagsAction()
 	{
-		$tally = new Tally\TagCloud\Hashtags($this->mongo);
+		$tally = new Tally\TagCloud\Hashtags($this->tweets);
 		$this->view->setVar('obj', $tally->get($this->config->word_stats));
 		return $this->view->render('js');
 	}
 
 	public function textAction()
 	{
-		$tally = new Tally\TagCloud\Text($this->mongo);
+		$tally = new Tally\TagCloud\Text($this->tweets);
 		$this->view->setVar('obj', $tally->get($this->config->word_stats));
 		return $this->view->render('js');
 	}

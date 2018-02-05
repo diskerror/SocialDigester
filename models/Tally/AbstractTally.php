@@ -4,26 +4,36 @@ namespace Tally;
 
 abstract class AbstractTally
 {
-	protected $_twit;
-	protected $_tally;
+	protected $_tweets;
+
+	private $_tally;
 
 	/**
-	 * @param \MongoDB\Client $mongo
+	 * @param \MongoDB\Collection $tweets
 	 */
-	function __construct(\MongoDB\Client $mongo)
+	function __construct(\MongoDB\Collection $tweets)
 	{
-		$this->_twit = $mongo->feed->twitter;
+		$this->_tweets = $tweets;
 		$this->_tally = [];
 	}
 
-	public function doTally($word)
+	protected function doTally($word)
 	{
 		if (array_key_exists($word, $this->_tally)) {
-			++$this->_tally[ $word ];
+			++$this->_tally[$word];
 		}
 		else {
-			$this->_tally[ $word ] = 1;
+			$this->_tally[$word] = 1;
 		}
 	}
 
+	protected function _rSortTally()
+	{
+		arsort($this->_tally);
+	}
+
+	protected function &_getTally()
+	{
+		return $this->_tally;
+	}
 }

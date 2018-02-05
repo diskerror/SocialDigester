@@ -13,7 +13,7 @@ class Text extends AbstractTagCloud
 	 */
 	function get(\Phalcon\Config $config)
 	{
-		$tweets = $this->_twit->find([
+		$tweets = $this->_tweets->find([
 			'text'       => ['$gt' => ''],
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 		]);

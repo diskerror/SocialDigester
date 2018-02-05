@@ -3,6 +3,7 @@
 class StemHandler
 {
 	const STEMFILE = APP_PATH . '/stems.txt';
+
 	protected $_stems;
 
 	function __construct()
@@ -24,10 +25,10 @@ class StemHandler
 	{
 		$s = strtolower($s);
 		if (!array_key_exists($s, $this->_stems)) {
-			$this->_stems[ $s ] = Diskerror\Stem($s);
+			$this->_stems[$s] = Diskerror\Stem($s);
 		}
 
-		return $this->_stems[ $s ];
+		return $this->_stems[$s];
 	}
 
 }

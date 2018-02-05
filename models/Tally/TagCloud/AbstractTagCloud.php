@@ -28,8 +28,8 @@ class AbstractTagCloud extends \Tally\AbstractTally
 	{
 		//	Group words by normalized value.
 		$normalizedGroup = [];
-		foreach ($this->_tally as $k => $v) {
-			$normalizedGroup[ self::_normalizeText($k) ][ $k ] = $v;
+		foreach ($this->_getTally() as $k => $v) {
+			$normalizedGroup[self::_normalizeText($k)][$k] = $v;
 		}
 
 		//	Organize the group's properties.
