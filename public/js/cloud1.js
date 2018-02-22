@@ -41,7 +41,7 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			},
 			complete: function() {
-				setTimeout(getHashtags, 3500);
+				setTimeout(getHashtags, 3500);	//	milliseconds between cloud updates
 			}
 		});
 	})();
@@ -59,7 +59,7 @@ $(function() {
 				$('#text1').html('<p>' + data.join('</p><p>') + '</p>');
 			},
 			complete: function() {
-				setTimeout(getSummary, 7000);
+				setTimeout(getSummary, 9000);	//	milliseconds between text updates
 			}
 		});
 	})();

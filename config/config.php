@@ -32,7 +32,7 @@ $config = new \Phalcon\Config([
 		'host'       => 'mongodb://localhost:27017',
 		'database'   => 'digester',
 		'collection' => 'tweets',
-		'expire'     => 1800,        //	In seconds. Save tweets for 30 minutes.
+		'expire'     => 1200,        //	In seconds. Save tweets for 20 minutes.
 	],
 
 	'word_stats' => [
