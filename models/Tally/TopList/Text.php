@@ -30,7 +30,7 @@ class Text extends \Tally\AbstractTally
 					continue;
 				}
 
-				$self->doTally(strtolower($word));
+				self::doTally(strtolower($word));
 			}
 		}
 
