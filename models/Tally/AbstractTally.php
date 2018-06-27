@@ -20,9 +20,9 @@ abstract class AbstractTally
 //		}
 
 // 		return strtolower($s);
-//		return metaphone($s);
+		return metaphone($s);
 // 		return soundex($s);
-		return \Diskerror\stem($s);
+// 		return \Diskerror\stem($s)[0];
 	}
 
 }
