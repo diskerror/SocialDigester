@@ -2,6 +2,7 @@
 	"require": {
 		"diskerror/utilities": "dev-master",
 		"diskerror/typed": "dev-master",
+		"ext-diskerror_stem": "*",
 		"zendframework/zend-json": "^3.0",
 		"mongodb/mongodb": "^1.0.0",
 		"ext-phalcon": "*",

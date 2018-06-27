@@ -7,7 +7,7 @@ class GetTask extends \Phalcon\Cli\Task
 		echo 'Get what?';
 	}
 
-	public function VersionAction()
+	public function versionAction()
 	{
 		cout($this->config->version);
 	}
@@ -24,18 +24,27 @@ class GetTask extends \Phalcon\Cli\Task
 
 	public function hashtagsAction()
 	{
-		print_r(array_slice((new Tally\TopList\HashTags($this->tweets))->get($this->config->word_stats), 0, 25));
+		print_r(array_slice(Tally\TopList::getHashtags($this->db->tweets, $this->config->word_stats)->arr, 0, 25));
 	}
 
 	public function textwordsAction()
 	{
-		print_r(array_slice((new Tally\TopList\Text($this->tweets))->get($this->config->word_stats), 0, 25));
+		print_r(array_slice(Tally\TopList::getText($this->db->tweets, $this->config->word_stats)->arr, 0, 25));
 	}
 
 	public function summaryAction()
 	{
-		$summary = new GenerateSummary($this->tweets);
-		cout(implode("\n\n", $summary->exec($this->config->word_stats)));
+		$summary = GenerateSummary::exec($this->db->tweets, $this->config->word_stats);
+		cout(implode("\n\n", $summary));
 	}
 
+	public function snapshotAction()
+	{
+		$snap = new Snapshot([
+			'id_'      => time(),
+			'tagCloud' => Tally\TagCloud::getHashtags($this->db->tweets, $this->config->word_stats),
+		]);
+		$this->db->snapshots->insertOne($snap->getArrForMongo());
+		cout($snap->id_);
+	}
 }

@@ -4,36 +4,25 @@ namespace Tally;
 
 abstract class AbstractTally
 {
-	protected $_tweets;
+	private function __construct() { }
 
-	private $_tally;
-
-	/**
-	 * @param \MongoDB\Collection $tweets
-	 */
-	function __construct(\MongoDB\Collection $tweets)
+	protected static function _normalizeText($s)
 	{
-		$this->_tweets = $tweets;
-		$this->_tally = [];
+		//	remove trailing digits
+		$s = preg_replace('/\d+$/', '', $s);
+
+		//	So "Schumer" == "Shumer".
+		$s = preg_replace('/sch/i', 'sh', $s);
+
+		//	Plural becomes singular for longer words.
+//		if (strlen($s) > 5) {
+//			$s = preg_replace('/s+$/i', '', $s);
+//		}
+
+// 		return strtolower($s);
+//		return metaphone($s);
+// 		return soundex($s);
+		return \Diskerror\stem($s);
 	}
 
-	protected function doTally($word)
-	{
-		if (array_key_exists($word, $this->_tally)) {
-			++$this->_tally[$word];
-		}
-		else {
-			$this->_tally[$word] = 1;
-		}
-	}
-
-	protected function _rSortTally()
-	{
-		arsort($this->_tally);
-	}
-
-	protected function &_getTally()
-	{
-		return $this->_tally;
-	}
 }

@@ -12,7 +12,7 @@ class TweetBase extends \Diskerror\Typed\TypedClass
 	protected $_nullCreatesNullInstance = true;
 
 	//	Only this top level "id" is used for the MongoDb "_id" auto index.
-	//	The "getSpecialObj" method changes "id_" to "_id".
+	//	The "getSpecialArr" method changes "id_" to "_id".
 	protected $id_ = 0;
 	protected $created_at = '__class__Diskerror\Utilities\DateTime';
 	protected $contributors = null;

@@ -52,7 +52,7 @@ class Stream extends ClientAbstract
 		}
 	}
 
-	public function isEOF()
+	public function isEOF() : bool
 	{
 		return feof($this->_proc);
 	}
@@ -64,7 +64,7 @@ class Stream extends ClientAbstract
 	 */
 	public function read()
 	{
-		$json = trim(fgets($this->_proc, 16384), "\x00..\x20");
+		$json = trim(fgets($this->_proc, 16384), "\x00..\x20\x7F");
 
 		return json_decode($json);
 // 		return \Zend\Json\Json::decode($json);
@@ -74,9 +74,10 @@ class Stream extends ClientAbstract
 	 * Start a stream.
 	 * https://dev.twitter.com/streaming/overview
 	 *
-	 * @return boolean
+	 * @return bool
+	 * @throws BadMethodCallException
 	 */
-	public function __call($function, array $params = [])
+	public function __call($function, array $params = []) : bool
 	{
 		switch ($function) {
 			case 'filter':
@@ -84,7 +85,7 @@ class Stream extends ClientAbstract
 			break;
 
 			default:
-				throw new LogicException('bad function name');
+				throw new \BadMethodCallException();
 		}
 
 		$this->_closeProcIfOpen();

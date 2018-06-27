@@ -28,17 +28,17 @@ $config = new \Phalcon\Config([
 	 */
 	'printNewLine' => true,
 
-	'mongo' => [
+	'mongo_db' => [
 		'host'       => 'mongodb://localhost:27017',
 		'database'   => 'digester',
-		'collection' => 'tweets',
-		'expire'     => 1200,        //	In seconds. Save tweets for 20 minutes.
 	],
 
+	'tweets_expire' => 1200, //	In seconds. Save tweets for 20 minutes.
+
 	'word_stats' => [
-		'count'  => 100,    //	return the top X items
-		'window' => 300,    //	summarize the last X seconds
-		'stop'   => [],        //	stop words
+		'count'  => 100,	//	return the top X items
+		'window' => 300,	//	summarize the last X seconds
+		'stop'   => [],		//	stop words
 	],
 
 	'twitter' => [

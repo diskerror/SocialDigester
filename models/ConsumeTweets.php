@@ -1,33 +1,34 @@
 <?php
 
-class ConsumeTweets
+use MongoDB\Collection;
+use Phalcon\Config;
+use TwitterClient\Stream;
+
+
+final class ConsumeTweets
 {
-	protected $_tweets;
-
-	protected $_stream;
-
-	/**
-	 * @param MongoDB\Collection   $tweets
-	 * @param TwitterClient\Stream $stream
-	 */
-	function __construct(MongoDB\Collection $tweets, TwitterClient\Stream $stream)
-	{
-		$this->_tweets = $tweets;
-		$this->_stream = $stream;
-	}
+	private function __construct() { }
 
 	/**
 	 * Open and save a stream of tweets.
 	 *
-	 * @param \Phalcon\Config $track
-	 * @param stdClass|null   $logger should be a Logger or Phalcon\Logger\Abstract derivitave
-	 * @param PidHandler      $pid_handler
+	 * @param \MongoDB\Collection   $tweets
+	 * @param \TwitterClient\Stream $stream
+	 * @param \Phalcon\Config       $track
+	 * @param stdClass|null         $logger should be a Logger or Phalcon\Logger\Abstract derivitave
+	 * @param \PidHandler           $pid_handler
 	 *
 	 */
-	public function exec(\Phalcon\Config $track, $logger, $pidHandler)
+	public static function exec(
+		Collection $tweets,
+		Stream $stream,
+		Config $track,
+		$logger,
+		PidHandler $pidHandler
+	)
 	{
 		try {
-			$this->_stream->filter([
+			$stream->filter([
 				'track'          => implode(',', (array)$track),
 				'language'       => 'en',
 				'stall_warnings' => true,
@@ -36,20 +37,20 @@ class ConsumeTweets
 			$logger->info('Started capturing tweets.');
 // 			$sh = new StemHandler();
 
-			while (!$this->_stream->isEOF()) {
+			while (!$stream->isEOF()) {
 				if (!$pidHandler->exists()) {
 					break;
 				}
 
 				//	get tweet
 				try {
-					$packet = $this->_stream->read();
+					$packet = $stream->read();
 
 					if (!is_object($packet)) {
 						continue;
 					}
 
-					if ($this->_stream::isMessage($packet)) {
+					if ($stream::isMessage($packet)) {
 						if ($logger !== null) {
 							$logger->info(json_encode($packet));
 						}
@@ -87,7 +88,7 @@ class ConsumeTweets
 
 				try {
 					//	convert to Mongo compatible object and insert
-					$this->_tweets->insertOne($tweet->getSpecialObj());
+					$tweets->insertOne($tweet->getArrForMongo());
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();

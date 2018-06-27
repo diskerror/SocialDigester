@@ -12,15 +12,13 @@ class TweetsTask extends \Phalcon\Cli\Task
 	public function getAction()
 	{
 		$stream = new TwitterClient\Stream($this->config->twitter->auth);
-		$consumer = new ConsumeTweets($this->tweets, $stream);
-
 // 		$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $this->config->process->name . '.log');
 		$logger = LoggerFactory::getStreamLogger();
 
-		$consumer->exec($this->config->twitter->track, $logger, $this->_getPidHandler());
+		ConsumeTweets::exec($this->db->tweets, $stream, $this->config->twitter->track, $logger, $this->_getPidHandler());
 	}
 
-	protected function _getPidHandler()
+	protected function _getPidHandler() : PidHandler
 	{
 		if (!isset($this->_pidHandler)) {
 			$this->_pidHandler = new PidHandler($this->config->process);
@@ -42,19 +40,23 @@ class TweetsTask extends \Phalcon\Cli\Task
 	public function indexAction()
 	{
 		//	These only needs to be run on a new collection.
-		$this->tweets->createIndex(
+		$this->db->tweets->createIndex(
 			['created_at' => 1],
-			['expireAfterSeconds' => $this->config->mongo->expire]
+			['expireAfterSeconds' => $this->config->tweets_expire]
 		);
 
-		$this->tweets->createIndex(
+		$this->db->tweets->createIndex(
 			['entities.hashtags.0.text' => 1]
+		);
+
+		$this->db->snapshots->createIndex(
+			['created' => 1]
 		);
 	}
 
 	public function testAction()
 	{
-		$tweets = $this->tweets->find([
+		$tweets = $this->db->tweets->find([
 // 			'entities.hashtags.0.text' => ['$gt' => ''],
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
@@ -70,7 +72,7 @@ class TweetsTask extends \Phalcon\Cli\Task
 
 	public function runningAction()
 	{
-		$t = $this->tweets->count([
+		$t = $this->db->tweets->count([
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('4 seconds ago') * 1000)],
 		]);
 

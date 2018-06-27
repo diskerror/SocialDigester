@@ -11,7 +11,7 @@ class PidHandler
 	/**
 	 * @param Phalcon\Config $config
 	 */
-	function __construct(Phalcon\Config $config)
+	public function __construct(Phalcon\Config $config)
 	{
 		$this->_procDir = $config->procDir;
 		if (substr($this->_procDir, -1) !== '/') {
@@ -26,14 +26,14 @@ class PidHandler
 		$this->_fullProcessFileName = $this->_basePath . $config->name . '.pid';
 	}
 
-	function __destruct()
+	public function __destruct()
 	{
 		if (file_exists($this->_fullProcessFileName)) {
 			unlink($this->_fullProcessFileName);
 		}
 	}
 
-	function setFile()
+	public function setFile()
 	{
 		if (file_exists($this->_fullProcessFileName)) {
 			throw new Exception('process "' . $this->_fullProcessFileName . '" is already running or not stopped properly');
@@ -49,7 +49,7 @@ class PidHandler
 	/**
 	 * @return boolean
 	 */
-	public function exists()
+	public function exists() : bool
 	{
 		return file_exists($this->_fullProcessFileName);
 	}
@@ -57,7 +57,7 @@ class PidHandler
 	/**
 	 * @return boolean
 	 */
-	public function removeIfExists()
+	public function removeIfExists() : bool
 	{
 		if (file_exists($this->_fullProcessFileName)) {
 			$running = file_exists($this->_procDir . file_get_contents($this->_fullProcessFileName));

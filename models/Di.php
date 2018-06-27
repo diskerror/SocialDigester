@@ -20,16 +20,25 @@ class Di extends Phalcon\Di\FactoryDefault
 // 			return $mongo;
 // 		});
 
-		$this->setShared('tweets', function() use ($config) {
-			static $collection;
-			if (!isset($collection)) {
-				$mongo = $config->mongo;
-				$collection =
-					(new MongoDB\Client($mongo->host))
-						->{$mongo->database}
-						->{$mongo->collection};
+//		$this->setShared('tweets', function() use ($config) {
+//			static $collection;
+//			if (!isset($collection)) {
+//				tweets = $config->tweets;
+//				$collection =
+//					(new MongoDB\Client(tweets->host))
+//						->{tweets->database}
+//						->{tweets->collection};
+//			}
+//			return $collection;
+//		});
+
+		$this->setShared('db', function() use ($config) {
+			static $db;
+			if (!isset($db)) {
+				$db = (new MongoDB\Client($config->mongo_db->host))
+					->{$config->mongo_db->database};
 			}
-			return $collection;
+			return $db;
 		});
 
 		$this->setShared('view', function() {

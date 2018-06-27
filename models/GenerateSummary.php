@@ -6,49 +6,41 @@ use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
 
-class GenerateSummary
+final class GenerateSummary
 {
-	protected $_tweets;
-
-	/**
-	 * @param MongoDB\Collection $tweets
-	 */
-	function __construct(MongoDB\Collection $tweets)
-	{
-		$this->_tweets = $tweets;
-	}
+	private function __construct() { }
 
 	/**
 	 * Generate summary of tweet texts.
 	 *
-	 * @param Phalcon\Config $config
+	 * @param \MongoDB\Collection $tweetsCollection
+	 * @param Phalcon\Config      $config
 	 *
 	 * @return array
 	 */
-	public function exec(Phalcon\Config $config)
+	public static function exec(\MongoDB\Collection $tweetsCollection, Phalcon\Config $config) : array
 	{
-		$tweets =
-			$this->_tweets->find(
-				[
-					'created_at' =>
-						['$gt' => new MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+		$tweets = $tweetsCollection->find(
+			[
+				'created_at' =>
+					['$gt' => new MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+			],
+			[
+				'sort'       => [
+					'created_at' => -1,
 				],
-				[
-					'sort'       => [
-						'created_at' => -1,
-					],
-					'limit'      => 10000,
-					'projection' => [
-						'text' => 1,
-					],
-				]
-			);
+				'limit'      => 10000,
+				'projection' => [
+					'text' => 1,
+				],
+			]
+		);
 
 		$text = '';
 		foreach ($tweets as $tweet) {
-			if (preg_match('/(^039|^rt)/i', $tweet['text'])) {
-				continue;
-			}
+//			if (preg_match('/(^039|^rt)/i', $tweet['text'])) {
+//				continue;
+//			}
 
 			$text .= $tweet->text . "\n";
 		}
