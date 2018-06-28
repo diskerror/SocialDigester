@@ -1,13 +1,11 @@
 <?php
 
-use \Phalcon\Mvc\Dispatcher as PhDispatcher;
-
-class Di extends Phalcon\Di\FactoryDefault
+class DiBase
 {
-	function __construct(\Phalcon\Config $config)
-	{
-		parent::__construct();
+	private function __construct() { }
 
+	public static function init(\Phalcon\Di\FactoryDefault $di, \Phalcon\Config $config)
+	{
 		$this->setShared('config', function() use ($config) {
 			return $config;
 		});

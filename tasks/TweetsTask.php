@@ -76,7 +76,7 @@ class TweetsTask extends \Phalcon\Cli\Task
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('4 seconds ago') * 1000)],
 		]);
 
-		echo $t===0 ? 0 : 1;
+		cout($t===0 ? 0 : 1);
 	}
 
 }

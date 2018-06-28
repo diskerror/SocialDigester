@@ -62,7 +62,7 @@ class TallyWords implements Iterator
 	/**
 	 * Sort array keys by count, descending.
 	 */
-	public function rsort()
+	public function sort()
 	{
 		arsort($this->arr);
 	}

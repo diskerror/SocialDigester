@@ -6,7 +6,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Politicator</title>
-	<?php $this->assets->outputCss() ?>
+	<link rel="stylesheet" type="text/css" href="/css/jqcloud.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery.qtip.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.structure.min.css" />
+	<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="/js/jqcloud.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.qtip.min.js"></script>
+	<script type="text/javascript" src="/js/imagesloaded.pkg.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
 	<?php $this->assets->outputJs() ?>
 	<style>
 		body {
@@ -25,6 +33,11 @@
 			overflow: hidden;
 		}
 	</style>
+	<?php if(isset($tagCloud)): ?>
+	<script type="text/javascript">
+		var tagCloud = <?= Zend\Json\Json::encode($tagCloud, false, ['enableJsonExprFinder' => true]); ?>;
+	</script>
+	<?php endif; ?>
 </head>
 <body>
 <svg class="defs-only" xmlns="http://www.w3.org/2000/svg">
@@ -55,7 +68,7 @@
 		</svg>
 	</div>
 	<div style=";height:60px">
-		<p style="vertical-align:middle"><b>Hashtags found with: </b><?= $terms ?></p>
+		<p style="vertical-align:middle"><b>Hashtags found with: </b><?= isset($track) ? implode(', ', $track) : '' ?></p>
 	</div>
 </header>
 
@@ -69,6 +82,7 @@
 
 <div style="width:100%;height:152px;text-align:center;vertical-align:middle;border-top:1px solid #AAC;font-size:15px">
 	<div id="text1" style="width:100%;">
+		<?= isset($summary) ? '<p>'.implode("</p>\n\t\t<p>", $summary).'</p>' : '' ?>
 	</div>
 </div>
 
@@ -82,6 +96,11 @@
 			Consumes Twitter tweets, counts the hashtags,<br>and displays a summary.
 		</div>
 	</div>
+	<?php if(isset($created)): ?>
+	<div style="text-align:center;margin:auto;width:420px;height:50px">
+		<p>Snapshot taken on <?= (string)$created ?></p>
+	</div>
+	<?php endif; ?>
 </footer>
 
 </body>

@@ -11,21 +11,9 @@ class IndexController extends \Phalcon\Mvc\Controller
 		$output = $cache->get('');
 
 		if ($output === null) {
-			$this->assets
-				->addCss('css/jqcloud.min.css')
-				->addCss('css/jquery.qtip.min.css')
-				->addCss('css/jquery-ui.min.css')
-				->addCss('css/jquery-ui.structure.min.css');
+			$this->assets->addJs('js/cloud1.js');
 
-			$this->assets
-				->addJs('js/jquery-3.3.1.min.js')
-				->addJs('js/jqcloud.min.js')
-				->addJs('js/cloud1.js')
-				->addJs('js/jquery.qtip.min.js')
-				->addJs('js/imagesloaded.pkg.min.js')
-				->addJs('js/jquery-ui.min.js');
-
-			$this->view->setVar('terms', implode(', ', (array)$this->config->twitter->track));
+			$this->view->setVar('track', (array)$this->config->twitter->track);
 
 			$output = $this->view->render('index');
 			$cache->save('', $output);
@@ -54,7 +42,7 @@ class IndexController extends \Phalcon\Mvc\Controller
 
 	public function summaryAction()
 	{
-		$obj = GenerateSummary::exec($this->db->tweets, $this->config->word_stats);
+		$obj = Summary::get($this->db->tweets, $this->config->word_stats);
 		$this->view->setVar('obj', $obj);
 		return $this->view->render('js');
 	}

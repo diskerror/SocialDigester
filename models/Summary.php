@@ -6,7 +6,7 @@ use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
 
-final class GenerateSummary
+final class Summary
 {
 	private function __construct() { }
 
@@ -18,7 +18,7 @@ final class GenerateSummary
 	 *
 	 * @return array
 	 */
-	public static function exec(\MongoDB\Collection $tweetsCollection, Phalcon\Config $config) : array
+	public static function get(\MongoDB\Collection $tweetsCollection, Phalcon\Config $config) : array
 	{
 		$tweets = $tweetsCollection->find(
 			[
@@ -38,11 +38,12 @@ final class GenerateSummary
 
 		$text = '';
 		foreach ($tweets as $tweet) {
-//			if (preg_match('/(^039|^rt)/i', $tweet['text'])) {
-//				continue;
-//			}
-
-			$text .= $tweet->text . "\n";
+			if (preg_match('/(^039|^rt)/i', $tweet['text'])) {
+				$text .= substr($tweet->text, 3) . "\n";
+			}
+			else {
+				$text .= $tweet->text . "\n";
+			}
 		}
 
 		$parser = new Parser();

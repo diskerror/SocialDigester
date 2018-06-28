@@ -34,17 +34,12 @@ class GetTask extends \Phalcon\Cli\Task
 
 	public function summaryAction()
 	{
-		$summary = GenerateSummary::exec($this->db->tweets, $this->config->word_stats);
+		$summary = Summary::get($this->db->tweets, $this->config->word_stats);
 		cout(implode("\n\n", $summary));
 	}
 
 	public function snapshotAction()
 	{
-		$snap = new Snapshot([
-			'id_'      => time(),
-			'tagCloud' => Tally\TagCloud::getHashtags($this->db->tweets, $this->config->word_stats),
-		]);
-		$this->db->snapshots->insertOne($snap->getArrForMongo());
-		cout($snap->id_);
+		cout(Snapshot::make($this->db, $this->config));
 	}
 }

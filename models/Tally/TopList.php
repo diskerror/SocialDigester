@@ -40,7 +40,7 @@ final class TopList extends AbstractTally
 			}
 		}
 
-		$tally->rsort();
+		$tally->sort();
 
 		return $tally;
 	}
@@ -77,7 +77,7 @@ final class TopList extends AbstractTally
 			}
 		}
 
-		$tally->rsort();
+		$tally->sort();
 
 		return $tally;
 	}
