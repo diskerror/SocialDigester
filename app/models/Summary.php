@@ -23,7 +23,7 @@ final class Summary
 		$tweets = $tweetsCollection->find(
 			[
 				'created_at' =>
-					['$gt' => new MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+					['$gt' => date('Y-m-d H:i:s', strtotime($config->window . ' seconds ago'))],
 			],
 			[
 				'sort'       => [

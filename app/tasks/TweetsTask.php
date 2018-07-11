@@ -58,13 +58,14 @@ class TweetsTask extends \Phalcon\Cli\Task
 	{
 		$tweets = $this->db->tweets->find([
 // 			'entities.hashtags.0.text' => ['$gt' => ''],
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('10 seconds ago') * 1000)],
+			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('10 seconds ago'))],
 		]);
 
 		$t = 0;
+		$obj = new Tweet\Tweet();
 		foreach ($tweets as $tweet) {
-			$tweet = new Tweet\Tweet($tweet);
-			print_r($tweet->toArray());
+			$obj->assign($tweet);
+			print_r($obj->toArray());
 			$t++;
 		}
 		echo $t;
@@ -73,7 +74,7 @@ class TweetsTask extends \Phalcon\Cli\Task
 	public function runningAction()
 	{
 		$t = $this->db->tweets->count([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('4 seconds ago') * 1000)],
+			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('4 seconds ago'))],
 		]);
 
 		fwrite(STDOUT, $t===0 ? 0 : 1);

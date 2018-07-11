@@ -30,7 +30,7 @@ final class TagCloud extends AbstractTally
 	{
 		$tweets = $tweetsCollection->find([
 			'entities.hashtags.0.text' => ['$gt' => ''],
-			'created_at'               => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+			'created_at'               => ['$gt' => date('Y-m-d H:i:s', strtotime($config->window . ' seconds ago'))],
 		]);
 
 		$uniqeWords = new Set();
@@ -128,7 +128,7 @@ final class TagCloud extends AbstractTally
 	{
 		$tweets = $tweetsCollection->find([
 			'text'       => ['$gt' => ''],
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime($config->window . ' seconds ago'))],
 		]);
 
 		$tally = new TallyWords();

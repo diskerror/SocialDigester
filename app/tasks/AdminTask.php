@@ -13,7 +13,7 @@ class AdminTask extends \Phalcon\Cli\Task
 		fwrite(STDOUT, Tweets::findFirst());
 		return;
 		$t = $this->mongo->tweets->count([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('10 seconds ago') * 1000)],
+			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('10 seconds ago'))],
 		]);
 
 		fwrite(STDOUT, 'Tweets are being received at a rate of ' . $t / 10 . ' per second.');
