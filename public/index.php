@@ -3,7 +3,7 @@
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
-define('APP_PATH', realpath(__DIR__ . '/..'));
+define('APP_PATH', '..');
 
 require APP_PATH . '/functions/errorHandler.php';
 require APP_PATH . '/vendor/autoload.php';
