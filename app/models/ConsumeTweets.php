@@ -3,7 +3,7 @@
 use MongoDB\Collection;
 use Phalcon\Config;
 use TwitterClient\Stream;
-
+use Diskerror\Typed\ArrayOptions as AO;
 
 final class ConsumeTweets
 {
@@ -37,6 +37,9 @@ final class ConsumeTweets
 			$logger->info('Started capturing tweets.');
 // 			$sh = new StemHandler();
 
+			$tweet = new \Tweet\Tweet();
+			$tweet->setArrayOptions(AO::OMIT_EMPTY|AO::OMIT_RESOURCE|AO::SWITCH_ID|AO::TO_BSON_DATE);
+
 			while (!$stream->isEOF()) {
 				if (!$pidHandler->exists()) {
 					break;
@@ -57,7 +60,8 @@ final class ConsumeTweets
 
 						continue;
 					}
-					$tweet = new \Tweet\Tweet($packet);
+					$tweet->assign();			//	clear original
+					$tweet->assign($packet);	//	adds to or updates existing data
 				}
 				catch (Exception $e) {
 					if ($logger !== null) {
@@ -88,7 +92,7 @@ final class ConsumeTweets
 
 				try {
 					//	convert to Mongo compatible object and insert
-					$tweets->insertOne($tweet->getArrForMongo());
+					$tweets->insertOne($tweet->toArray());
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();

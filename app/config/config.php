@@ -19,21 +19,21 @@
  *
  */
 
-$config = new \Phalcon\Config([
+return [
 
-	'version'      => '0.3',
+	'version' => '0.4',
 
 	'mongo_db' => [
-		'host'       => 'mongodb://localhost:27017',
-		'database'   => 'digester',
+		'host'     => 'mongodb://localhost:27017',
+		'database' => 'digester',
 	],
 
 	'tweets_expire' => 1200, //	In seconds. Save tweets for 20 minutes.
 
 	'word_stats' => [
-		'count'  => 100,	//	return the top X items
-		'window' => 300,	//	summarize the last X seconds
-		'stop'   => [],		//	stop words
+		'count'  => 100,    //	return the top X items
+		'window' => 300,    //	summarize the last X seconds
+		'stop'   => [],     //	stop words
 	],
 
 	'twitter' => [
@@ -99,4 +99,4 @@ $config = new \Phalcon\Config([
 		],
 	],
 
-]);
+];

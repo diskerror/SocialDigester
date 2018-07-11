@@ -69,7 +69,7 @@ final class Summary
 
 		$subSummaries = [];
 		$summaryCount = 0;
-		$outputArr = [];
+		$outputArr    = [];
 		foreach ($summaries as $summary) {
 			$sub = substr($summary, 10, 30);
 			if (in_array($sub, $subSummaries)) {
@@ -77,7 +77,7 @@ final class Summary
 			}
 
 			$subSummaries[] = $sub;
-			$outputArr[] = $summary;
+			$outputArr[]    = $summary;
 
 			if (++$summaryCount >= 3) {
 				break;

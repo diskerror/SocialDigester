@@ -33,7 +33,7 @@ class LoggerFactory
 	 */
 	function __construct($fileName)
 	{
-		$this->_file = self::getFile($fileName);
+		$this->_file   = self::getFile($fileName);
 		$this->_stream = self::getStream();
 	}
 

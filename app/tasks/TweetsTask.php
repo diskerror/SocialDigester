@@ -6,7 +6,7 @@ class TweetsTask extends \Phalcon\Cli\Task
 
 	public function mainAction()
 	{
-		cout(PHP_EOL . 'And do what?');
+		fwrite(STDOUT, 'And do what?');
 	}
 
 	public function getAction()
@@ -30,10 +30,10 @@ class TweetsTask extends \Phalcon\Cli\Task
 	public function stopAction()
 	{
 		if ($this->_getPidHandler()->removeIfExists()) {
-			cout('Process was stopped.');
+			fwrite(STDOUT, 'Process was stopped.');
 		}
 		else {
-			cout('Process was not running.');
+			fwrite(STDOUT, 'Process was not running.');
 		}
 	}
 
@@ -76,7 +76,7 @@ class TweetsTask extends \Phalcon\Cli\Task
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('4 seconds ago') * 1000)],
 		]);
 
-		cout($t===0 ? 0 : 1);
+		fwrite(STDOUT, $t===0 ? 0 : 1);
 	}
 
 }

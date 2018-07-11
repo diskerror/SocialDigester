@@ -4,9 +4,9 @@ class IndexController extends \Phalcon\Mvc\Controller
 {
 	public function indexAction()
 	{
-		$indexCache = $this->config->index_cache;
+		$indexCache                 = $this->config->index_cache;
 		$indexCache->back->frontend = Phalcon\Cache\Frontend\Factory::load($indexCache->front);
-		$cache = Phalcon\Cache\Backend\Factory::load($indexCache->back);
+		$cache                      = Phalcon\Cache\Backend\Factory::load($indexCache->back);
 
 		$output = $cache->get('');
 
@@ -24,15 +24,15 @@ class IndexController extends \Phalcon\Mvc\Controller
 
 	public function tagCloudAction()
 	{
-		$tagCloudCache = $this->config->tag_cloud_cache;
+		$tagCloudCache                 = $this->config->tag_cloud_cache;
 		$tagCloudCache->back->frontend = Phalcon\Cache\Frontend\Factory::load($tagCloudCache->front);
-		$cache = Phalcon\Cache\Backend\Factory::load($tagCloudCache->back);
+		$cache                         = Phalcon\Cache\Backend\Factory::load($tagCloudCache->back);
 
 		$output = $cache->get('');
 
 		if ($output === null) {
 			$obj = Tally\TagCloud::getHashtags($this->db->tweets, $this->config->word_stats);
-			$this->view->setVar('obj', $obj->getArrForRest());
+			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 			$cache->save('', $output);
 		}

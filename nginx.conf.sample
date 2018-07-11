@@ -15,7 +15,8 @@
 #
 server {
         listen       80;
-        server_name  politicator.com;
+#        server_name  politicator.com;
+        server_name  pole.dev;
         root "/var/www/politicator/public";
         index index.php;
 
