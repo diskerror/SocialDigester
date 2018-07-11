@@ -3,12 +3,13 @@
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
-define('APP_PATH', realpath(__DIR__ . '/..'));
-
-require APP_PATH . '/functions/errorHandler.php';
-require APP_PATH . '/vendor/autoload.php';
+define('BASE_PATH', dirname(__DIR__));
+define('APP_PATH', BASE_PATH . '/app');
 
 try {
+	require APP_PATH . '/functions/errorHandler.php';
+	require BASE_PATH . '/vendor/autoload.php';
+
 	(new \Phalcon\Loader())
 		->registerDirs([
 			APP_PATH . '/controllers/',

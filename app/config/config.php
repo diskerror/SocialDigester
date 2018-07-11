@@ -23,11 +23,6 @@ $config = new \Phalcon\Config([
 
 	'version'      => '0.3',
 
-	/**
-	 * CLI: if true, then we print a new line at the end of each execution
-	 */
-	'printNewLine' => true,
-
 	'mongo_db' => [
 		'host'       => 'mongodb://localhost:27017',
 		'database'   => 'digester',
