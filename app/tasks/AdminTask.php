@@ -10,13 +10,18 @@ class AdminTask extends \Phalcon\Cli\Task
 {
 	public function mainAction()
 	{
-		fwrite(STDOUT, Tweets::findFirst());
-		return;
-		$t = $this->mongo->tweets->count([
+// 		fwrite(STDOUT, Tweets::findFirst());
+// 		return;
+		$t = $this->db->tweets->count([
 			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('10 seconds ago'))],
 		]);
 
 		fwrite(STDOUT, 'Tweets are being received at a rate of ' . $t / 10 . ' per second.');
+	}
+
+	public function showConfigAction()
+	{
+		fwrite(STDOUT, json_encode($this->config, JSON_PRETTY_PRINT));
 	}
 
 	public function checkRunningAction()
