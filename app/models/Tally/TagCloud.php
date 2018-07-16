@@ -65,6 +65,8 @@ final class TagCloud extends AbstractTally
 	 */
 	private static function _buildTagCloud(TallyWords $tally, Config $config) : TypedArray
 	{
+		$tally->adjustCount($config->window/60.0); // changes value to count per minute
+
 		//	Group words by normalized value.
 		$normalizedGroup = [];
 		foreach ($tally as $k => $v) {
@@ -81,7 +83,7 @@ final class TagCloud extends AbstractTally
 		uasort($normalizedGroup, 'self::_sortCountSumDesc');
 
 		//	Get the first X number of members.
-		$normalizedGroup = array_slice($normalizedGroup, 0, $config->count);
+		$normalizedGroup = array_slice($normalizedGroup, 0, $config->quantity);
 
 		//	Sort on key.
 		ksort($normalizedGroup, SORT_NATURAL | SORT_FLAG_CASE);
@@ -117,7 +119,7 @@ final class TagCloud extends AbstractTally
 	}
 
 	/**
-	 * Return count of each word in text field.
+	 * Return quantity of each word in text field.
 	 *
 	 * @param Collection $tweetsCollection
 	 * @param Config     $config

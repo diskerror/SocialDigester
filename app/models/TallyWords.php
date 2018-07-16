@@ -9,7 +9,7 @@
 class TallyWords implements Iterator
 {
 	/**
-	 * The key will be words and the value will be an integer count of that word.
+	 * The key will be words and the value will be an integer quantity of that word.
 	 * @var array
 	 */
 	public $arr;
@@ -65,5 +65,12 @@ class TallyWords implements Iterator
 	public function sort()
 	{
 		arsort($this->arr);
+	}
+
+	public function adjustCount(float $div)
+	{
+		foreach ($this->arr as &$v) {
+			$v /= $div;
+		}
 	}
 }

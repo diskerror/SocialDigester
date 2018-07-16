@@ -13,3 +13,9 @@ class Tweets extends \Phalcon\Mvc\MongoCollection
 		$this->setSource('tweets');
 	}
 }
+
+/*
+ *
+ * https://forum.phalconphp.com/discussion/14885/mongodb-support-in-phalcon-3-php-7
+ *
+ */

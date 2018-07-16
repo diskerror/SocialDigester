@@ -31,9 +31,9 @@ return [
 	'tweets_expire' => 1200, //	In seconds. Save tweets for 20 minutes.
 
 	'word_stats' => [
-		'count'  => 100,    //	return the top X items
-		'window' => 300,    //	summarize the last X seconds
-		'stop'   => [],     //	stop words
+		'quantity' => 100,    //	return the top X items
+		'window'   => 300,    //	summarize the last X seconds
+		'stop'     => [],     //	stop words
 	],
 
 	'twitter' => [

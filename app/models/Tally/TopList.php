@@ -15,7 +15,7 @@ final class TopList extends AbstractTally
 	private function __construct() { }
 
 	/**
-	 * Return count of each current hashtag.
+	 * Return quantity of each current hashtag.
 	 *
 	 * @param \MongoDB\Collection $tweetsCollection
 	 * @param Phalcon\Config      $config
@@ -46,7 +46,7 @@ final class TopList extends AbstractTally
 	}
 
 	/**
-	 * Return count of each word in text field.
+	 * Return quantity of each word in text field.
 	 *
 	 * @param \MongoDB\Collection $tweetsCollection
 	 * @param Phalcon\Config      $config
