@@ -1,45 +1,55 @@
 <?php
 
-class GetTask extends \Phalcon\Cli\Task
+class GetTask extends Cli
 {
 	public function mainAction()
 	{
-		fwrite(STDOUT, 'Get what?');
+		self::println("Get what?");
 	}
 
 	public function versionAction()
 	{
-		fwrite(STDOUT, $this->config->version);
+		self::println($this->config->version);
 	}
 
 	public function pidPathAction()
 	{
-		fwrite(STDOUT, $this->config->process->path);
+		self::println($this->config->process->path);
 	}
 
 	public function cachePathAction()
 	{
-		fwrite(STDOUT, $this->config->index_cache->back->cacheDir);
+		self::println( $this->config->index_cache->back->cacheDir);
 	}
 
 	public function hashtagsAction()
 	{
-		fwrite(STDOUT, print_r(array_slice(Tally\TopList::getHashtags($this->db->tweets, $this->config->word_stats)->arr, 0, 25), true));
+		self::println(
+			json_encode(
+				array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats)->arr, 0, 25),
+				JSON_PRETTY_PRINT
+			)
+		);
 	}
 
 	public function textwordsAction()
 	{
-		fwrite(STDOUT, print_r(array_slice(Tally\TopList::getText($this->db->tweets, $this->config->word_stats)->arr, 0, 25), true));
+		self::println(
+			json_encode(
+				array_slice(Code\Tally\TopList::getText($this->config->word_stats)->arr, 0, 25),
+				JSON_PRETTY_PRINT
+			)
+		);
 	}
 
 	public function summaryAction()
 	{
-		$summary = Summary::get($this->db->tweets, $this->config->word_stats);
-		fwrite(STDOUT, implode("\n\n", $summary));
+		$summary = Code\Summary::get($this->config->word_stats);
+		self::print(implode("\n\n", $summary));
 	}
 
 	public function snapshotAction()
 	{
-		fwrite(STDOUT, Snapshot::make($this->db, $this->config));
+		self::println(Code\Snapshots::make($this->config));
 	}
 }

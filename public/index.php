@@ -17,13 +17,12 @@ set_error_handler(
 );
 
 try {
+	//	Models are loaded with the Composer autoloader.
 	require BASE_PATH . '/vendor/autoload.php';
 
 	(new \Phalcon\Loader())
 		->registerDirs([
 			APP_PATH . '/controllers/',
-			APP_PATH . '/models/',
-			APP_PATH . '/structs/',
 		])
 		->register();
 

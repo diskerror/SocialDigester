@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains the
+ * This file contains the common bootstrap code.
  */
 
 $di->setShared('config', function() {
@@ -8,7 +8,7 @@ $di->setShared('config', function() {
 	if (!isset($config)) {
 		//	Always open this configuration file with it's default values.
 		$configFile = APP_PATH . '/config/config.php';
-		$config = new Phalcon\Config(require $configFile);
+		$config     = new Phalcon\Config(require $configFile);
 
 		//	Open all other files ending with '.php' as a configuration file.
 		//	'glob' defaults to sorted.
@@ -22,15 +22,14 @@ $di->setShared('config', function() {
 	return $config;
 });
 
-$di->setShared('db', function() {
-	static $db;
-	if (!isset($db)) {
+$di->setShared('mongo', function() {
+	static $mongo;
+	if (!isset($mongo)) {
 		$mongo_db = $this->getConfig()->mongo_db;
 		$client = new MongoDB\Client($mongo_db->host);
-//		$client = new \Phalcon\Db\Adapter\MongoDB\Client($mongo_db->host);
-		$db = $client->{$mongo_db->database};
+		$mongo  = $client->{$mongo_db->database};
 	}
-	return $db;
+	return $mongo;
 });
 
 $di->set('collectionManager', function() {

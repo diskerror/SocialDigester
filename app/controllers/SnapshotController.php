@@ -12,7 +12,7 @@ class SnapshotController extends \Phalcon\Mvc\Controller
 	{
 		$this->assets->addJs('js/snapshot.js');
 
-		$snapshot = $this->db->snapshots->find(['_id' => (int)$this->dispatcher->getParam('id')]);
+		$snapshot = $this->mongo->snapshots->find(['_id' => (int)$this->dispatcher->getParam('id')]);
 
 		if (!$snapshot) {
 			return $this->response->redirect('/', true);
@@ -21,7 +21,7 @@ class SnapshotController extends \Phalcon\Mvc\Controller
 		$this->view->setVar('created', $snapshot->created);
 		$this->view->setVar('track', $snapshot->track->toArray());
 		$this->view->setVar('tagCloud', $snapshot->tagCloud->toArray());
-		$this->view->setVar('summary', $snapshot->summary->toArray());
+		$this->view->setVar('Code\Summary', $snapshot->summary->toArray());
 		$output = $this->view->render('index');
 
 		return $output;

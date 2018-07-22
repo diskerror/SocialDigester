@@ -68,7 +68,7 @@ return [
 	],
 
 	'process' => [
-		'name'    => 'tweets',
+		'name'    => 'twitter_digester',
 		'path'    => '/var/run/twitter_digester',
 		'procDir' => '/proc/'    //	location of actual PID
 	],

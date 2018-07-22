@@ -6,25 +6,31 @@
  * Time: 7:26 PM
  */
 
-class AdminTask extends \Phalcon\Cli\Task
+class AdminTask extends Cli
 {
-	public function mainAction()
+	public function rateAction()
 	{
-// 		fwrite(STDOUT, Tweets::findFirst());
-// 		return;
-		$t = $this->db->tweets->count([
-			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('10 seconds ago'))],
+		$t = (new Resource\Tweets())->count([
+			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('20 seconds ago'))],
 		]);
 
-		fwrite(STDOUT, 'Tweets are being received at a rate of ' . $t / 10 . ' per second.');
+		self::println('Tweets are being received at a rate of ' . $t / 20 . ' per second.');
 	}
 
 	public function showConfigAction()
 	{
-		fwrite(STDOUT, json_encode($this->config, JSON_PRETTY_PRINT));
+		self::println(json_encode($this->config, JSON_PRETTY_PRINT));
 	}
 
-	public function checkRunningAction()
+	public function indexAction()
+	{
+		//	These only needs to be run on a new collection.
+		(new Resource\Tweets())->doIndex($this->config->tweets_expire);
+		(new Resource\Snapshots())->doIndex($this->config->tweets_expire);
+		(new Resource\Messages())->doIndex($this->config->tweets_expire);
+	}
+
+	public function handleRunningAction()
 	{
 //DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 //

@@ -1,10 +1,10 @@
 <?php
 
-class MainTask extends \Phalcon\Cli\Task
+class MainTask extends Cli
 {
 	public function mainAction()
 	{
-		fwrite(STDOUT, 'working');
+		self::println('working');
 	}
 
 }

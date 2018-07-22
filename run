@@ -18,13 +18,12 @@ set_error_handler(
 );
 
 try {
+	//	Models are loaded with the Composer autoloader.
 	require BASE_PATH . '/vendor/autoload.php';
 
 	(new \Phalcon\Loader())
 		->registerDirs([
 			APP_PATH . '/tasks/',
-			APP_PATH . '/models/',
-			APP_PATH . '/structs/',
 		])
 		->register();
 
@@ -48,7 +47,7 @@ try {
 	(new Phalcon\Cli\Console($di))
 		->handle($arguments);
 
-	fwrite(STDOUT, PHP_EOL);
+//	fwrite(STDOUT, PHP_EOL);
 }
 catch (Throwable $t) {
 	fwrite(STDERR, $t . PHP_EOL);

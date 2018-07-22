@@ -1,5 +1,6 @@
 <?php
 
+
 class IndexController extends \Phalcon\Mvc\Controller
 {
 	public function indexAction()
@@ -31,7 +32,7 @@ class IndexController extends \Phalcon\Mvc\Controller
 		$output = $cache->get('');
 
 		if ($output === null) {
-			$obj = Tally\TagCloud::getHashtags($this->db->tweets, $this->config->word_stats);
+			$obj = Code\Tally\TagCloud::getHashtags($this->config->word_stats);
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 			$cache->save('', $output);
@@ -42,7 +43,7 @@ class IndexController extends \Phalcon\Mvc\Controller
 
 	public function summaryAction()
 	{
-		$obj = Summary::get($this->db->tweets, $this->config->word_stats);
+		$obj = Code\Summary::get($this->config->word_stats);
 		$this->view->setVar('obj', $obj);
 		return $this->view->render('js');
 	}
