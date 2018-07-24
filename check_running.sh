@@ -2,7 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-RUNNING=$(${DIR}/run tweets running);
+RUNNING=$(${DIR}/run admin rate);
 
 if [ "$RUNNING" -eq 0 ]
 then
