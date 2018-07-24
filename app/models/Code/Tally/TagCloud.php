@@ -105,7 +105,7 @@ final class TagCloud extends AbstractTally
 
 			$cloudWords[] = [
 				'text'   => $groupKeys[0],
-				'weight' => (int)(log($totalTally) * 30) + $totalTally,   //  A combination of log and linear.
+				'weight' => (int)((log($totalTally*5) * 40) + $totalTally*5),   //  A combination of log and linear.
 				'link'   => 'javascript:ToTwitter(["' . implode('","', $twitterLookup->toArray()) . '"])',
 				'html'   => [
 					'title' => $totalTally . $htmlTitle,
