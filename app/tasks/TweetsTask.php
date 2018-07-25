@@ -40,4 +40,12 @@ class TweetsTask extends Cli
 		self::println($t);
 	}
 
+	public function runningAction()
+	{
+		$t = (new Resource\Tweets())->count([
+			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('4 seconds ago'))],
+		]);
+
+		self::println(($t===0 ? 0 : 1));
+	}
 }
