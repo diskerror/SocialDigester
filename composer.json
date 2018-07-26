@@ -2,6 +2,7 @@
 	"require": {
 		"diskerror/typed": "dev-master",
 		"zendframework/zend-json": "^3.0",
+		"ext-mongodb": "^1.4",
 		"mongodb/mongodb": "^1.0.0",
 		"ext-phalcon": "^3.3",
 		"php-science/textrank": "^1.0",
