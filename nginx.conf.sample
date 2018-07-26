@@ -15,8 +15,7 @@
 #
 server {
         listen       80;
-#        server_name  politicator.com;
-        server_name  pole.dev;
+        server_name  politicator.com;
         root "/var/www/politicator/public";
         index index.php;
 
@@ -29,7 +28,7 @@ server {
 
         location ~ \.php$ {
                 try_files $uri =404;
-                fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
                 fastcgi_index index.php;
 
                 include fastcgi_params;
