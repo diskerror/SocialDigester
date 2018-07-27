@@ -21,6 +21,8 @@ final class Summary
 	 */
 	public static function get(\Phalcon\Config $config) : array
 	{
+		ini_set('memory_limit', 268435456);
+
 		$tweets = (new \Resource\Tweets())->find(
 			[
 				'created_at' =>
