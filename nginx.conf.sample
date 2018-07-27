@@ -14,33 +14,33 @@
 # Default server configuration
 #
 server {
-        listen       80;
-        server_name  politicator.com;
-        root "/var/www/politicator/public";
-        index index.php;
+	listen       80;
+	server_name  politicator.com;
+	root "/var/www/politicator/public";
+	index index.php;
 
-        try_files $uri $uri/ @rewrite;
+	try_files $uri $uri/ @rewrite;
 
-        location @rewrite {
-                rewrite ^/(.*)$ /index.php?_url=/$1;
-        }
+	location @rewrite {
+		rewrite ^/(.*)$ /index.php?_url=/$1;
+	}
 
 
-        location ~ \.php$ {
-                try_files $uri =404;
-                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
-                fastcgi_index index.php;
+	location ~ \.php$ {
+		try_files $uri =404;
+		fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+		fastcgi_index index.php;
 
-                include fastcgi_params;
-                fastcgi_split_path_info                 ^(.+\.php)(/.+)$;
-                fastcgi_param PATH_INFO                 $fastcgi_path_info;
-                fastcgi_param PATH_TRANSLATED   $document_root$fastcgi_path_info;
-                fastcgi_param SCRIPT_FILENAME   $document_root$fastcgi_script_name;
-        }
+		include fastcgi_params;
+		fastcgi_split_path_info			^(.+\.php)(/.+)$;
+		fastcgi_param PATH_INFO			$fastcgi_path_info;
+		fastcgi_param PATH_TRANSLATED	$document_root$fastcgi_path_info;
+		fastcgi_param SCRIPT_FILENAME	$document_root$fastcgi_script_name;
+	}
 
-        location ~ /\.ht {
-                deny all;
-        }
+	location ~ /\.ht {
+			deny all;
+	}
 
 	gzip on;
 	gzip_disable "msie6";

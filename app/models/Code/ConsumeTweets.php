@@ -18,6 +18,8 @@ final class ConsumeTweets
 	 */
 	public static function exec(\Phalcon\Config $twitterConfig)
 	{
+		ini_set('memory_limit', 268435456);
+
 		try {
 			$stream     = new \Resource\TwitterClient\Stream($twitterConfig->auth);
 			$pidHandler = new PidHandler(\Phalcon\Di::getDefault()->getConfig()->process);
