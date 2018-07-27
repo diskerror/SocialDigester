@@ -26,7 +26,7 @@ final class Summary
 		$tweets = (new \Resource\Tweets())->find(
 			[
 				'created_at' =>
-					['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime($config->window . ' seconds ago') * 1000)],
+					['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime('99 seconds ago') * 1000)],
 			],
 			[
 				'sort'       => [

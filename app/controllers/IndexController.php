@@ -5,9 +5,9 @@ class IndexController extends \Phalcon\Mvc\Controller
 {
 	public function indexAction()
 	{
-		$indexCache                 = $this->config->index_cache;
-		$indexCache->back->frontend = Phalcon\Cache\Frontend\Factory::load($indexCache->front);
-		$cache                      = Phalcon\Cache\Backend\Factory::load($indexCache->back);
+		$cacheConfig                 = $this->config->index_cache;
+		$cacheConfig->back->frontend = Phalcon\Cache\Frontend\Factory::load($cacheConfig->front);
+		$cache                       = Phalcon\Cache\Backend\Factory::load($cacheConfig->back);
 
 		$output = $cache->get('');
 
@@ -25,9 +25,9 @@ class IndexController extends \Phalcon\Mvc\Controller
 
 	public function tagCloudAction()
 	{
-		$tagCloudCache                 = $this->config->tag_cloud_cache;
-		$tagCloudCache->back->frontend = Phalcon\Cache\Frontend\Factory::load($tagCloudCache->front);
-		$cache                         = Phalcon\Cache\Backend\Factory::load($tagCloudCache->back);
+		$cacheConfig                 = $this->config->tag_cloud_cache;
+		$cacheConfig->back->frontend = Phalcon\Cache\Frontend\Factory::load($cacheConfig->front);
+		$cache                       = Phalcon\Cache\Backend\Factory::load($cacheConfig->back);
 
 		$output = $cache->get('');
 
@@ -43,9 +43,20 @@ class IndexController extends \Phalcon\Mvc\Controller
 
 	public function summaryAction()
 	{
-		$obj = Code\Summary::get($this->config->word_stats);
-		$this->view->setVar('obj', $obj);
-		return $this->view->render('js');
+		$cacheConfig                 = $this->config->summary_cache;
+		$cacheConfig->back->frontend = Phalcon\Cache\Frontend\Factory::load($cacheConfig->front);
+		$cache                       = Phalcon\Cache\Backend\Factory::load($cacheConfig->back);
+
+		$output = $cache->get('');
+
+		if ($output === null) {
+			$obj = Code\Summary::get($this->config->word_stats);
+			$this->view->setVar('obj', $obj);
+			$output = $this->view->render('js');
+			$cache->save('', $output);
+		}
+
+		return $output;
 	}
 
 

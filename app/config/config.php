@@ -79,7 +79,7 @@ return [
 
 	'index_cache' => [
 		'front' => [
-			'lifetime' => 300,    //	five minutes
+			'lifetime' => 600,    //	ten minutes
 			'adapter'  => 'data',
 		],
 		'back'  => [
@@ -98,6 +98,19 @@ return [
 		'back'  => [
 			'cacheDir' => '/dev/shm/twitter_digester/',
 			'prefix'   => 'tag_cloud',
+			'frontend' => null,
+			'adapter'  => 'file',
+		],
+	],
+
+	'summary_cache' => [
+		'front' => [
+			'lifetime' => 6,    //	six seconds
+			'adapter'  => 'data',
+		],
+		'back'  => [
+			'cacheDir' => '/dev/shm/twitter_digester/',
+			'prefix'   => 'summary',
 			'frontend' => null,
 			'adapter'  => 'file',
 		],
