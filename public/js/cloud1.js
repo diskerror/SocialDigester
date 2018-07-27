@@ -15,7 +15,7 @@ $(function() {
 	(function getHashtags() {
 		if (!doRun) {
 			doRun = true;
-			setTimeout(getHashtags, 1800);
+			setTimeout(getHashtags, 1700);
 			return;
 		}
 
@@ -37,18 +37,27 @@ $(function() {
 			url: '/index/tagcloud',
 			dataType: 'json',
 			success: function(data) {
-				$('#cloud1').jQCloud('update', data);
+				if (data.length !== 0) {
+					$('#cloud1').jQCloud('update', data);
+				}
+				else {
+					$('#cloud1').jQCloud('update', [
+						{text:'I’m sleeping...', weight:10},
+						{text:' « snore » ', weight:6},
+						{text: ' ', weight: 1}
+					]);
+				}
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			},
 			complete: function() {
-				setTimeout(getHashtags, 3500);	//	milliseconds between cloud updates
+				setTimeout(getHashtags, 3400);	//	milliseconds between cloud updates
 			}
 		});
 	})();
 
 	(function getSummary() {
 		if (!doRun) {
-			setTimeout(getSummary, 4000);
+			setTimeout(getSummary, 3000);
 			return;
 		}
 
@@ -64,34 +73,6 @@ $(function() {
 		});
 	})();
 
-});
-
-$(function() {
-	$("#tag-count-slider").slider({
-		orientation: "vertical",
-		range: "min",
-		min: 20,
-		max: 120,
-		value: 100,
-		slide: function(event, ui) {
-			$("#tag-count").val(ui.value);
-		}
-	});
-	$("#tag-count").val($("#tag-count-slider").slider("value"));
-});
-
-$(function() {
-	$("#update-seconds-slider").slider({
-		orientation: "vertical",
-		range: "min",
-		min: 1000,
-		max: 10000,
-		value: 3500,
-		slide: function(event, ui) {
-			$("#update-seconds").val(ui.value);
-		}
-	});
-	$("#update-seconds").val($("#update-seconds-slider").slider("value") / 1000);
 });
 
 function ToTwitter(hashtags) {
