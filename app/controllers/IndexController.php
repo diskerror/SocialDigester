@@ -48,4 +48,10 @@ class IndexController extends \Phalcon\Mvc\Controller
 		return $this->view->render('js');
 	}
 
+
+	public function infoAction()
+	{
+		phpinfo();
+	}
+
 }
