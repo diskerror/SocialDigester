@@ -8,7 +8,8 @@
 		"ext-phalcon": "^3.3",
 		"php-science/textrank": "^1.0",
 		"ext-intl": "*",
-		"ext-ds": "*"
+		"ext-ds": "*",
+		"ext-mbstring": "*"
 	},
 	"suggest": {
 		"curl": "curl"
