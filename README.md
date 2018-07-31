@@ -1,5 +1,5 @@
 # Politicator.com
-This started out a few years ago as a project to keep my programming chops up while unemployed. The programming focus was on learning:
+This started out a few years ago as a project to keep my programming chops up. The programming focus was on learning:
 
 * the [Phalcon](https://phalconphp.com/) framework,
 * to capture a [Twitter](https://twitter.com) stream,
