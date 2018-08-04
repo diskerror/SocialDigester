@@ -21,13 +21,16 @@ class Tweets extends MongoCollection
 		$this->getClient()->insertOne([]);
 		$this->getClient()->dropIndexes();
 		$this->getClient()->createIndex(
-			['created_at' => 1, 'entities.hashtags.0.text' => 1],
+			['created_at' => 1],
 			['expireAfterSeconds' => $expire]
 		);
 
 		$this->getClient()->createIndex(
-			['created_at' => 1, 'text' => 1],
-			['expireAfterSeconds' => $expire]
+			['entities.hashtags.0.text' => 1]
+		);
+
+		$this->getClient()->createIndex(
+			['text' => 1]
 		);
 	}
 }

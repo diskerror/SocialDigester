@@ -26,8 +26,8 @@ class AdminTask extends Cli
 	{
 		//	These only needs to be run on a new collection.
 		(new Resource\Tweets())->doIndex($this->config->tweets_expire);
-		(new Resource\Snapshots())->doIndex($this->config->tweets_expire);
-		(new Resource\Messages())->doIndex($this->config->tweets_expire);
+		(new Resource\Snapshots())->doIndex();		//	snapshots don't expire
+		(new Resource\Messages())->doIndex(3600);	//	one hour
 	}
 
 	public function handleRunningAction()
