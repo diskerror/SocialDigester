@@ -1,17 +1,25 @@
 {
+	"name": "Twitter Digester",
+	"description": "Consumes a Twitter stream and counts the hashtags, for starters...",
+	"type": "project",
+	"license": "public",
+	"homepage": "http://www.politicator.com/",
+	"minimum-stability": "stable",
+	"prefer-stable": true,
 	"require": {
 		"php": "^7.1",
-		"diskerror/typed": "dev-master",
+		"diskerror/typed": "0.7.6",
 		"zendframework/zend-json": "^3.0",
 		"ext-mongodb": "1.5.*",
 		"mongodb/mongodb": "^1.0.0",
 		"ext-phalcon": "^3.3",
 		"php-science/textrank": "^1.0",
+		"php-ds/php-ds": "^1.2",
 		"ext-intl": "*",
-		"ext-ds": "*",
 		"ext-mbstring": "*"
 	},
 	"suggest": {
+		"ext-ds": "*",
 		"curl": "curl"
 	},
 	"require-dev": {
@@ -19,9 +27,10 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Code\\": "app/models/Code/",
-			"Resource\\": "app/models/Resource/",
-			"Structure\\": "app/models/Structure/"
+			"Code\\": "app/models/code/",
+			"Service\\": "app/models/service",
+			"Resource\\": "app/models/resource/",
+			"Structure\\": "app/models/struct/"
 		}
 	}
 }

@@ -8,50 +8,41 @@
 
 namespace Resource;
 
-use Diskerror\Typed\ArrayOptions as AO;
+use Diskerror\Typed\TypedArray;
 
 /**
  * Class MongoCollection
+ *
  * @package Resource
  */
 abstract class MongoCollection
 {
 	/**
 	 * Name of the collection to use.
+	 *
 	 * @var string
 	 */
 	protected $_collection;
 
 	/**
 	 * The name of the class in which to convert each returned document.
+	 *
 	 * @var string
 	 */
 	protected $_class;
 
-	private $_client;
+	private   $_client;
 
 	/**
 	 * MongoCollection constructor.
 	 */
 	public function __construct() { }
 
-	abstract public function doIndex(int $expire=0);
+	abstract public function doIndex(int $expire = 0);
 
 	public function insertOne($document, array $options = [])
 	{
-		if ($document instanceof \Diskerror\Typed\TypedClass) {
-			$argOptions = $document->getArrayOptions();
-			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
-
-			$res = self::getClient()->insertOne($document->toArray(), $options);
-
-			$document->setArrayOptions($argOptions);
-		}
-		else {
-			$res = self::getClient()->insertOne($document, $options);
-		}
-
-		return $res;
+		return self::getClient()->insertOne($document, $options);
 	}
 
 	/**
@@ -67,19 +58,7 @@ abstract class MongoCollection
 
 	public function insertMany($document, array $options = [])
 	{
-		if ($document instanceof \Diskerror\Typed\TypedArray) {
-			$argOptions = $document->getArrayOptions();
-			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
-
-			$res = self::getClient()->insertMany($document->toArray(), $options);
-
-			$document->setArrayOptions($argOptions);
-		}
-		else {
-			$res = self::getClient()->insertOne($document, $options);
-		}
-
-		return $res;
+		return self::getClient()->insertMany($document, $options);
 	}
 
 	public function __call($name, $args)
@@ -102,7 +81,7 @@ abstract class MongoCollection
 	public function find($filter = [], array $options = [])
 	{
 		$res = self::getClient()->find($filter, $options);
-		return new \Diskerror\Typed\TypedArray($res, $this->_class);
+		return new TypedArray($this->_class, $res);
 	}
 
 	public function findOne($filter = [], array $options = [])

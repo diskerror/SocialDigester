@@ -2,15 +2,19 @@
 
 namespace Structure\Tweet;
 
+use Diskerror\Typed\DateTime;
+use Service\NormalizeString;
+use Structure\Tweet\Entities\Entities;
+
 trait TweetTrait
 {
-	protected $created_at                = '__class__Diskerror\Typed\DateTime';
+	protected $created_at                = [DateTime::class];
 
 	protected $contributors              = null;
 
-	protected $entities                  = '__class__Structure\Tweet\Entities\Entities';
+	protected $entities                  = [Entities::class];
 
-//	protected $extended_entities         = '__class__Structure\Tweet\ExtendedEntities';
+//	protected $extended_entities         = [ExtendedEntities::class];
 
 	protected $favorite_count            = 0;
 
@@ -26,7 +30,7 @@ trait TweetTrait
 
 	protected $lang                      = 'en';
 
-	protected $place                     = '__class__Structure\Tweet\Place';
+	protected $place                     = [Place::class];
 
 	protected $possibly_sensitive        = false;
 
@@ -34,16 +38,10 @@ trait TweetTrait
 
 	protected $source                    = '';
 
-	protected $text                      = '';
+	protected $text                      = [NormalizeString::class];
 
 	protected $truncated                 = false;
 
-	protected $user                      = '__class__Structure\Tweet\User';
-
-
-	protected function _set_text($v)
-	{
-		$this->text = preg_replace('/\s+/', ' ', \Normalizer::normalize((string)$v, \Normalizer::FORM_D));
-	}
+	protected $user                      = [User::class];
 
 }

@@ -2,8 +2,11 @@
 
 namespace Code;
 
-use Diskerror\Typed\ArrayOptions as AO;
-use function is_array;
+use MongoDB\BSON\UTCDateTime;
+use Resource\Messages;
+use Resource\Tweets;
+use Resource\TwitterClient\Stream;
+use Structure\Tweet;
 
 final class ConsumeTweets
 {
@@ -21,7 +24,7 @@ final class ConsumeTweets
 		ini_set('memory_limit', 268435456);
 
 		try {
-			$stream     = new \Resource\TwitterClient\Stream($twitterConfig->auth);
+			$stream     = new Stream($twitterConfig->auth);
 			$pidHandler = new PidHandler(\Phalcon\Di::getDefault()->getConfig()->process);
 
 //			$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $config->process->name . '.log');
@@ -29,11 +32,10 @@ final class ConsumeTweets
 
 //			$sh = new StemHandler();
 
-			$tweet = new \Structure\Tweet();
-			$tweet->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
+			$tweet = new Tweet();
 
-			$tweetsClient   = (new \Resource\Tweets())->getClient();
-			$messagesClient = (new \Resource\Messages())->getClient();
+			$tweetsClient   = (new Tweets())->getClient();
+			$messagesClient = (new Messages())->getClient();
 
 
 			//	Send request to start a filtered stream.
@@ -69,7 +71,7 @@ final class ConsumeTweets
 				}
 
 				if ($stream::isMessage($packet)) {
-					$packet['created'] = new \MongoDB\BSON\UTCDateTime((int)(microtime(true)*1000));
+					$packet['created'] = new UTCDateTime((int)(microtime(true)*1000));
 					$messagesClient->insertOne($packet);
 					continue;
 				}

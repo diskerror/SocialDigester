@@ -8,11 +8,14 @@
 
 namespace Code\Tally;
 
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Collection;
 use Phalcon\Config;
 use Ds\Set;
 use Diskerror\Typed\TypedArray;
 use Code\TallyWords;
+use Resource\Tweets;
+use Structure\TagCloud\Word;
 
 final class TagCloud extends AbstractTally
 {
@@ -87,7 +90,7 @@ final class TagCloud extends AbstractTally
 		//	Sort on key.
 		ksort($normalizedGroup, SORT_NATURAL | SORT_FLAG_CASE);
 
-		$cloudWords = new TypedArray(null, 'Structure\TagCloud\Word');
+		$cloudWords = new TypedArray(Word::class);
 		foreach ($normalizedGroup as &$group) {
 			$totalTally = $group['_sum_'];
 			unset($group['_sum_']);
@@ -126,8 +129,8 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getText(Config $config) : TypedArray
 	{
-		$tweets = (new \Resource\Tweets())->find([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+		$tweets = (new Tweets())->find([
+			'created_at' => ['$gt' => new UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 			'text'       => ['$gt' => ''],
 		]);
 

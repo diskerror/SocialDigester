@@ -2,6 +2,8 @@
 
 namespace Structure\Tweet\Entities;
 
+use Diskerror\Typed\TypedArray;
+
 class Urls extends \Diskerror\Typed\TypedClass
 {
 	protected $url          = '';
@@ -10,5 +12,5 @@ class Urls extends \Diskerror\Typed\TypedClass
 
 	protected $display_url  = '';
 
-	protected $indices      = '__class__Diskerror\Typed\TypedArray(null, "int")';
+	protected $indices      = [TypedArray::class, 'int'];
 }

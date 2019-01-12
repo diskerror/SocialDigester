@@ -2,6 +2,10 @@
 
 namespace Code;
 
+use Phalcon\Logger\Adapter\File;
+use Phalcon\Logger\Adapter\Stream;
+use Phalcon\Logger\Formatter\Line;
+
 /**
  * This logger class writes to both a named file and to STDERR.
  *
@@ -41,7 +45,7 @@ class LoggerFactory
 
 	public static function getFileLogger($fileName)
 	{
-		$file = new \Phalcon\Logger\Adapter\File($fileName);
+		$file = new File($fileName);
 		$file->setFormatter(self::getFormatter());
 		return $file;
 	}
@@ -49,14 +53,14 @@ class LoggerFactory
 	public static function getFormatter()
 	{
 		if (!isset(self::$_format)) {
-			self::$_format = new \Phalcon\Logger\Formatter\Line(self::OUTPUT_FORMAT);
+			self::$_format = new Line(self::OUTPUT_FORMAT);
 		}
 		return self::$_format;
 	}
 
 	public static function getStreamLogger()
 	{
-		$stream = new \Phalcon\Logger\Adapter\Stream('php://stderr');
+		$stream = new Stream('php://stderr');
 		$stream->setFormatter(self::getFormatter());
 		return $stream;
 	}

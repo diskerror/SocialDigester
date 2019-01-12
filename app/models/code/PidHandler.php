@@ -2,6 +2,8 @@
 
 namespace Code;
 
+use RuntimeException;
+
 class PidHandler
 {
 	protected $_fullProcessFileName;
@@ -38,11 +40,11 @@ class PidHandler
 	public function setFile()
 	{
 		if (file_exists($this->_fullProcessFileName)) {
-			throw new \Exception('process "' . $this->_fullProcessFileName . '" is already running or not stopped properly');
+			throw new RuntimeException('process "' . $this->_fullProcessFileName . '" is already running or not stopped properly');
 		}
 
 		if (!file_exists($this->_basePath)) {
-			throw new \Exception(PHP_EOL . PHP_EOL . 'Create directory with proper permissions: sudo mkdir -pm 777 ' . $this->_basePath . PHP_EOL . PHP_EOL);
+			throw new RuntimeException(PHP_EOL . PHP_EOL . 'Create directory with proper permissions: sudo mkdir -pm 777 ' . $this->_basePath . PHP_EOL . PHP_EOL);
 		}
 
 		file_put_contents($this->_fullProcessFileName, getmypid());

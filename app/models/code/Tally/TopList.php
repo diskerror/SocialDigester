@@ -9,9 +9,8 @@
 namespace Code\Tally;
 
 use Code\TallyWords;
+use Resource\Tweets;
 use Tally\Phalcon;
-use function var_dump;
-use function var_export;
 
 final class TopList extends AbstractTally
 {
@@ -26,7 +25,7 @@ final class TopList extends AbstractTally
 	 */
 	public static function getHashtags(\Phalcon\Config $config) : TallyWords
 	{
-		$tweets = (new \Resource\Tweets())->find([
+		$tweets = (new Tweets())->find([
 			'created_at'               =>
 				['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
@@ -58,7 +57,7 @@ final class TopList extends AbstractTally
 	 */
 	public static function getText(\Phalcon\Config $config) : TallyWords
 	{
-		$tweets = (new \Resource\Tweets())->find([
+		$tweets = (new Tweets())->find([
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime($config->window . ' seconds ago') * 1000)],
 			'text'       => ['$gt' => ''],
 		]);

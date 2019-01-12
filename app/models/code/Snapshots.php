@@ -2,12 +2,6 @@
 
 namespace Code;
 
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 6/27/18
- * Time: 11:44 AM
- */
 final class Snapshots
 {
 	private function __construct() { }

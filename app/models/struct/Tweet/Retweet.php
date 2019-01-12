@@ -2,7 +2,9 @@
 
 namespace Structure\Tweet;
 
-class Retweet extends \Diskerror\Typed\TypedClass
+use Diskerror\Typed\TypedClass;
+
+class Retweet extends TypedClass
 {
 	protected $id = 0;
 

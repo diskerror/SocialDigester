@@ -2,7 +2,9 @@
 
 namespace Structure\Tweet;
 
-class Place extends \Diskerror\Typed\TypedClass
+use Diskerror\Typed\TypedClass;
+
+class Place extends TypedClass
 {
 	protected $id           = '';
 

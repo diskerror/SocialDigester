@@ -7,6 +7,7 @@ use PhpScience\TextRank\Tool\Parser;
 use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
+use Resource\Tweets;
 
 final class Summary
 {
@@ -23,7 +24,7 @@ final class Summary
 	{
 		ini_set('memory_limit', 268435456);
 
-		$tweets = (new \Resource\Tweets())->find(
+		$tweets = (new Tweets())->find(
 			[
 				'created_at' =>
 					['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime('99 seconds ago') * 1000)],

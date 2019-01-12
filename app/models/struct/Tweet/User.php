@@ -2,7 +2,11 @@
 
 namespace Structure\Tweet;
 
-class User extends \Diskerror\Typed\TypedClass
+use Diskerror\Typed\DateTime;
+use Diskerror\Typed\TypedClass;
+use Service\NormalizeString;
+
+class User extends TypedClass
 {
 	protected $id                   = 0;
 
@@ -14,9 +18,9 @@ class User extends \Diskerror\Typed\TypedClass
 
 	protected $contributors_enabled = false;
 
-	protected $created_at           = '__class__Diskerror\Typed\DateTime';
+	protected $created_at           = [DateTime::class];
 
-	protected $description          = '';
+	protected $description          = [NormalizeString::class];
 
 	protected $favourites_count     = 0;
 
@@ -41,10 +45,5 @@ class User extends \Diskerror\Typed\TypedClass
 	protected $url                  = '';
 
 	protected $verified             = false;
-
-	protected function _set_description($v)
-	{
-		$this->description = preg_replace('/\s+/', ' ', \Normalizer::normalize((string)$v, \Normalizer::FORM_D));
-	}
 
 }
