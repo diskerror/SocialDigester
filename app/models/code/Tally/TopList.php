@@ -9,13 +9,11 @@
 namespace Code\Tally;
 
 use Code\TallyWords;
+use Phalcon\Config;
 use Resource\Tweets;
-use Tally\Phalcon;
 
 final class TopList extends AbstractTally
 {
-	private function __construct() { }
-
 	/**
 	 * Return quantity of each current hashtag.
 	 *
@@ -23,7 +21,7 @@ final class TopList extends AbstractTally
 	 *
 	 * @return TallyWords
 	 */
-	public static function getHashtags(\Phalcon\Config $config) : TallyWords
+	public static function getHashtags(Config $config) : TallyWords
 	{
 		$tweets = (new Tweets())->find([
 			'created_at'               =>

@@ -4,25 +4,23 @@
 	"type": "project",
 	"license": "public",
 	"homepage": "http://www.politicator.com/",
-	"minimum-stability": "stable",
+	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"require": {
 		"php": "^7.1",
-		"diskerror/typed": "0.7.6",
-		"zendframework/zend-json": "^3.0",
-		"ext-mongodb": "1.5.*",
-		"mongodb/mongodb": "^1.0.0",
 		"ext-phalcon": "^3.3",
+		"diskerror/typedbson": "dev-master",
+		"zendframework/zend-json": "^3.0",
+		"php-ds/php-ds": "^1.2 || ^2.0",
 		"php-science/textrank": "^1.0",
-		"php-ds/php-ds": "^1.2",
 		"ext-intl": "*",
 		"ext-mbstring": "*"
 	},
 	"suggest": {
-		"ext-ds": "*",
-		"curl": "curl"
+		"ext-ds": "*"
 	},
 	"require-dev": {
+		"roave/security-advisories": "dev-master",
 		"phalcon/ide-stubs": "3.3"
 	},
 	"autoload": {

@@ -1,5 +1,7 @@
 <?php
 
+use MongoDB\BSON\UTCDateTime;
+
 class TweetsTask extends Cli
 {
 	public function mainAction()
@@ -31,10 +33,8 @@ class TweetsTask extends Cli
 		]);
 
 		$t = 0;
-		$obj = new Structure\Tweet();
 		foreach ($tweets as $tweet) {
-			$obj->assign($tweet);
-			print_r($obj->toArray());
+			self::println(json_encode($tweet, JSON_PRETTY_PRINT));
 			$t++;
 		}
 		self::println($t);
@@ -43,7 +43,8 @@ class TweetsTask extends Cli
 	public function runningAction()
 	{
 		$t = (new Resource\Tweets())->count([
-			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('4 seconds ago'))],
+//			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('4 seconds ago'))],
+			'created_at' => ['$gt' => new UTCDateTime(strtotime('4 seconds ago')*1000)],
 		]);
 
 		self::println(($t===0 ? 0 : 1));

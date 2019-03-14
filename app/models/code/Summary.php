@@ -76,7 +76,7 @@ final class Summary
 		$outputArr    = [];
 		foreach ($summaries as $summary) {
 			$sub = substr($summary, 10, 30);
-			if (in_array($sub, $subSummaries)) {
+			if (in_array($sub, $subSummaries, true)) {
 				continue;
 			}
 

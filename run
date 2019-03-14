@@ -4,8 +4,7 @@
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
-define('BASE_PATH', __DIR__);
-define('APP_PATH', BASE_PATH . '/app');
+define('APP_PATH', __DIR__ . '/app');
 
 /**
  * Convert all errors into ErrorExceptions
@@ -19,11 +18,11 @@ set_error_handler(
 
 try {
 	//	Models are loaded with the Composer autoloader.
-	require BASE_PATH . '/vendor/autoload.php';
+	require __DIR__ . '/vendor/autoload.php';
 
 	(new \Phalcon\Loader())
 		->registerDirs([
-			APP_PATH . '/tasks/',
+			__DIR__ . '/app/tasks/',
 		])
 		->register();
 

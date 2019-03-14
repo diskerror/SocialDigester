@@ -4,7 +4,6 @@ ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
 define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
 
 /**
  * Convert all errors into ErrorExceptions
@@ -22,19 +21,19 @@ try {
 
 	(new \Phalcon\Loader())
 		->registerDirs([
-			APP_PATH . '/controllers/',
+			BASE_PATH . '/app/controllers/',
 		])
 		->register();
 
 	$di = new \Phalcon\Di\FactoryDefault();
 
-	require APP_PATH . '/DiCommon.inc';
+	require BASE_PATH . '/app/DiCommon.inc';
 
 	$di->setShared('view', function() {
 		static $view;
 		if (!isset($view)) {
 			$view = new Phalcon\Mvc\View\Simple();
-			$view->setViewsDir(APP_PATH . '/views/');
+			$view->setViewsDir(BASE_PATH . '/app/views/');
 		}
 		return $view;
 	});

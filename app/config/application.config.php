@@ -1,33 +1,46 @@
 <?php
-
 /**
- * All nested arrays are converted to nested Phalcon\Config objects.
+ * If you need an environment-specific system or application configuration,
+ * there is an example in the documentation
  *
- * To add to or override these values
- * create another file in this directory
- * that ends in '.php' with contents like:
- *
- * $config->twitter->offsetSet(
- *     'auth',
- *     [
- *         'consumer_key'          => 'wwww',
- *         'consumer_secret'       => 'xxxx',
- *         'oauth_token'           => 'yyyy',
- *         'oauth_token_secret'    => 'zzzz',
- *     ]
- * );
- *
+ * @see https://docs.zendframework.com/tutorials/advanced-config/#environment-specific-system-configuration
+ * @see https://docs.zendframework.com/tutorials/advanced-config/#environment-specific-application-configuration
  */
-
 return [
+	'APPLICATION_NAME' => 'digester';
+
+    'user_config_name'         => '._APPLICATION_NAME_.php',
+
+    // Whether or not to enable a configuration cache.
+    // If enabled, the merged configuration will be cached and used in
+    // subsequent requests.
+    'config_cache_enabled'     => true,
+
+    // The key used to create the configuration cache file name.
+//    'config_cache_key'         => 'application.config.cache',
+
+    // Whether or not to enable a module class map cache.
+    // If enabled, creates a module class map cache which will be used
+    // by in future requests, to reduce the autoloading process.
+//    'module_map_cache_enabled' => false,
+
+    // The key used to create the class map cache file name.
+//    'module_map_cache_key'     => 'application.module.cache',
+
+    // The path in which to cache merged configuration.
+//    'cache_dir'                => 'data/cache/',
+
+    // Initial configuration with which to seed the ServiceManager.
+    // Should be compatible with Zend\ServiceManager\Config.
+    // 'service_manager' => [],
 
 	'mongodb' => [
 		'host'        => 'mongodb://localhost:27017',
-		'database'    => 'politicator',
+		'database'    => '_APPLICATION_NAME_',
 
-		//  The list of active collections. Listing the names  here prevents typos from
+		//  The list of active collections. Listing the names here prevents typos from
 		//      creating new and mysterious collections.
-		//  The keys are the collection names and the values are a list of the  index definitions.
+		//  The keys are the collection names and the values are a list of the index definitions.
 		'collections' => [
 			'tweet'    => [
 				['keys' => ['created_at' => 1], 'options' => ['expireAfterSeconds' => 60 * 20]],
@@ -87,8 +100,8 @@ return [
 	],
 
 	'process' => [
-		'name'    => 'politicator',
-		'path'    => '/var/run/politicator',
+		'name'    => '_APPLICATION_NAME_',
+		'path'    => '/var/run/_APPLICATION_NAME_',
 		'procDir' => '/proc/'    //	location of actual PID
 	],
 
@@ -99,7 +112,7 @@ return [
 				'adapter'  => 'data',
 			],
 			'back'  => [
-				'cacheDir' => '/dev/shm/politicator/',
+				'cacheDir' => '/dev/shm/_APPLICATION_NAME_/',
 				'prefix'   => 'index',
 				'frontend' => null,
 				'adapter'  => 'file',
@@ -112,7 +125,7 @@ return [
 				'adapter'  => 'data',
 			],
 			'back'  => [
-				'cacheDir' => '/dev/shm/politicator/',
+				'cacheDir' => '/dev/shm/_APPLICATION_NAME_/',
 				'prefix'   => 'tag_cloud',
 				'frontend' => null,
 				'adapter'  => 'file',
@@ -125,12 +138,11 @@ return [
 				'adapter'  => 'data',
 			],
 			'back'  => [
-				'cacheDir' => '/dev/shm/politicator/',
+				'cacheDir' => '/dev/shm/_APPLICATION_NAME_/',
 				'prefix'   => 'summary',
 				'frontend' => null,
 				'adapter'  => 'file',
 			],
 		],
 	],
-
 ];

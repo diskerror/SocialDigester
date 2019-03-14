@@ -3,7 +3,7 @@
 namespace Structure\Tweet;
 
 use Diskerror\Typed\DateTime;
-use Service\NormalizeString;
+use Structure\NormalizeString;
 use Structure\Tweet\Entities\Entities;
 
 trait TweetTrait

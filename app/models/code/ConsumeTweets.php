@@ -76,8 +76,7 @@ final class ConsumeTweets
 					continue;
 				}
 
-				$tweet->assign();            //	clear original
-				$tweet->assign($packet);    //	adds to or updates existing data
+				$tweet->assign($packet);
 
 
 				//	remove URLs from text
@@ -100,8 +99,7 @@ final class ConsumeTweets
 
 
 				try {
-					//	convert to Mongo compatible object and insert
-					$tweetsClient->insertOne($tweet->toArray());
+					$tweetsClient->insertOne($tweet);
 				}
 				catch (\Exception $e) {
 					$m = $e->getMessage();

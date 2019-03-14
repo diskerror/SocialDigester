@@ -4,7 +4,7 @@ namespace Structure\Tweet;
 
 use Diskerror\Typed\DateTime;
 use Diskerror\Typed\TypedClass;
-use Service\NormalizeString;
+use Structure\NormalizeString;
 
 class User extends TypedClass
 {

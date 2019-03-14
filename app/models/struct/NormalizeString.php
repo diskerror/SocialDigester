@@ -6,7 +6,7 @@
  * Time: 10:22
  */
 
-namespace Service;
+namespace Structure;
 
 
 use Diskerror\Typed\SAString;

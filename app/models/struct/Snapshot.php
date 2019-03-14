@@ -8,13 +8,12 @@
 
 namespace Structure;
 
-use Diskerror\Typed\Date;
 use Diskerror\Typed\DateTime;
-use Diskerror\Typed\SAString;
 use Diskerror\Typed\TypedArray;
+use Diskerror\Typed\TypedClass;
 use Structure\TagCloud\Word;
 
-class Snapshot extends \Diskerror\Typed\TypedClass
+class Snapshot extends TypedClass
 {
 	protected $_id      = 0;    //	time()
 

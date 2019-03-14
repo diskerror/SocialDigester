@@ -13,7 +13,6 @@ class Tweets extends MongoCollection
 	public function __construct()
 	{
 		$this->_collection = 'tweets';
-		$this->_class      = '\Structure\Tweet';
 	}
 
 	public function doIndex(int $expire=0)

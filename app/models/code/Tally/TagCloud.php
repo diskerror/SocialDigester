@@ -9,7 +9,6 @@
 namespace Code\Tally;
 
 use MongoDB\BSON\UTCDateTime;
-use MongoDB\Collection;
 use Phalcon\Config;
 use Ds\Set;
 use Diskerror\Typed\TypedArray;
@@ -19,8 +18,6 @@ use Structure\TagCloud\Word;
 
 final class TagCloud extends AbstractTally
 {
-	private function __construct() { }
-
 	/**
 	 * Return count of each current hashtag.
 	 *
@@ -31,7 +28,7 @@ final class TagCloud extends AbstractTally
 	public static function getHashtags(Config $config) : TypedArray
 	{
 		$tweets = (new \Resource\Tweets())->find([
-			'created_at'               => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+			'created_at'               => ['$gt' => new UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
 

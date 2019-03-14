@@ -24,13 +24,6 @@ abstract class MongoCollection
 	 */
 	protected $_collection;
 
-	/**
-	 * The name of the class in which to convert each returned document.
-	 *
-	 * @var string
-	 */
-	protected $_class;
-
 	private   $_client;
 
 	/**
@@ -80,13 +73,11 @@ abstract class MongoCollection
 
 	public function find($filter = [], array $options = [])
 	{
-		$res = self::getClient()->find($filter, $options);
-		return new TypedArray($this->_class, $res);
+		return self::getClient()->find($filter, $options);
 	}
 
 	public function findOne($filter = [], array $options = [])
 	{
-		$res = self::getClient()->findOne($filter, $options);
-		return new $this->_class($res);
+		return self::getClient()->findOne($filter, $options);
 	}
 }
