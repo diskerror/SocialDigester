@@ -20,6 +20,7 @@
  */
 
 return [
+	'APPLICATION_NAME' => 'politicator',
 
 	'mongodb' => [
 		'host'        => 'mongodb://localhost:27017',
@@ -45,9 +46,81 @@ return [
 	],
 
 	'wordStats' => [
-		'quantity' => 100,    //	return the top X items
-		'window'   => 300,    //	summarize the last X seconds
-		'stop'     => [],     //	stop words
+		//	return the top X items
+		'quantity' => 100,
+		//	summarize the last X seconds
+		'window'   => 300,
+		//	stop words
+		'stop'     => [
+			'about',
+			'after',
+			'all',
+			'and',
+			'are',
+			'back',
+			'been',
+			'before',
+			'being',
+			'but',
+			'can',
+			'could',
+			'did',
+			'even',
+			'field',
+			'for',
+			'from',
+			'get',
+			'going',
+			'had',
+			'has',
+			'have',
+			'her',
+			'him',
+			'his',
+			'how',
+			'http',
+			'https',
+			'into',
+			'it\'s',
+			'its',
+			'just',
+			'let',
+			'make',
+			'man',
+			'many',
+			'more',
+			'most',
+			'much',
+			'not',
+			'now',
+			'only',
+			'other',
+			'over',
+			'really',
+			'see',
+			'she',
+			'since',
+			'still',
+			'than',
+			'that',
+			'the',
+			'their',
+			'them',
+			'they',
+			'this',
+			'those',
+			'very',
+			'via',
+			'was',
+			'what',
+			'when',
+			'who',
+			'will',
+			'with',
+			'would',
+			'you',
+			'your',
+		],
 	],
 
 	'twitter' => [

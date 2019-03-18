@@ -2,13 +2,8 @@
 
 use MongoDB\BSON\UTCDateTime;
 
-class TweetsTask extends Cli
+class TweetsTask extends TaskMaster
 {
-	public function mainAction()
-	{
-		self::println('And do what?');
-	}
-
 	public function getAction()
 	{
 		Code\ConsumeTweets::exec($this->config->twitter);

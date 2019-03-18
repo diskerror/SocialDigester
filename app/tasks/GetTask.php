@@ -1,30 +1,39 @@
 <?php
 
-class GetTask extends Cli
-{
-	public function mainAction()
-	{
-		self::println("Get what?");
-	}
+use Service\StdIo;
 
+class GetTask extends TaskMaster
+{
+	/**
+	 * Get current version.
+	 */
 	public function versionAction()
 	{
-		self::println($this->config->version);
+		StdIo::outln($this->config->version);
 	}
 
+	/**
+	 * Get PID path.
+	 */
 	public function pidPathAction()
 	{
-		self::println($this->config->process->path);
+		StdIo::outln($this->config->process->path);
 	}
 
+	/**
+	 * Get cache path.
+	 */
 	public function cachePathAction()
 	{
-		self::println( $this->config->index_cache->back->cacheDir);
+		StdIo::outln($this->config->index_cache->back->cacheDir);
 	}
 
+	/**
+	 * Display JSON of Twitter hashtag statistics.
+	 */
 	public function hashtagsAction()
 	{
-		self::println(
+		StdIo::outln(
 			json_encode(
 				array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats)->arr, 0, 25),
 				JSON_PRETTY_PRINT
@@ -32,9 +41,12 @@ class GetTask extends Cli
 		);
 	}
 
+	/**
+	 * Display JSON of Twitter tweet word count statistics.
+	 */
 	public function textwordsAction()
 	{
-		self::println(
+		StdIo::outln(
 			json_encode(
 				array_slice(Code\Tally\TopList::getText($this->config->word_stats)->arr, 0, 25),
 				JSON_PRETTY_PRINT
@@ -42,14 +54,20 @@ class GetTask extends Cli
 		);
 	}
 
+	/**
+	 * Display a summary of all current tweets.
+	 */
 	public function summaryAction()
 	{
 		$summary = Code\Summary::get($this->config->word_stats);
-		self::print(implode("\n\n", $summary));
+		StdIo::out(implode("\n\n", $summary));
 	}
 
+	/**
+	 * Store a snapshot of the current Twitter activity.
+	 */
 	public function snapshotAction()
 	{
-		self::println(Code\Snapshots::make($this->config));
+		StdIo::outln(Code\Snapshots::make($this->config));
 	}
 }

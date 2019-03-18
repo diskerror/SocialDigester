@@ -9,12 +9,14 @@
 	"require": {
 		"php": "^7.1",
 		"ext-phalcon": "^3.3",
+		"ext-intl": "*",
+		"ext-mbstring": "*",
 		"diskerror/typedbson": "dev-master",
 		"zendframework/zend-json": "^3.0",
+		"zendframework/zend-stdlib": "^2.7 || ^3.0",
 		"php-ds/php-ds": "^1.2 || ^2.0",
 		"php-science/textrank": "^1.0",
-		"ext-intl": "*",
-		"ext-mbstring": "*"
+		"zendframework/zend-server": "^2.8.0"
 	},
 	"suggest": {
 		"ext-ds": "*"

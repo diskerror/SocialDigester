@@ -6,22 +6,33 @@
  * Time: 7:26 PM
  */
 
-class AdminTask extends Cli
+use Service\StdIo;
+
+class AdminTask extends TaskMaster
 {
+	/**
+	 * Displays the rate at which tweets are being consumed.
+	 */
 	public function rateAction()
 	{
 		$t = (new Resource\Tweets())->count([
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('20 seconds ago') * 1000)],
 		]);
 
-		self::println('Tweets are being received at a rate of ' . $t / 20 . ' per second.');
+		StdIo::outln('Tweets are being received at a rate of ' . $t / 20 . ' per second.');
 	}
 
+	/**
+	 * Display the current aggregate configuration.
+	 */
 	public function showConfigAction()
 	{
-		self::println(json_encode($this->config, JSON_PRETTY_PRINT));
+		StdIo::outln(json_encode($this->config, JSON_PRETTY_PRINT));
 	}
 
+	/**
+	 * Reindex MongoDB collections.
+	 */
 	public function indexAction()
 	{
 		//	These only needs to be run on a new collection.

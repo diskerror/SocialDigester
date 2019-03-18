@@ -7,7 +7,7 @@
  * @see https://docs.zendframework.com/tutorials/advanced-config/#environment-specific-application-configuration
  */
 return [
-	'APPLICATION_NAME' => 'digester';
+	'APPLICATION_NAME' => 'politicator',
 
     'user_config_name'         => '._APPLICATION_NAME_.php',
 
