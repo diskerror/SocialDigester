@@ -44,7 +44,7 @@ abstract class MongoCollection
 	public function getClient()
 	{
 		if (!isset($this->_client)) {
-			$this->_client = \Phalcon\Di::getDefault()->getShared('mongo')->{$this->_collection};
+			$this->_client = \Phalcon\Di::getDefault()->getShared('mongodb')->{$this->_collection};
 		}
 		return $this->_client;
 	}

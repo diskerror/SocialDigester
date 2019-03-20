@@ -3,12 +3,11 @@
 namespace Service\Application;
 
 use OutOfRangeException;
+use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager;
+use Resource\MongoCollectionManager;
 use Structure\Config;
 use Zend\Stdlib\ArrayUtils;
-use function array_map;
-use function gettype;
-use function is_dir;
 
 /**
  * Class DiAbstract
@@ -27,8 +26,6 @@ abstract class DiAbstract
 	 */
 	protected $_application;
 
-	private $_nameReplacement = '';
-
 	/**
 	 * DiAbstract constructor.
 	 *
@@ -43,7 +40,12 @@ abstract class DiAbstract
 		$this->_basePath = $basePath;
 	}
 
-	final protected function _commonDi(&$di): void
+	/**
+	 * Common dependencies for both CLI and HTTP.
+	 *
+	 * @param FactoryDefault $di
+	 */
+	final protected function _commonDi(FactoryDefault $di): void
 	{
 		$self = $this;
 
@@ -73,6 +75,14 @@ abstract class DiAbstract
 			}
 
 			return $config;
+		});
+
+		$di->setShared('mongodb', function() use ($di) {
+			static $mongodb;
+			if (!isset($mongodb)) {
+				$mongodb = new MongoCollectionManager($di->getShared('config')->mongodb);
+			}
+			return $mongodb;
 		});
 
 		$di->setShared('eventsManager', function() {

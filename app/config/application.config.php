@@ -35,7 +35,7 @@ return [
 
 	'mongodb' => [
 		'host'        => 'mongodb://localhost:27017',
-		'database'    => 'politicator',
+		'database'    => 'digester',
 
 		//  The list of active collections. Listing the names here prevents typos from
 		//      creating new and mysterious collections.

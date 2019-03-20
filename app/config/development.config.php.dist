@@ -21,7 +21,7 @@ return [
     //      and the master connection for web access.
     'mongo_db' => [
         'host' => 'mongodb://127.0.0.1:27017',
-        'database' => 'middle_dev',
+        'database' => 'digester_dev',
     ],
 
 ];

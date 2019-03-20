@@ -32,8 +32,6 @@ final class ConsumeTweets
 
 //			$sh = new StemHandler();
 
-			$tweet = new Tweet();
-
 			$tweetsClient   = (new Tweets())->getClient();
 			$messagesClient = (new Messages())->getClient();
 
@@ -51,6 +49,7 @@ final class ConsumeTweets
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
+			$tweet = new Tweet();
 			while (!$stream->isEOF()) {
 				if (!$pidHandler->exists()) {
 					break;
