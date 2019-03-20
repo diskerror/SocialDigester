@@ -20,8 +20,6 @@
  */
 
 return [
-	'APPLICATION_NAME' => 'politicator',
-
 	'wordStats' => [
 		//	return the top X items
 		'quantity' => 100,

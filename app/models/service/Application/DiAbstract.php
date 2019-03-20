@@ -4,7 +4,10 @@ namespace Service\Application;
 
 use OutOfRangeException;
 use Phalcon\Events\Manager;
+use Structure\Config;
 use Zend\Stdlib\ArrayUtils;
+use function array_map;
+use function gettype;
 use function is_dir;
 
 /**
@@ -24,6 +27,8 @@ abstract class DiAbstract
 	 */
 	protected $_application;
 
+	private $_nameReplacement = '';
+
 	/**
 	 * DiAbstract constructor.
 	 *
@@ -38,7 +43,7 @@ abstract class DiAbstract
 		$this->_basePath = $basePath;
 	}
 
-	final protected function _commonDi(&$di)
+	final protected function _commonDi(&$di): void
 	{
 		$self = $this;
 
@@ -46,12 +51,25 @@ abstract class DiAbstract
 			static $config;
 
 			if (!isset($config)) {
-				$config = require $self->_basePath . '/app/config/application.config.php';
+				$configName = $self->_basePath . '/app/config/application.config.php';
+				$devName    = $self->_basePath . '/app/config/development.config.php';
 
-				if (file_exists($self->_basePath . '/app/config/development.config.php')) {
-					$config =
-						ArrayUtils::merge($config, require $self->_basePath . '/app/config/development.config.php');
+				//	File must exist.
+				$config = require $configName;
+
+				if (file_exists($devName)) {
+					$config = ArrayUtils::merge($config, require $devName);
 				}
+
+				//	Open all other files in this directory and ending with '.php' as a configuration file.
+				//	'glob' defaults to sorted.
+				foreach (glob($self->_basePath . '/app/config/*.php') as $g) {
+					if ($g !== $configName && $g !== $devName && !is_dir($g)) {
+						$config = ArrayUtils::merge($config, require $g);
+					}
+				}
+
+				$config = new Config($config);
 			}
 
 			return $config;

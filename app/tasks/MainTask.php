@@ -30,19 +30,22 @@ class MainTask extends TaskMaster
 			StdIo::outln();
 		}
 
-		StdIo::outln('A hidden file named "' . $this->config['user_config_name'] . '" must be in the users home directory');
+		StdIo::outln('A hidden file named "' . $this->config->userConfigName . '" must be in the users home directory');
 		StdIo::outln('and containing configuration data in this form:');
 
-		$demoConfig = new Structure\Config();
+		$demoConfig = (new Structure\Config())->toArray();
 
-		$demoConfig->syteline_dbs[]->configName = 'us';
-		$demoConfig->syteline_dbs[]->configName = 'can';
-
-		$demoConfig = $demoConfig->toArray();
-		unset($demoConfig['mongo_db']['collections']);  //  comes from application.config.php
+		unset($demoConfig['userConfigName']);
+		unset($demoConfig['caches']);
+		unset($demoConfig['process']);
+		unset($demoConfig['version']);
+		unset($demoConfig['mongodb']);
+		unset($demoConfig['twitter']['track']);
+		unset($demoConfig['wordStats']['stopWords']);
 
 		StdIo::outln('<?php');
 		StdIo::out('return ');
 		StdIo::phpOut($demoConfig);
+		StdIo::outln(';');
 	}
 }

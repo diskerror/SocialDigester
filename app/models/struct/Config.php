@@ -13,10 +13,11 @@ use Structure\Config\WordStats;
 
 class Config extends TypedClass
 {
-	protected $version   = '0.6';
-	protected $mongodb   = [Mongo::class];
-	protected $wordStats = [WordStats::class];
-	protected $twitter   = [Twitter::class];
-	protected $process   = [Process::class];
-	protected $caches    = [TypedArray::class, Cache::class];
+	protected $version        = '0.6';
+	protected $userConfigName = '';
+	protected $mongodb        = [Mongo::class];
+	protected $wordStats      = [WordStats::class];
+	protected $twitter        = [Twitter::class];
+	protected $process        = [Process::class];
+	protected $caches         = [TypedArray::class, Cache::class];
 }
