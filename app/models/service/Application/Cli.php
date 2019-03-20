@@ -7,6 +7,8 @@ use Phalcon\Cli\Console;
 use Phalcon\Cli\Dispatcher\Exception;
 use Phalcon\Di\FactoryDefault\Cli as FdCli;
 use Service\StdIo;
+use function strpos;
+use function substr;
 
 class Cli extends DiAbstract
 {
@@ -45,7 +47,13 @@ class Cli extends DiAbstract
 			$this->_application->handle($args);
 		}
 		catch (Exception $e) {
-			StdIo::err($e->getMessage());
+			$message = $e->getMessage();
+			if (($pos = strpos($message, 'Task handler class cannot be loaded')) !== false) {
+				StdIo::err(substr($message, 0, $pos) . ' command does not exist.');
+			}
+			else {
+				StdIo::err($e->getMessage());
+			}
 		}
 	}
 }

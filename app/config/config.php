@@ -22,29 +22,6 @@
 return [
 	'APPLICATION_NAME' => 'politicator',
 
-	'mongodb' => [
-		'host'        => 'mongodb://localhost:27017',
-		'database'    => 'politicator',
-
-		//  The list of active collections. Listing the names  here prevents typos from
-		//      creating new and mysterious collections.
-		//  The keys are the collection names and the values are a list of the  index definitions.
-		'collections' => [
-			'tweet'    => [
-				['keys' => ['created_at' => 1], 'options' => ['expireAfterSeconds' => 60 * 20]],
-				['keys' => ['entities.hashtags.0.text' => 1]],
-				['keys' => ['text' => 1]],
-			],
-			'message'  => [
-				['keys' => ['created' => 1], 'options' => ['expireAfterSeconds' => 60 * 60]],
-			],
-			'snapshot' => [
-				//	_id is automatically indexed
-			],
-
-		],
-	],
-
 	'wordStats' => [
 		//	return the top X items
 		'quantity' => 100,

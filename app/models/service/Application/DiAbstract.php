@@ -2,10 +2,8 @@
 
 namespace Service\Application;
 
-use function fwrite;
 use OutOfRangeException;
 use Phalcon\Events\Manager;
-use const STDOUT;
 use Zend\Stdlib\ArrayUtils;
 use function is_dir;
 
@@ -38,7 +36,6 @@ abstract class DiAbstract
 		}
 
 		$this->_basePath = $basePath;
-		fwrite(STDOUT, $this->_basePath);
 	}
 
 	final protected function _commonDi(&$di)
