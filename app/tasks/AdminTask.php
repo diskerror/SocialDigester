@@ -15,7 +15,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function rateAction()
 	{
-		$t = (new Resource\Tweets())->count([
+		$t = $this->mongodb->tweets->count([
 			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('20 seconds ago') * 1000)],
 		]);
 
@@ -27,7 +27,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function showConfigAction()
 	{
-		StdIo::outln(json_encode($this->config, JSON_PRETTY_PRINT));
+		StdIo::jsonOut($this->config);
 	}
 
 	/**
@@ -35,10 +35,9 @@ class AdminTask extends TaskMaster
 	 */
 	public function indexAction()
 	{
-		//	These only needs to be run on a new collection.
-		(new Resource\Tweets())->doIndex($this->config->tweets_expire);
-		(new Resource\Snapshots())->doIndex();		//	snapshots don't expire
-		(new Resource\Messages())->doIndex(3600);	//	one hour
+		foreach ($this->mongodb->getCollectionNames() as $collectionName) {
+			$this->mongodb->doIndex($collectionName);
+		}
 	}
 
 	public function handleRunningAction()

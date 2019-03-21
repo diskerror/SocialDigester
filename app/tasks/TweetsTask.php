@@ -1,47 +1,53 @@
 <?php
 
 use MongoDB\BSON\UTCDateTime;
+use Service\StdIo;
 
 class TweetsTask extends TaskMaster
 {
 	public function getAction()
 	{
-		Code\ConsumeTweets::exec($this->config->twitter);
+		Code\ConsumeTweets::exec(
+			$this->stream,
+			$this->config->twitter,
+			$this->pidHandler,
+			$this->logger,
+			$this->mongodb->tweets,
+			$this->mongodb->messages
+		);
 	}
 
 	public function stopAction()
 	{
-		$pidHandler = new Code\PidHandler($this->config->process);
-		if ($pidHandler->removeIfExists()) {
-			self::println('Process was stopped.');
+		if ($this->pidHandler->removeIfExists()) {
+			StdIo::outln('Process was stopped.');
 		}
 		else {
-			self::println('Process was not running.');
+			StdIo::outln('Process was not running.');
 		}
 	}
 
 	public function testAction()
 	{
-		$tweets = (new Resource\Tweets())->find([
+		$tweets = $this->mongodb->tweets->find([
  			'entities.hashtags.0.text' => ['$gt' => ''],
 			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('10 seconds ago'))],
 		]);
 
 		$t = 0;
 		foreach ($tweets as $tweet) {
-			self::println(json_encode($tweet, JSON_PRETTY_PRINT));
+			StdIo::jsonOut($tweet);
 			$t++;
 		}
-		self::println($t);
+		StdIo::outln($t);
 	}
 
 	public function runningAction()
 	{
-		$t = (new Resource\Tweets())->count([
-//			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('4 seconds ago'))],
+		$t = $this->mongodb->tweets->count([
 			'created_at' => ['$gt' => new UTCDateTime(strtotime('4 seconds ago')*1000)],
 		]);
 
-		self::println(($t===0 ? 0 : 1));
+		StdIo::outln(($t===0 ? 0 : 1));
 	}
 }

@@ -21,7 +21,7 @@ class Http extends DiAbstract
 	 *
 	 * @param string $basePath
 	 */
-	public function initDi()
+	public function init()
 	{
 		$di = new FactoryDefault();
 

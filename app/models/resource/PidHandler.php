@@ -1,8 +1,9 @@
 <?php
 
-namespace Code;
+namespace Resource;
 
 use RuntimeException;
+use Structure\Config\Process;
 
 class PidHandler
 {
@@ -15,7 +16,7 @@ class PidHandler
 	/**
 	 * @param \Phalcon\Config $config
 	 */
-	public function __construct(\Phalcon\Config $config)
+	public function __construct(Process $config)
 	{
 		$this->_procDir = $config->procDir;
 		if (substr($this->_procDir, -1) !== '/') {
@@ -53,7 +54,7 @@ class PidHandler
 	/**
 	 * @return boolean
 	 */
-	public function exists() : bool
+	public function exists(): bool
 	{
 		return file_exists($this->_fullProcessFileName);
 	}
@@ -61,7 +62,7 @@ class PidHandler
 	/**
 	 * @return boolean
 	 */
-	public function removeIfExists() : bool
+	public function removeIfExists(): bool
 	{
 		if (file_exists($this->_fullProcessFileName)) {
 			$running = file_exists($this->_procDir . file_get_contents($this->_fullProcessFileName));

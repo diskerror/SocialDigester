@@ -5,6 +5,7 @@ namespace Service\Application;
 use OutOfRangeException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager;
+use Resource\LoggerFactory;
 use Resource\MongoCollectionManager;
 use Structure\Config;
 use Zend\Stdlib\ArrayUtils;
@@ -92,12 +93,21 @@ abstract class DiAbstract
 			}
 			return $eventsManager;
 		});
+
+		$di->setShared('logger', function() use ($self) {
+			static $logger;
+			if (!isset($logger)) {
+//				$logger = LoggerFactory::getFileLogger($self->_basePath . '/' . $config->process->name . '.log');
+				$logger = LoggerFactory::getStreamLogger();
+			}
+			return $logger;
+		});
 	}
 
 	/**
 	 * @param $di
 	 */
-	abstract public function initDi();
+	abstract public function init();
 
 	/**
 	 * Run application.

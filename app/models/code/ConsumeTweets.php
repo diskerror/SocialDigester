@@ -3,9 +3,11 @@
 namespace Code;
 
 use MongoDB\BSON\UTCDateTime;
-use Resource\Messages;
-use Resource\Tweets;
-use Resource\TwitterClient\Stream;
+use MongoDB\Collection;
+use Resource\LoggerFactory;
+use Resource\PidHandler;
+use Resource\TwitterStream;
+use Structure\Config;
 use Structure\Tweet;
 
 final class ConsumeTweets
@@ -15,26 +17,26 @@ final class ConsumeTweets
 	/**
 	 * Open and save a stream of tweets.
 	 *
-	 * @param \Phalcon\Config  $twitterConfig
-	 * @param \Code\PidHandler $pid_handler
-	 *
+	 * @param TwitterStream  $stream
+	 * @param Config\Twitter $twitterConfig
+	 * @param PidHandler     $pidHandler
+	 * @param LoggerFactory  $logger
+	 * @param Collection     $tweetsClient
+	 * @param Collection     $messagesClient
 	 */
-	public static function exec(\Phalcon\Config $twitterConfig)
+	public static function exec(
+		TwitterStream $stream,
+		Config\Twitter $twitterConfig,
+		PidHandler $pidHandler,
+		LoggerFactory $logger,
+		Collection $tweetsClient,
+		Collection $messagesClient
+	)
 	{
 		ini_set('memory_limit', 268435456);
 
 		try {
-			$stream     = new Stream($twitterConfig->auth);
-			$pidHandler = new PidHandler(\Phalcon\Di::getDefault()->getConfig()->process);
-
-//			$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $config->process->name . '.log');
-			$logger = LoggerFactory::getStreamLogger();
-
 //			$sh = new StemHandler();
-
-			$tweetsClient   = (new Tweets())->getClient();
-			$messagesClient = (new Messages())->getClient();
-
 
 			//	Send request to start a filtered stream.
 			$stream->filter([
@@ -70,7 +72,7 @@ final class ConsumeTweets
 				}
 
 				if ($stream::isMessage($packet)) {
-					$packet['created'] = new UTCDateTime((int)(microtime(true)*1000));
+					$packet['created'] = new UTCDateTime((int)(microtime(true) * 1000));
 					$messagesClient->insertOne($packet);
 					continue;
 				}

@@ -13,7 +13,7 @@ try {
 		->register();
 
 	(new Service\Application\Cli(__DIR__))
-		->initDi()
+		->init()
 		->run($argv);
 }
 catch (Throwable $t) {

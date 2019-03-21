@@ -23,7 +23,7 @@ class MongoCollectionManager
 	public function __construct(Mongo $mongoConfig)
 	{
 		$this->_db                  = (new Client($mongoConfig->host))->{$mongoConfig->database};
-		$this->_collectionIndexDefs = $mongoConfig->collections->toArray();
+		$this->_collectionIndexDefs = $mongoConfig->collections;
 		$this->_collectionNames     = $mongoConfig->collections->keys();
 
 		foreach ($this->_collectionIndexDefs as $collName => $indexDefs) {
@@ -43,7 +43,7 @@ class MongoCollectionManager
 	 *
 	 * @param $collectionName
 	 */
-	public function doIndex($collectionName)
+	public function doIndex(string $collectionName)
 	{
 		if (!in_array($collectionName, $this->_collectionNames)) {
 			throw new \LogicException('Collection must be defined in "app/config/application.config.php".');
@@ -54,7 +54,7 @@ class MongoCollectionManager
 
 		try {
 			//  Throws exception if collection doesn't exist.
-			$this->_db->command(['collStats' => $collName]);
+			$this->_db->command(['collStats' => $collectionName]);
 		}
 		catch (CommandException $e) {
 			/** @var \MongoDB\InsertOneResult $inserted */

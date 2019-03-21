@@ -11,6 +11,19 @@ use Structure\Config\Twitter;
 use Structure\Config\WordStats;
 
 
+/**
+ * Class Config
+ *
+ * @package Structure
+ *
+ * @property $version
+ * @property $userConfigName
+ * @property $mongodb
+ * @property $wordStats
+ * @property $twitter
+ * @property $process
+ * @property $caches
+ */
 class Config extends TypedClass
 {
 	protected $version        = '0.6';

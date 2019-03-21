@@ -13,9 +13,20 @@ use Diskerror\Typed\TypedArray;
 use Diskerror\Typed\TypedClass;
 use Structure\TagCloud\Word;
 
+/**
+ * Class Snapshot
+ *
+ * @package Structure
+ *
+ * @property $_id
+ * @property $created
+ * @property $track
+ * @property $tagCloud
+ * @property $summary
+ */
 class Snapshot extends TypedClass
 {
-	protected $_id      = 0;    //	time()
+	protected $_id      = null;
 
 	protected $created  = [DateTime::class];
 

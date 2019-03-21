@@ -41,15 +41,15 @@ return [
 		//      creating new and mysterious collections.
 		//  The keys are the collection names and the values are a list of the index definitions.
 		'collections' => [
-			'tweet'    => [
+			'tweets'    => [
 				['keys' => ['created_at' => 1], 'options' => ['expireAfterSeconds' => 60 * 20]],
 				['keys' => ['entities.hashtags.0.text' => 1]],
 				['keys' => ['text' => 1]],
 			],
-			'message'  => [
+			'messages'  => [
 				['keys' => ['created' => 1], 'options' => ['expireAfterSeconds' => 60 * 60]],
 			],
-			'snapshot' => [
+			'snapshots' => [
 				//	_id is automatically indexed
 			],
 

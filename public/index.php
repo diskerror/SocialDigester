@@ -12,7 +12,7 @@ try {
 		->register();
 
 	(new Service\Application\Http(__DIR__ . '/..'))
-		->initDi()
+		->init()
 		->run();
 }
 catch (Throwable $t) {

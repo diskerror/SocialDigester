@@ -7,7 +7,8 @@ use PhpScience\TextRank\Tool\Parser;
 use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
-use Resource\Tweets;
+use Resource\MongoCollectionManager;
+use Structure\Config\WordStats;
 
 final class Summary
 {
@@ -16,24 +17,25 @@ final class Summary
 	/**
 	 * Generate summary of tweet texts.
 	 *
-	 * @param \Phalcon\Config      $config
+	 * @param WordStats              $config
+	 * @param MongoCollectionManager $mongodb
 	 *
 	 * @return array
 	 */
-	public static function get(\Phalcon\Config $config) : array
+	public static function get(WordStats $config, MongoCollectionManager $mongodb): array
 	{
 		ini_set('memory_limit', 268435456);
 
-		$tweets = (new Tweets())->find(
+		$tweets = $mongodb->tweets->find(
 			[
 				'created_at' =>
-					['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime('99 seconds ago') * 1000)],
+					['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 			],
 			[
 				'sort'       => [
 					'created_at' => -1,
 				],
-				'limit'      => 10000,
+				'limit'      => $config->quantity,
 				'projection' => [
 					'text' => 1,
 				],

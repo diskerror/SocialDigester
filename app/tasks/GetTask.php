@@ -25,7 +25,7 @@ class GetTask extends TaskMaster
 	 */
 	public function cachePathAction()
 	{
-		StdIo::outln($this->config->index_cache->back->cacheDir);
+		StdIo::outln($this->config->caches['index']->back->cacheDir);
 	}
 
 	/**
@@ -33,12 +33,7 @@ class GetTask extends TaskMaster
 	 */
 	public function hashtagsAction()
 	{
-		StdIo::outln(
-			json_encode(
-				array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats)->arr, 0, 25),
-				JSON_PRETTY_PRINT
-			)
-		);
+		StdIo::jsonOut(array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats)->arr, 0, 25));
 	}
 
 	/**
@@ -46,12 +41,7 @@ class GetTask extends TaskMaster
 	 */
 	public function textwordsAction()
 	{
-		StdIo::outln(
-			json_encode(
-				array_slice(Code\Tally\TopList::getText($this->config->word_stats)->arr, 0, 25),
-				JSON_PRETTY_PRINT
-			)
-		);
+		StdIo::jsonOut(array_slice(Code\Tally\TopList::getText($this->config->word_stats)->arr, 0, 25));
 	}
 
 	/**
@@ -59,8 +49,7 @@ class GetTask extends TaskMaster
 	 */
 	public function summaryAction()
 	{
-		$summary = Code\Summary::get($this->config->word_stats);
-		StdIo::out(implode("\n\n", $summary));
+		StdIo::outln(implode("\n\n", Code\Summary::get($this->config->wordStats, $this->mongodb)));
 	}
 
 	/**

@@ -1,7 +1,8 @@
 <?php
 
-namespace Code;
+namespace Resource;
 
+use Code\Phalcon;
 use Phalcon\Logger\Adapter\File;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Formatter\Line;
@@ -36,13 +37,21 @@ class LoggerFactory
 	protected $_stream;
 
 	/**
+	 * LoggerFactory constructor.
+	 *
+	 * @param string $fileName
 	 */
-	function __construct($fileName)
+	function __construct(string $fileName)
 	{
 		$this->_file   = self::getFile($fileName);
 		$this->_stream = self::getStream();
 	}
 
+	/**
+	 * @param $fileName
+	 *
+	 * @return File
+	 */
 	public static function getFileLogger($fileName)
 	{
 		$file = new File($fileName);
@@ -50,6 +59,9 @@ class LoggerFactory
 		return $file;
 	}
 
+	/**
+	 * @return Phalcon\Logger\Formatter\Line|Line
+	 */
 	public static function getFormatter()
 	{
 		if (!isset(self::$_format)) {
@@ -58,6 +70,9 @@ class LoggerFactory
 		return self::$_format;
 	}
 
+	/**
+	 * @return Stream
+	 */
 	public static function getStreamLogger()
 	{
 		$stream = new Stream('php://stderr');

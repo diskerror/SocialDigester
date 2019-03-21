@@ -6,6 +6,29 @@ use Diskerror\Typed\DateTime;
 use Structure\NormalizeString;
 use Structure\Tweet\Entities\Entities;
 
+/**
+ * Trait TweetTrait
+ *
+ * @package Structure\Tweet
+ *
+ * @property $created_at
+ * @property $contributors
+ * @property $entities
+ * @property $favorite_count
+ * @property $filter_level
+ * @property $in_reply_to_screen_name
+ * @property $in_reply_to_status_id_str
+ * @property $in_reply_to_user_id_str
+ * @property $is_quote_status
+ * @property $lang
+ * @property $place
+ * @property $possibly_sensitive
+ * @property $retweet_count
+ * @property $source
+ * @property $text
+ * @property $truncated
+ * @property $user
+ */
 trait TweetTrait
 {
 	protected $created_at                = [DateTime::class];

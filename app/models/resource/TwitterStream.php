@@ -1,10 +1,11 @@
 <?php
 
-namespace Resource\TwitterClient;
+namespace Resource;
 
-use Phalcon\Config;
+use Service\OAuth;
+use Structure\Config\Twitter;
 
-class Stream extends ClientAbstract
+class TwitterStream
 {
 	protected static $_messageKeys = [
 		'control'         => 0,
@@ -23,15 +24,19 @@ class Stream extends ClientAbstract
 		'warning'         => 0,
 	];
 
+	protected $_oauth;
+
+	protected $_baseURL;
+
 	/**
 	 * @var resource
 	 */
 	protected $_proc;
 
-	public function __construct(Config $auth)
+	public function __construct(Twitter $config)
 	{
-		parent::__construct($auth);
-		$this->_baseURL .= 'statuses/';
+		$this->_oauth = new OAuth($config->oauth);
+		$this->_baseURL = $config->url . 'statuses/';
 	}
 
 	public static function isMessage(array $packet)
@@ -108,7 +113,7 @@ class Stream extends ClientAbstract
 			$data = ' --data \'' . rawurlencode($params[0]) . '\'';
 		}
 
-		$header = $this->_getHeader($url, 'GET', $params[0]);
+		$header = $this->_oauth->getHeader($url, 'GET', $params[0]);
 //		cout('curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n");die;
 		$this->_proc = popen('curl -s --compressed --get ' . $url . $data . ' --header \'' . $header . '\'', 'r');
 

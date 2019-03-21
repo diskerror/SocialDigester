@@ -2,6 +2,11 @@
 
 namespace Code;
 
+use Code\Tally\TagCloud;
+use Resource\MongoCollectionManager;
+use Structure\Config;
+use Structure\Snapshot;
+
 final class Snapshots
 {
 	private function __construct() { }
@@ -9,19 +14,20 @@ final class Snapshots
 	/**
 	 * Grab and save the current state of data.
 	 *
-	 * @param \Phalcon\Config $config
+	 * @param Config                 $config
+	 * @param MongoCollectionManager $mongodb
 	 *
-	 * @return array
+	 * @return string
 	 */
-	public static function make(\Phalcon\Config $config) : int
+	public static function make(Config $config, MongoCollectionManager $mongodb): string
 	{
-		$snap = new \Structure\Snapshot([
-			'_id'      => time(),
-			'track'    => (array)$config->twitter->track,
-			'tagCloud' => Tally\TagCloud::getHashtags($config->word_stats),
+		$snap = new Snapshot([
+			'track'    => $config->twitter->track,
+			'tagCloud' => TagCloud::getHashtags($config->word_stats),
 			'summary'  => Summary::get($config->word_stats),
 		]);
-		(new \Resource\Snapshots())->insertOne($snap);
-		return $snap->_id;
+
+		$result = $mongodb->snapshots->insertOne($snap);
+		return (string) $result->getInsertedId();
 	}
 }
