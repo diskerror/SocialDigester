@@ -33,7 +33,7 @@ class GetTask extends TaskMaster
 	 */
 	public function hashtagsAction()
 	{
-		StdIo::jsonOut(array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats)->arr, 0, 25));
+		StdIo::jsonOut(array_slice(Code\Tally\TopList::getHashtags($this->mongodb, $this->config->wordStats)->arr, 0, 32));
 	}
 
 	/**
@@ -41,7 +41,7 @@ class GetTask extends TaskMaster
 	 */
 	public function textwordsAction()
 	{
-		StdIo::jsonOut(array_slice(Code\Tally\TopList::getText($this->config->word_stats)->arr, 0, 25));
+		StdIo::jsonOut(array_slice(Code\Tally\TopList::getText($this->mongodb, $this->config->wordStats)->arr, 0, 32));
 	}
 
 	/**
@@ -49,7 +49,7 @@ class GetTask extends TaskMaster
 	 */
 	public function summaryAction()
 	{
-		StdIo::outln(implode("\n\n", Code\Summary::get($this->config->wordStats, $this->mongodb)));
+		StdIo::outln(implode("\n\n", Code\Summary::get($this->mongodb, $this->config->wordStats)));
 	}
 
 	/**
@@ -57,6 +57,6 @@ class GetTask extends TaskMaster
 	 */
 	public function snapshotAction()
 	{
-		StdIo::outln(Code\Snapshots::make($this->config));
+		StdIo::outln(Code\Snapshots::make($this->mongodb, $this->config));
 	}
 }

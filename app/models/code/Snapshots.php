@@ -14,20 +14,20 @@ final class Snapshots
 	/**
 	 * Grab and save the current state of data.
 	 *
-	 * @param Config                 $config
 	 * @param MongoCollectionManager $mongodb
+	 * @param Config                 $config
 	 *
 	 * @return string
 	 */
-	public static function make(Config $config, MongoCollectionManager $mongodb): string
+	public static function make(MongoCollectionManager $mongodb, Config $config): string
 	{
 		$snap = new Snapshot([
-			'track'    => $config->twitter->track,
-			'tagCloud' => TagCloud::getHashtags($config->word_stats),
-			'summary'  => Summary::get($config->word_stats),
+			'track'    => $config->track,
+			'tagCloud' => TagCloud::getHashtags($mongodb, $config->word_stats),
+			'summary'  => Summary::get($mongodb, $config->word_stats),
 		]);
 
-		$result = $mongodb->snapshots->insertOne($snap);
-		return (string) $result->getInsertedId();
+		$inserted = $mongodb->snapshots->insertOne($snap);
+		return (string)$inserted->getInsertedId();
 	}
 }

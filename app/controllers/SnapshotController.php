@@ -8,11 +8,15 @@
 
 class SnapshotController extends \Phalcon\Mvc\Controller
 {
+	use PropertiesTrait;
+
 	public function indexAction()
 	{
 		$this->assets->addJs('js/snapshot.js');
 
-		$snapshot = $this->mongo->snapshots->find(['_id' => (int)$this->dispatcher->getParam('id')]);
+		$id = preg_replace('/[^0-9a-fA-F]/', '', $this->dispatcher->getParam('id'));
+
+		$snapshot = $this->mongo->snapshots->find(['_id' => $id]);
 
 		if (!$snapshot) {
 			return $this->response->redirect('/', true);

@@ -9,7 +9,7 @@ class TweetsTask extends TaskMaster
 	{
 		Code\ConsumeTweets::exec(
 			$this->stream,
-			$this->config->twitter,
+			$this->config->track->toArray(),
 			$this->pidHandler,
 			$this->logger,
 			$this->mongodb->tweets,

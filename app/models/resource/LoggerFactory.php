@@ -2,7 +2,6 @@
 
 namespace Resource;
 
-use Code\Phalcon;
 use Phalcon\Logger\Adapter\File;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Formatter\Line;
@@ -12,6 +11,12 @@ use Phalcon\Logger\Formatter\Line;
  *
  * @copyright     Copyright (c) 2016 Reid Woodbury Jr.
  * @license       http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
+ *
+ * @method info($message)
+ * @method warning($message)
+ * @method critical($message)
+ * @method emergency($message)
+ * @method debug($message)
  */
 class LoggerFactory
 {
@@ -22,17 +27,18 @@ class LoggerFactory
 
 	/**
 	 * Log format object.
-	 * @type Phalcon\Logger\Formatter\Line
+	 *
+	 * @type Line
 	 */
 	protected static $_format;
 
 	/**
-	 * @type Phalcon\Logger\Adapter\File
+	 * @type File
 	 */
 	protected $_file;
 
 	/**
-	 * @type Phalcon\Logger\Adapter\Stream
+	 * @type Stream
 	 */
 	protected $_stream;
 
@@ -43,8 +49,8 @@ class LoggerFactory
 	 */
 	function __construct(string $fileName)
 	{
-		$this->_file   = self::getFile($fileName);
-		$this->_stream = self::getStream();
+		$this->_file   = self::getFileLogger($fileName);
+		$this->_stream = self::getStreamLogger();
 	}
 
 	/**
@@ -52,7 +58,7 @@ class LoggerFactory
 	 *
 	 * @return File
 	 */
-	public static function getFileLogger($fileName)
+	public static function getFileLogger($fileName): File
 	{
 		$file = new File($fileName);
 		$file->setFormatter(self::getFormatter());
@@ -60,9 +66,9 @@ class LoggerFactory
 	}
 
 	/**
-	 * @return Phalcon\Logger\Formatter\Line|Line
+	 * @return Line
 	 */
-	public static function getFormatter()
+	public static function getFormatter(): Line
 	{
 		if (!isset(self::$_format)) {
 			self::$_format = new Line(self::OUTPUT_FORMAT);
@@ -73,7 +79,7 @@ class LoggerFactory
 	/**
 	 * @return Stream
 	 */
-	public static function getStreamLogger()
+	public static function getStreamLogger(): Stream
 	{
 		$stream = new Stream('php://stderr');
 		$stream->setFormatter(self::getFormatter());
@@ -92,6 +98,8 @@ class LoggerFactory
 		$this->_file->$level($message);
 
 		switch ($level) {
+			case 'info':
+			case 'warning':
 			case 'critical':
 			case 'emergency':
 			case 'debug':

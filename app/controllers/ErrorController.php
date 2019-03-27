@@ -2,6 +2,8 @@
 
 class ErrorController extends \Phalcon\Mvc\Controller
 {
+	use PropertiesTrait;
+
 	public function indexAction()
 	{
 	}

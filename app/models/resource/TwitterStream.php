@@ -5,6 +5,14 @@ namespace Resource;
 use Service\OAuth;
 use Structure\Config\Twitter;
 
+/**
+ * Class TwitterStream
+ *
+ * @package Resource
+ *
+ * @method filter($in=[])
+ * @method sample($in=[])
+ */
 class TwitterStream
 {
 	protected static $_messageKeys = [
@@ -35,7 +43,7 @@ class TwitterStream
 
 	public function __construct(Twitter $config)
 	{
-		$this->_oauth = new OAuth($config->oauth);
+		$this->_oauth   = new OAuth($config->oauth);
 		$this->_baseURL = $config->url . 'statuses/';
 	}
 

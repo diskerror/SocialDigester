@@ -21,7 +21,7 @@ class Http extends DiAbstract
 	 *
 	 * @param string $basePath
 	 */
-	public function init()
+	public function init(): self
 	{
 		$di = new FactoryDefault();
 
@@ -60,15 +60,15 @@ class Http extends DiAbstract
 			return $url;
 		});
 
-		$di->setShared('dispatcher', function() use ($self) {
+		$di->setShared('dispatcher', function() use ($di) {
 			static $dispatcher;
 
 			if (!isset($dispatcher)) {
-				$events = $self->getShared('eventsManager');
+				$events = $di->getShared('eventsManager');
 
 				$events->attach(
 					'dispatch:beforeException',
-					function($event, $dispatcher, $exception) {
+					function($event, Dispatcher $dispatcher, \Exception $exception) {
 						switch ($exception->getCode()) {
 							case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
 								$dispatcher->forward([
@@ -106,6 +106,8 @@ class Http extends DiAbstract
 
 		$this->_application = new Application($di);
 		$this->_application->useImplicitView(false);
+
+		return $this;
 	}
 
 	/**

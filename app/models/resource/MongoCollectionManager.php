@@ -20,11 +20,11 @@ class MongoCollectionManager
 	protected $_collectionNames;
 	protected $_db;
 
-	public function __construct(Mongo $mongoConfig)
+	public function __construct(Mongo $config)
 	{
-		$this->_db                  = (new Client($mongoConfig->host))->{$mongoConfig->database};
-		$this->_collectionIndexDefs = $mongoConfig->collections;
-		$this->_collectionNames     = $mongoConfig->collections->keys();
+		$this->_db                  = (new Client($config->host))->{$config->database};
+		$this->_collectionIndexDefs = $config->collections->toArray();
+		$this->_collectionNames     = $config->collections->keys();
 
 		foreach ($this->_collectionIndexDefs as $collName => $indexDefs) {
 			try {
@@ -62,17 +62,19 @@ class MongoCollectionManager
 			$collection->deleteOne(['_id' => ['$eq' => $inserted->getInsertedId()]]);
 		}
 
-		$collection->dropIndexes();
 		foreach ($this->_collectionIndexDefs[$collectionName] as $indexDef) {
 			switch (count($indexDef)) {
 				case 0;
+					$collection->dropIndexes();
 					break;
 
 				case 1:
+					$collection->dropIndexes();
 					$collection->createIndex($indexDef['keys']);
 					break;
 
 				case 2:
+					$collection->dropIndexes();
 					$collection->createIndex($indexDef['keys'], $indexDef['options']);
 					break;
 

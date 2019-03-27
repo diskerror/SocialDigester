@@ -27,7 +27,8 @@ class AdminTask extends TaskMaster
 	 */
 	public function showConfigAction()
 	{
-		StdIo::jsonOut($this->config);
+		StdIo::phpOut($this->config);
+		StdIo::outln(';');
 	}
 
 	/**

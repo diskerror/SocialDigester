@@ -7,26 +7,26 @@ use MongoDB\Collection;
 use Resource\LoggerFactory;
 use Resource\PidHandler;
 use Resource\TwitterStream;
-use Structure\Config;
 use Structure\Tweet;
+use function stripos;
 
 final class ConsumeTweets
 {
 	private function __construct() { }
 
 	/**
-	 * Open and save a stream of tweets.
+	 * Open a stream of tweets and save to DB.
 	 *
-	 * @param TwitterStream  $stream
-	 * @param Config\Twitter $twitterConfig
-	 * @param PidHandler     $pidHandler
-	 * @param LoggerFactory  $logger
-	 * @param Collection     $tweetsClient
-	 * @param Collection     $messagesClient
+	 * @param TwitterStream $stream
+	 * @param array         $track //    array of strings
+	 * @param PidHandler    $pidHandler
+	 * @param LoggerFactory $logger
+	 * @param Collection    $tweetsClient
+	 * @param Collection    $messagesClient
 	 */
 	public static function exec(
 		TwitterStream $stream,
-		Config\Twitter $twitterConfig,
+		array $track,
 		PidHandler $pidHandler,
 		LoggerFactory $logger,
 		Collection $tweetsClient,
@@ -40,7 +40,7 @@ final class ConsumeTweets
 
 			//	Send request to start a filtered stream.
 			$stream->filter([
-				'track'          => implode(',', (array)$twitterConfig->track),
+				'track'          => implode(',', $track),
 				'language'       => 'en',
 				'stall_warnings' => true,
 			]);
@@ -72,7 +72,7 @@ final class ConsumeTweets
 				}
 
 				if ($stream::isMessage($packet)) {
-					$packet['created'] = new UTCDateTime((int)(microtime(true) * 1000));
+					$packet['created'] = new UTCDateTime((microtime(true) * 1000));
 					$messagesClient->insertOne($packet);
 					continue;
 				}
@@ -105,16 +105,18 @@ final class ConsumeTweets
 				catch (\Exception $e) {
 					$m = $e->getMessage();
 
-					if (preg_match('/Authentication/i', $m)) {
+					if (false !== stripos($m, 'Authentication')) {
 						$logger->emergency('Mongo ' . $m);
 					}
+					elseif (preg_match('/duplicate.*key/i', $m)) {
+//						$logger->info('duplicate key');
+						/**
+						 * The Twitter agreement says that if someone changes their tweet then we must accept that change.
+						 */
+						$tweetsClient->replaceOne(['_id' => $tweet->_id], $tweet);
+					}
 					else {
-						if (preg_match('/duplicate.*key/i', $m)) {
-							$logger->warning('dup');
-						}
-						else {
-							$logger->warning('Mongo ' . $m);
-						}
+						$logger->warning('Mongo ' . $m);
 					}
 				}
 			}

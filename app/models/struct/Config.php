@@ -2,6 +2,7 @@
 
 namespace Structure;
 
+use Diskerror\Typed\SAString;
 use Diskerror\Typed\TypedArray;
 use Diskerror\Typed\TypedClass;
 use Structure\Config\Cache;
@@ -20,6 +21,7 @@ use Structure\Config\WordStats;
  * @property $userConfigName
  * @property $mongodb
  * @property $wordStats
+ * @property $track
  * @property $twitter
  * @property $process
  * @property $caches
@@ -30,6 +32,7 @@ class Config extends TypedClass
 	protected $userConfigName = '';
 	protected $mongodb        = [Mongo::class];
 	protected $wordStats      = [WordStats::class];
+	protected $track          = [TypedArray::class, SAString::class];
 	protected $twitter        = [Twitter::class];
 	protected $process        = [Process::class];
 	protected $caches         = [TypedArray::class, Cache::class];

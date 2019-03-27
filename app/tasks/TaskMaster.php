@@ -8,6 +8,16 @@
 
 use Service\StdIo;
 
+/**
+ * Class TaskMaster
+ *
+ * @property $config
+ * @property $mongodb
+ * @property $eventsManager
+ * @property $logger
+ * @property $stream
+ * @property $pidHandler
+ */
 class TaskMaster extends Phalcon\Cli\Task
 {
     /**

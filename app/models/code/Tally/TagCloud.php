@@ -8,27 +8,29 @@
 
 namespace Code\Tally;
 
-use MongoDB\BSON\UTCDateTime;
-use Phalcon\Config;
-use Ds\Set;
-use Diskerror\Typed\TypedArray;
 use Code\TallyWords;
-use Resource\Tweets;
+use Diskerror\Typed\TypedArray;
+use Ds\Set;
+use Resource\MongoCollectionManager;
+use Structure\Config\WordStats;
 use Structure\TagCloud\Word;
 
-final class TagCloud extends AbstractTally
+final class TagCloud
 {
+	use TallyTrait;
+
 	/**
 	 * Return count of each current hashtag.
 	 *
-	 * @param Config $config
+	 * @param MongoCollectionManager $mongodb
+	 * @param WordStats              $config
 	 *
 	 * @return TypedArray
 	 */
-	public static function getHashtags(Config $config) : TypedArray
+	public static function getHashtags(MongoCollectionManager $mongodb, WordStats $config): TypedArray
 	{
-		$tweets = (new \Resource\Tweets())->find([
-			'created_at'               => ['$gt' => new UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+		$tweets = $mongodb->tweets->find([
+			'created_at'               => ['$gt' => self::_getWindowDate($config->window)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
 
@@ -58,11 +60,11 @@ final class TagCloud extends AbstractTally
 	 * Words are normalized and grouped under the same tag.
 	 *
 	 * @param TallyWords $tally
-	 * @param Config     $config
+	 * @param WordStats  $config
 	 *
 	 * @return TypedArray
 	 */
-	private static function _buildTagCloud(TallyWords $tally, Config $config) : TypedArray
+	private static function _buildTagCloud(TallyWords $tally, WordStats $config): TypedArray
 	{
 		$tally->scaleTally($config->window / 60.0); // changes value to count per minute
 
@@ -105,7 +107,7 @@ final class TagCloud extends AbstractTally
 
 			$cloudWords[] = [
 				'text'   => $groupKeys[0],
-				'weight' => (int)((log($totalTally*5) * 40) + $totalTally*5),   //  A combination of log and linear.
+				'weight' => (int)((log($totalTally * 5) * 40) + $totalTally * 5),   //  A combination of log and linear.
 				'link'   => 'javascript:ToTwitter(["' . implode('","', $twitterLookup->toArray()) . '"])',
 				'html'   => [
 					'title' => $totalTally . $htmlTitle,
@@ -120,14 +122,15 @@ final class TagCloud extends AbstractTally
 	/**
 	 * Return quantity of each word in text field.
 	 *
-	 * @param Config     $config
+	 * @param MongoCollectionManager $mongodb
+	 * @param WordStats              $config
 	 *
 	 * @return TypedArray
 	 */
-	public static function getText(Config $config) : TypedArray
+	public static function getText(MongoCollectionManager $mongodb, WordStats $config): TypedArray
 	{
-		$tweets = (new Tweets())->find([
-			'created_at' => ['$gt' => new UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+		$tweets = $mongodb->tweets->find([
+			'created_at' => ['$gt' => self::_getWindowDate($config->window)],
 			'text'       => ['$gt' => ''],
 		]);
 
@@ -149,15 +152,6 @@ final class TagCloud extends AbstractTally
 		}
 
 		return self::_buildTagCloud($tally, $config);
-	}
-
-	private static function _sortCountSumDesc($a, $b)
-	{
-		if ($a['_sum_'] === $b['_sum_']) {
-			return 0;
-		}
-
-		return ($a['_sum_'] > $b['_sum_']) ? -1 : 1;
 	}
 
 }

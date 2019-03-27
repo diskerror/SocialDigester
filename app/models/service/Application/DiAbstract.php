@@ -64,15 +64,15 @@ abstract class DiAbstract
 					$config = ArrayUtils::merge($config, require $devName);
 				}
 
-				//	Open all other files in this directory and ending with '.php' as a configuration file.
+				$config = new Config($config);
+
+				//	Open all other files in this directory that end with '.php' as a configuration file.
 				//	'glob' defaults to sorted.
 				foreach (glob($self->_basePath . '/app/config/*.php') as $g) {
 					if ($g !== $configName && $g !== $devName && !is_dir($g)) {
-						$config = ArrayUtils::merge($config, require $g);
+						$config->replace(require $g);
 					}
 				}
-
-				$config = new Config($config);
 			}
 
 			return $config;

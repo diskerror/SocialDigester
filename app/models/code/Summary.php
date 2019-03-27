@@ -17,12 +17,12 @@ final class Summary
 	/**
 	 * Generate summary of tweet texts.
 	 *
-	 * @param WordStats              $config
 	 * @param MongoCollectionManager $mongodb
+	 * @param WordStats              $config
 	 *
 	 * @return array
 	 */
-	public static function get(WordStats $config, MongoCollectionManager $mongodb): array
+	public static function get(MongoCollectionManager $mongodb, WordStats $config): array
 	{
 		ini_set('memory_limit', 268435456);
 
@@ -44,12 +44,12 @@ final class Summary
 
 		$text = '';
 		foreach ($tweets as $tweet) {
-			if (preg_match('/(^039|^rt)/i', $tweet->text)) {
-				$text .= substr($tweet->text, 3) . "\n";
-			}
-			else {
+//			if (preg_match('/(^039|^rt)/i', $tweet->text)) {
+//				$text .= substr($tweet->text, 3) . "\n";
+//			}
+//			else {
 				$text .= $tweet->text . "\n";
-			}
+//			}
 		}
 
 		$parser = new Parser();

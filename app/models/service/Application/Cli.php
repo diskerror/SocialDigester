@@ -12,6 +12,9 @@ use Service\StdIo;
 
 class Cli extends DiAbstract
 {
+	/**
+	 * @return Cli
+	 */
 	public function init(): self
 	{
 		$di = new FdCli();
@@ -42,6 +45,8 @@ class Cli extends DiAbstract
 
 	/**
 	 * @param array $argv
+	 *
+	 * @throws Exception
 	 */
 	public function run(array $argv = []): void
 	{
