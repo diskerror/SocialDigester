@@ -10,11 +10,13 @@ class AdminTask extends Cli
 {
 	public function rateAction()
 	{
+		$secs = 10;
+
 		$t = (new Resource\Tweets())->count([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('20 seconds ago') * 1000)],
+			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($secs . ' seconds ago') * 1000)],
 		]);
 
-		self::println('Tweets are being received at a rate of ' . $t / 20 . ' per second.');
+		self::println('Tweets are being received at a rate of ' . $t / $secs . ' per second averaged over ' . $secs . ' seconds.');
 	}
 
 	public function showConfigAction()

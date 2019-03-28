@@ -1,7 +1,7 @@
 {
 	"require": {
 		"php": "^7.1",
-		"diskerror/typed": "dev-master",
+		"diskerror/typed": "0.6a",
 		"zendframework/zend-json": "^3.0",
 		"ext-mongodb": "1.5.*",
 		"mongodb/mongodb": "^1.0.0",

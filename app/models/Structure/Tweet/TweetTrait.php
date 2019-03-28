@@ -12,21 +12,21 @@ trait TweetTrait
 
 //	protected $extended_entities         = '__class__Structure\Tweet\ExtendedEntities';
 
-	protected $favorite_count            = 0;
+// 	protected $favorite_count            = 0;
 
-	protected $filter_level              = 'low';
+// 	protected $filter_level              = 'low';
 
-	protected $in_reply_to_screen_name   = '';
+// 	protected $in_reply_to_screen_name   = '';
 
-	protected $in_reply_to_status_id_str = '';
+// 	protected $in_reply_to_status_id_str = '';
 
-	protected $in_reply_to_user_id_str   = '';
+// 	protected $in_reply_to_user_id_str   = '';
 
 	protected $is_quote_status           = false;
 
 	protected $lang                      = 'en';
 
-	protected $place                     = '__class__Structure\Tweet\Place';
+// 	protected $place                     = '__class__Structure\Tweet\Place';
 
 	protected $possibly_sensitive        = false;
 
@@ -38,7 +38,7 @@ trait TweetTrait
 
 	protected $truncated                 = false;
 
-	protected $user                      = '__class__Structure\Tweet\User';
+// 	protected $user                      = '__class__Structure\Tweet\User';
 
 
 	protected function _set_text($v)
