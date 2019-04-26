@@ -17,3 +17,5 @@ then
 else
     chmod 777 "$CACHE_PATH"
 fi
+
+${DIR}/run admin index
