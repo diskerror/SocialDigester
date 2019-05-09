@@ -28,7 +28,7 @@ return [
 		'database' => 'digester',
 	],
 
-	'tweets_expire' => 360, //	In seconds. Save tweets for 6 minutes.
+	'tweets_expire' => 900, //	In seconds. Save tweets for 15 minutes.
 
 	'word_stats' => [
 		'quantity' => 100,    //	return the top X items
@@ -59,6 +59,7 @@ return [
 			'mitch',
 			'mitchmcconnell',
 			'nancypelosi',
+			'paulryan',
 			'pelosi',
 			'pence',
 			'potus',
