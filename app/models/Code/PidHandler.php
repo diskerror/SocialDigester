@@ -2,6 +2,8 @@
 
 namespace Code;
 
+use Phalcon\Config;
+
 class PidHandler
 {
 	protected $_fullProcessFileName;
@@ -11,9 +13,9 @@ class PidHandler
 	protected $_procDir;
 
 	/**
-	 * @param \Phalcon\Config $config
+	 * @param Config $config
 	 */
-	public function __construct(\Phalcon\Config $config)
+	public function __construct(Config $config)
 	{
 		$this->_procDir = $config->procDir;
 		if (substr($this->_procDir, -1) !== '/') {

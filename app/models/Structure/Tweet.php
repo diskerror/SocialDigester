@@ -3,8 +3,9 @@
 namespace Structure;
 
 use Diskerror\Typed\ArrayOptions as AO;
+use Diskerror\Typed\TypedClass;
 
-class Tweet extends \Diskerror\Typed\TypedClass
+class Tweet extends TypedClass
 {
 	protected $_map = [
 		'id'  => 'id_',    //	from Twitter

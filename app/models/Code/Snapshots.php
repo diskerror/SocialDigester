@@ -2,6 +2,9 @@
 
 namespace Code;
 
+use Phalcon\Config;
+use Structure\Snapshot;
+
 /**
  * Created by PhpStorm.
  * User: reid
@@ -15,13 +18,13 @@ final class Snapshots
 	/**
 	 * Grab and save the current state of data.
 	 *
-	 * @param \Phalcon\Config $config
+	 * @param Config $config
 	 *
 	 * @return array
 	 */
-	public static function make(\Phalcon\Config $config) : int
+	public static function make(Config $config) : int
 	{
-		$snap = new \Structure\Snapshot([
+		$snap = new Snapshot([
 			'id_'      => time(),
 			'track'    => (array)$config->twitter->track,
 			'tagCloud' => Tally\TagCloud::getHashtags($config->word_stats),

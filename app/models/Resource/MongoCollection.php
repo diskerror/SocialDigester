@@ -43,12 +43,12 @@ abstract class MongoCollection
 			$argOptions = $document->getArrayOptions();
 			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
 
-			$res = self::getClient()->insertOne($document->toArray(), $options);
+			$res = $this->getClient()->insertOne($document->toArray(), $options);
 
 			$document->setArrayOptions($argOptions);
 		}
 		else {
-			$res = self::getClient()->insertOne($document, $options);
+			$res = $this->getClient()->insertOne($document, $options);
 		}
 
 		return $res;
@@ -71,12 +71,12 @@ abstract class MongoCollection
 			$argOptions = $document->getArrayOptions();
 			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
 
-			$res = self::getClient()->insertMany($document->toArray(), $options);
+			$res = $this->getClient()->insertMany($document->toArray(), $options);
 
 			$document->setArrayOptions($argOptions);
 		}
 		else {
-			$res = self::getClient()->insertOne($document, $options);
+			$res = $this->getClient()->insertOne($document, $options);
 		}
 
 		return $res;
@@ -86,13 +86,13 @@ abstract class MongoCollection
 	{
 		switch (count($args)) {
 			case 0:
-				return self::getClient()->{$name}();
+				return $this->getClient()->{$name}();
 
 			case 1:
-				return self::getClient()->{$name}($args[0]);
+				return $this->getClient()->{$name}($args[0]);
 
 			case 2:
-				return self::getClient()->{$name}($args[0], $args[1]);
+				return $this->getClient()->{$name}($args[0], $args[1]);
 
 			default:
 				throw new \InvalidArgumentException('too many arguments');
@@ -101,13 +101,13 @@ abstract class MongoCollection
 
 	public function find($filter = [], array $options = [])
 	{
-		$res = self::getClient()->find($filter, $options);
+		$res = $this->getClient()->find($filter, $options);
 		return new \Diskerror\Typed\TypedArray($res, $this->_class);
 	}
 
 	public function findOne($filter = [], array $options = [])
 	{
-		$res = self::getClient()->findOne($filter, $options);
+		$res = $this->getClient()->findOne($filter, $options);
 		return new $this->_class($res);
 	}
 }

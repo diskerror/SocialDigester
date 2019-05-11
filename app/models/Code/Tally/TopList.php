@@ -9,9 +9,9 @@
 namespace Code\Tally;
 
 use Code\TallyWords;
-use Tally\Phalcon;
-use function var_dump;
-use function var_export;
+use MongoDB\BSON\UTCDateTime;
+use Phalcon\Config;
+use Resource\Tweets;
 
 final class TopList extends AbstractTally
 {
@@ -20,15 +20,14 @@ final class TopList extends AbstractTally
 	/**
 	 * Return quantity of each current hashtag.
 	 *
-	 * @param Phalcon\Config $config
+	 * @param Config $config
 	 *
 	 * @return TallyWords
 	 */
-	public static function getHashtags(\Phalcon\Config $config) : TallyWords
+	public static function getHashtags(Config $config) : TallyWords
 	{
-		$tweets = (new \Resource\Tweets())->find([
-			'created_at'               =>
-				['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+		$tweets = (new Tweets())->find([
+			'created_at'               => ['$gte' => new UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
 
@@ -52,14 +51,14 @@ final class TopList extends AbstractTally
 	/**
 	 * Return quantity of each word in text field.
 	 *
-	 * @param Phalcon\Config $config
+	 * @param Config $config
 	 *
 	 * @return TallyWords
 	 */
-	public static function getText(\Phalcon\Config $config) : TallyWords
+	public static function getText(Config $config) : TallyWords
 	{
-		$tweets = (new \Resource\Tweets())->find([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime($config->window . ' seconds ago') * 1000)],
+		$tweets = (new Tweets())->find([
+			'created_at' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 			'text'       => ['$gt' => ''],
 		]);
 

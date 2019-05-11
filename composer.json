@@ -11,9 +11,6 @@
 		"ext-ds": "*",
 		"ext-mbstring": "*"
 	},
-	"suggest": {
-		"curl": "curl"
-	},
 	"require-dev": {
 		"phalcon/ide-stubs": "3.3"
 	},

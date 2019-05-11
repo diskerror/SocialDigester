@@ -4,7 +4,7 @@ namespace Structure\Tweet;
 
 trait TweetTrait
 {
-	protected $created_at                = '__class__Diskerror\Typed\DateTime';
+	protected $created_at                = '__class__Diskerror\Typed\DateTime("now","UTC")';
 
 	protected $contributors              = null;
 

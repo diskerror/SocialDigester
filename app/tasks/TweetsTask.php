@@ -27,7 +27,7 @@ class TweetsTask extends Cli
 	{
 		$tweets = (new Resource\Tweets())->find([
  			'entities.hashtags.0.text' => ['$gt' => ''],
-			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('10 seconds ago'))],
+			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
 
 		$t = 0;
@@ -43,9 +43,9 @@ class TweetsTask extends Cli
 	public function runningAction()
 	{
 		$t = (new Resource\Tweets())->count([
-			'created_at' => ['$gt' => date('Y-m-d H:i:s', strtotime('4 seconds ago'))],
+			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
 
-		self::println(($t===0 ? 0 : 1));
+		self::println($t===0?0:1);
 	}
 }

@@ -8,11 +8,12 @@
 
 namespace Code\Tally;
 
-use MongoDB\Collection;
+use MongoDB\BSON\UTCDateTime;
 use Phalcon\Config;
 use Ds\Set;
 use Diskerror\Typed\TypedArray;
 use Code\TallyWords;
+use Resource\Tweets;
 
 final class TagCloud extends AbstractTally
 {
@@ -25,10 +26,10 @@ final class TagCloud extends AbstractTally
 	 *
 	 * @return TypedArray
 	 */
-	public static function getHashtags(Config $config) : TypedArray
+	public static function getHashtags(Config $config): TypedArray
 	{
-		$tweets = (new \Resource\Tweets())->find([
-			'created_at'               => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+		$tweets = (new Tweets())->find([
+			'created_at'               => ['$gte' => new UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
 
@@ -62,7 +63,7 @@ final class TagCloud extends AbstractTally
 	 *
 	 * @return TypedArray
 	 */
-	private static function _buildTagCloud(TallyWords $tally, Config $config) : TypedArray
+	private static function _buildTagCloud(TallyWords $tally, Config $config): TypedArray
 	{
 		$tally->scaleTally($config->window / 60.0); // changes value to count per minute
 
@@ -105,7 +106,7 @@ final class TagCloud extends AbstractTally
 
 			$cloudWords[] = [
 				'text'   => $groupKeys[0],
-				'weight' => (int)((log($totalTally*5) * 40) + $totalTally*5),   //  A combination of log and linear.
+				'weight' => (int)((log($totalTally * 5) * 40) + $totalTally * 5),   //  A combination of log and linear.
 				'link'   => 'javascript:ToTwitter(["' . implode('","', $twitterLookup->toArray()) . '"])',
 				'html'   => [
 					'title' => $totalTally . $htmlTitle,
@@ -120,14 +121,14 @@ final class TagCloud extends AbstractTally
 	/**
 	 * Return quantity of each word in text field.
 	 *
-	 * @param Config     $config
+	 * @param Config $config
 	 *
 	 * @return TypedArray
 	 */
-	public static function getText(Config $config) : TypedArray
+	public static function getText(Config $config): TypedArray
 	{
 		$tweets = (new \Resource\Tweets())->find([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+			'created_at' => ['$gt' => new UTCDateTime((time() - $config->window) * 1000)],
 			'text'       => ['$gt' => ''],
 		]);
 

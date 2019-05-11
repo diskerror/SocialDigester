@@ -2,11 +2,14 @@
 
 namespace Code;
 
+use MongoDB\BSON\UTCDateTime;
+use Phalcon\Config;
 use PhpScience\TextRank\Tool\Graph;
 use PhpScience\TextRank\Tool\Parser;
 use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
+use Resource\Tweets;
 
 final class Summary
 {
@@ -15,18 +18,18 @@ final class Summary
 	/**
 	 * Generate summary of tweet texts.
 	 *
-	 * @param \Phalcon\Config      $config
+	 * @param Config      $config
 	 *
 	 * @return array
 	 */
-	public static function get(\Phalcon\Config $config) : array
+	public static function get(Config $config) : array
 	{
 		ini_set('memory_limit', 268435456);
 
-		$tweets = (new \Resource\Tweets())->find(
+		$tweets = (new Tweets())->find(
 			[
 				'created_at' =>
-					['$gt' => new \MongoDB\BSON\UTCDateTime( strtotime('99 seconds ago') * 1000)],
+					['$gt' => new UTCDateTime( strtotime('99 seconds ago') * 1000)],
 			],
 			[
 				'sort'       => [

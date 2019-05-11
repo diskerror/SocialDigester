@@ -2,6 +2,8 @@
 
 namespace Resource\TwitterClient;
 
+use Phalcon\Config;
+
 class Stream extends ClientAbstract
 {
 	protected static $_messageKeys = [
@@ -26,8 +28,11 @@ class Stream extends ClientAbstract
 	 */
 	protected $_proc;
 
-	public function __construct(\Phalcon\Config $auth)
+	public function __construct(Config $auth)
 	{
+		if (!`which curl`) {
+			throw new \Exception('The CLI program "curl" is required.');
+		}
 		parent::__construct($auth);
 		$this->_baseURL .= 'statuses/';
 	}
@@ -54,7 +59,7 @@ class Stream extends ClientAbstract
 		}
 	}
 
-	public function isEOF() : bool
+	public function isEOF(): bool
 	{
 		return feof($this->_proc);
 	}
@@ -78,12 +83,12 @@ class Stream extends ClientAbstract
 	 * @return bool
 	 * @throws \BadMethodCallException
 	 */
-	public function __call($function, array $params = []) : bool
+	public function __call($function, array $params = []): bool
 	{
 		switch ($function) {
 			case 'filter':
 			case 'sample':
-			break;
+				break;
 
 			default:
 				throw new \BadMethodCallException();

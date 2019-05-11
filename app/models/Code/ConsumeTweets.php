@@ -58,55 +58,49 @@ final class ConsumeTweets
 			$logger->info('Started capturing tweets.');
 
 			while ($pidHandler->exists() && !$stream->isEOF()) {
-				$tweets = [];
-				for ($c = 0; $c < self::INSERT_COUNT && !$stream->isEOF() && $pidHandler->exists(); ++$c) {
-					//	get tweet
-					try {
-						$packet = $stream->read();
-					}
-					catch (\Exception $e) {
-						$logger->info((string)$e);
-						continue;
-					}
-
-					//	Ignore bad data.
-					if (!is_array($packet)) {
-						continue;
-					}
-
-					if ($stream::isMessage($packet)) {
-						$packet['created'] = new UTCDateTime((microtime(true) * 1000));
-						$messagesClient->insertOne($packet);
-						continue;
-					}
-
-					$tweet->assign($packet);
-
-					//	remove URLs from text
-//					$text  = preg_replace('#https?:[^ ]+#', '', $tweet->text);
-//					$words = [];
-//
-//					//	build the two stem lists
-//					$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
-//					foreach ($split as $s) {
-//						$words[] = $sh->get($s);
-//					}
-//
-//					//	build stem pairs
-//					$last = '';
-//					foreach ($tweet->words as $w) {
-//						$tweet->pairs[] = $last . $w;
-//						$last           = $w;
-//					}
-//					$tweet->pairs[] = $last;
-
-					$tweets[] = $tweet->toArray();
+				//	get tweet
+				try {
+					$packet = $stream->read();
+				}
+				catch (\Exception $e) {
+					$logger->info((string)$e);
+					continue;
 				}
 
+				//	Ignore bad data.
+				if (!is_array($packet)) {
+					continue;
+				}
+
+				if ($stream::isMessage($packet)) {
+					$packet['created'] = new UTCDateTime();
+					$messagesClient->insertOne($packet);
+					continue;
+				}
+
+				$tweet->assign($packet);
+
+				//	remove URLs from text
+//				$text  = preg_replace('#https?:[^ ]+#', '', $tweet->text);
+//				$words = [];
+//
+//				//	build the two stem lists
+//				$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
+//				foreach ($split as $s) {
+//					$words[] = $sh->get($s);
+//				}
+//
+//				//	build stem pairs
+//				$last = '';
+//				foreach ($tweet->words as $w) {
+//					$tweet->pairs[] = $last . $w;
+//					$last           = $w;
+//				}
+//				$tweet->pairs[] = $last;
 
 				try {
 					//	convert to Mongo compatible object and insert
-					$tweetsClient->insertMany($tweets);
+					$tweetsClient->insertOne($tweet->toArray());
 				}
 				catch (\Exception $e) {
 					$m = $e->getMessage();
@@ -115,10 +109,8 @@ final class ConsumeTweets
 						$logger->emergency('Mongo ' . $m);
 					}
 					else {
-						if (preg_match('/duplicate.*key/i', $m)) {
-							$logger->warning('dup');
-						}
-						else {
+						//	ignore duplicates
+						if (!preg_match('/duplicate.*key/i', $m)) {
 							$logger->warning('Mongo ' . $m);
 						}
 					}
