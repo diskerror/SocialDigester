@@ -2,6 +2,15 @@
 
 namespace Structure\Tweet;
 
+/**
+ * Trait TweetTrait
+ *
+ * @package Structure\Tweet
+ *
+ * @property Diskerror\Typed\DateTime $created_at
+ * @property Entities\Entities $entities
+ * @property string $text
+ */
 trait TweetTrait
 {
 	protected $created_at                = '__class__Diskerror\Typed\DateTime("now","UTC")';

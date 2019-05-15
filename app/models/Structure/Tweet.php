@@ -5,6 +5,15 @@ namespace Structure;
 use Diskerror\Typed\ArrayOptions as AO;
 use Diskerror\Typed\TypedClass;
 
+/**
+ * Class Tweet
+ *
+ * @package Structure
+ *
+ * @property integer $id_
+ * @property integer $id
+ * @property integer $_id
+ */
 class Tweet extends TypedClass
 {
 	protected $_map = [

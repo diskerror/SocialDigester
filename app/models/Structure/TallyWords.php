@@ -4,6 +4,11 @@ namespace Structure;
 
 use Diskerror\Typed\TypedArray;
 
+/**
+ * Class TallyWords
+ *
+ * @package Structure
+ */
 class TallyWords extends TypedArray
 {
 	protected $_type = 'float';

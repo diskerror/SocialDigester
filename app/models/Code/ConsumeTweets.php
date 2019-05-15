@@ -85,14 +85,29 @@ final class ConsumeTweets
 
 					$tweet = new Tweet($packet);
 
+					//	Pre calculate tallies for INSERT_COUNT of tweets.
 					$uniqueWords = new Set();
-					//	Make sure we have only one of a hashtag per tweet.
+					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
 						$uniqueWords->add($hashtag->text);
+						$tallies->allHashtags->doTally($hashtag->text);
 					}
 
+					//	Count unique hashtags for this tweet.
 					foreach ($uniqueWords as $uniqeWord) {
 						$tallies->uniqueHashtags->doTally($uniqeWord);
+					}
+
+					//	Tally the words in the text.
+					$text = preg_replace('#https?:[^ ]+#', '', $tweet->text);
+					$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
+					foreach ($split as $s) {
+						$tallies->textwords->doTally($s);
+					}
+
+					//	Tally user mentions.
+					foreach ($tweet->entities->user_mentions as $userMention) {
+						$tallies->userMentions->doTally($userMention);
 					}
 
 					//	remove URLs from text
