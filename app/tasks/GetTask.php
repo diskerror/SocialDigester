@@ -26,7 +26,7 @@ class GetTask extends Cli
 	{
 		self::println(
 			json_encode(
-				array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats)->arr, 0, 25),
+				array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats), 0, 25),
 				JSON_PRETTY_PRINT
 			)
 		);

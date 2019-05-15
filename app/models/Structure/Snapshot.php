@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 6/22/18
- * Time: 4:20 PM
- */
 
 namespace Structure;
 

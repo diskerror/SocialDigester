@@ -1,20 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 6/26/18
- * Time: 7:26 PM
- */
+
+use MongoDB\BSON\UTCDateTime;
 
 class AdminTask extends Cli
 {
 	public function rateAction()
 	{
 		$t = (new Resource\Tweets())->count([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('60 seconds ago') * 1000)],
+			'created_at' => ['$gt' => new UTCDateTime(strtotime('60 seconds ago') * 1000)],
 		]);
 
-		self::println('Tweets are being received at a rate of ' . $t / 60 . ' per second.');
+		fprintf(STDOUT, "Tweets are being received at a rate of %.2f per second.\n", $t/60.0);
 	}
 
 	public function showConfigAction()
@@ -26,6 +22,7 @@ class AdminTask extends Cli
 	{
 		//	These only needs to be run on a new collection.
 		(new Resource\Tweets())->doIndex($this->config->tweets_expire);
+		(new Resource\Tallies())->doIndex($this->config->tweets_expire);
 		(new Resource\Snapshots())->doIndex();		//	snapshots don't expire
 		(new Resource\Messages())->doIndex(3600);	//	one hour
 	}

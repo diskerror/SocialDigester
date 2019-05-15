@@ -12,7 +12,8 @@ use MongoDB\BSON\UTCDateTime;
 use Phalcon\Config;
 use Ds\Set;
 use Diskerror\Typed\TypedArray;
-use Code\TallyWords;
+use Resource\Tallies;
+use Structure\TallyWords;
 use Resource\Tweets;
 
 final class TagCloud extends AbstractTally
@@ -29,24 +30,20 @@ final class TagCloud extends AbstractTally
 	public static function getHashtags(Config $config): TypedArray
 	{
 		$tweets = (new Tweets())->find([
-			'created_at'               => ['$gte' => new UTCDateTime(strtotime($config->window . ' seconds ago') * 1000)],
+			'created_at'               => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
 
-		$uniqeWords = new Set();
-		$tally      = new TallyWords();
+		$uniqueWords = new Set();
+		$tally       = new TallyWords();
 		foreach ($tweets as $tweet) {
-			if (preg_match('/(^039|^rt$)/i', $tweet->text)) {
-				continue;
-			}
-
 			//	Make sure we have only one of a hashtag per tweet.
-			$uniqeWords->clear();
+			$uniqueWords->clear();
 			foreach ($tweet->entities->hashtags as $hashtag) {
-				$uniqeWords->add($hashtag->text);
+				$uniqueWords->add($hashtag->text);
 			}
 
-			foreach ($uniqeWords as $uniqeWord) {
+			foreach ($uniqueWords as $uniqeWord) {
 				$tally->doTally($uniqeWord);
 			}
 		}
@@ -54,12 +51,33 @@ final class TagCloud extends AbstractTally
 		return self::_buildTagCloud($tally, $config);
 	}
 
+	public static function getHashtagsFromTallies(Config $config): TypedArray
+	{
+		$tallies = (new Tallies())->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		]);
+
+		$totals = new TallyWords();
+		foreach ($tallies as $tally) {
+			foreach ($tally->hashtags as $k => $v) {
+				if ($totals->offsetExists($k)) {
+					$totals[$k] += $v;
+				}
+				else {
+					$totals[$k] = $v;
+				}
+			}
+		}
+
+		return self::_buildTagCloud($totals, $config);
+	}
+
 	/**
 	 * Format data with TagCloud object.
 	 * Words are normalized and grouped under the same tag.
 	 *
-	 * @param TallyWords $tally
-	 * @param Config     $config
+	 * @param \Structure\TallyWords $tally
+	 * @param Config                $config
 	 *
 	 * @return TypedArray
 	 */
@@ -67,29 +85,13 @@ final class TagCloud extends AbstractTally
 	{
 		$tally->scaleTally($config->window / 60.0); // changes value to count per minute
 
-		//	Group words by normalized value.
-		$normalizedGroup = [];
-		foreach ($tally as $k => $v) {
-			$normalizedGroup[self::_normalizeText($k)][$k] = $v;
-		}
-
-		//	Organize the group's properties.
-		foreach ($normalizedGroup as &$group) {
-			arsort($group);
-			$group['_sum_'] = array_sum($group);
-		}
-
-		//	Sort on size, decending.
-		uasort($normalizedGroup, 'self::_sortCountSumDesc');
-
-		//	Get the first X number of members.
-		$normalizedGroup = array_slice($normalizedGroup, 0, $config->quantity);
+		$normalizedGroups = self::_normalizeGroupsFromTally($tally, $config->quantity);
 
 		//	Sort on key.
-		ksort($normalizedGroup, SORT_NATURAL | SORT_FLAG_CASE);
+		ksort($normalizedGroups, SORT_NATURAL | SORT_FLAG_CASE);
 
 		$cloudWords = new TypedArray(null, 'Structure\TagCloud\Word');
-		foreach ($normalizedGroup as &$group) {
+		foreach ($normalizedGroups as &$group) {
 			$totalTally = $group['_sum_'];
 			unset($group['_sum_']);
 			$groupKeys     = array_keys($group);
@@ -134,10 +136,6 @@ final class TagCloud extends AbstractTally
 
 		$tally = new TallyWords();
 		foreach ($tweets as $tweet) {
-//			if (preg_match('/(^039|^rt$)/i', $tweet['text'])) {
-//				continue;
-//			}
-
 			$words = explode(' ', preg_replace('/[^0-9a-zA-Z\']+/', ' ', $tweet->text));
 
 			foreach ($words as $word) {
@@ -150,15 +148,6 @@ final class TagCloud extends AbstractTally
 		}
 
 		return self::_buildTagCloud($tally, $config);
-	}
-
-	private static function _sortCountSumDesc($a, $b)
-	{
-		if ($a['_sum_'] === $b['_sum_']) {
-			return 0;
-		}
-
-		return ($a['_sum_'] > $b['_sum_']) ? -1 : 1;
 	}
 
 }

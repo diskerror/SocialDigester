@@ -9,7 +9,7 @@ class TweetsTask extends Cli
 
 	public function getAction()
 	{
-		Code\ConsumeTweets::exec($this->config->twitter);
+		Code\ConsumeTweets::exec($this->config);
 	}
 
 	public function stopAction()

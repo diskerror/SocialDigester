@@ -32,7 +32,7 @@ class IndexController extends \Phalcon\Mvc\Controller
 		$output = $cache->get('');
 
 		if ($output === null) {
-			$obj = Code\Tally\TagCloud::getHashtags($this->config->word_stats);
+			$obj = Code\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats);
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 			$cache->save('', $output);

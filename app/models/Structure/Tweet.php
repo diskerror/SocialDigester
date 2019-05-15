@@ -29,6 +29,6 @@ class Tweet extends TypedClass
 	public function __construct($in = null)
 	{
 		parent::__construct($in);
-		$this->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::KEEP_JSON_EXPR);
+		$this->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
 	}
 }

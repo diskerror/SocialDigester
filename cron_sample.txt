@@ -1,0 +1,8 @@
+
+@reboot /var/www/politicator/on_reboot.sh > /dev/null 2>&1
+*/12 * * * * /var/www/politicator/restart_tweets.sh > /dev/null 2>&1
+
+* * * * * /var/www/politicator/check_running.sh > /dev/null 2>&1
+* * * * * sleep 15; /var/www/politicator/check_running.sh > /dev/null 2>&1
+* * * * * sleep 30; /var/www/politicator/check_running.sh > /dev/null 2>&1
+* * * * * sleep 45; /var/www/politicator/check_running.sh > /dev/null 2>&1
