@@ -107,7 +107,7 @@ final class ConsumeTweets
 
 					//	Tally user mentions.
 					foreach ($tweet->entities->user_mentions as $userMention) {
-						$tallies->userMentions->doTally($userMention);
+						$tallies->userMentions->doTally($userMention->screen_name);
 					}
 
 					//	remove URLs from text
