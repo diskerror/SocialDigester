@@ -150,25 +150,23 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getText(Config $config): TypedArray
 	{
-		$tweets = (new \Resource\Tweets())->find([
-			'created_at' => ['$gt' => new UTCDateTime((time() - $config->window) * 1000)],
-			'text'       => ['$gt' => ''],
+		$tallies = (new Tallies())->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
-		$tally = new TallyWords();
-		foreach ($tweets as $tweet) {
-			$words = explode(' ', preg_replace('/[^0-9a-zA-Z\']+/', ' ', $tweet->text));
-
-			foreach ($words as $word) {
-				if ((strlen($word) < 3 && !is_numeric($word)) || in_array(strtolower($word), $config->stop)) {
-					continue;
+		$totals = new TallyWords();
+		foreach ($tallies as $tally) {
+			foreach ($tally->textWords as $k => $v) {
+				if ($totals->offsetExists($k)) {
+					$totals[$k] += $v;
 				}
-
-				$tally->doTally($word);
+				else {
+					$totals[$k] = $v;
+				}
 			}
 		}
 
-		return self::_buildTagCloud($tally, $config);
+		return self::_buildTagCloud($totals, $config);
 	}
 
 }

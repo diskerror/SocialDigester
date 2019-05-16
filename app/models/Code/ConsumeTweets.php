@@ -3,12 +3,15 @@
 namespace Code;
 
 use Ds\Set;
+use function in_array;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
 use Phalcon\Config;
 use Resource\Messages;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
+use function strlen;
+use function strtolower;
 use Structure\Tallies;
 use Structure\TallyWords;
 use Structure\Tweet;
@@ -40,7 +43,7 @@ final class ConsumeTweets
 //			$sh = new StemHandler();
 
 			$tweetsClient   = (new Tweets())->getClient();
-			$talliesClient   = (new \Resource\Tallies())->getClient();
+			$talliesClient  = (new \Resource\Tallies())->getClient();
 			$messagesClient = (new Messages())->getClient();
 
 
@@ -55,6 +58,8 @@ final class ConsumeTweets
 			$pidHandler->setFile();
 
 			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
+
+			$stopWords = (array) $config->word_stats->stop;
 
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
@@ -99,10 +104,12 @@ final class ConsumeTweets
 					}
 
 					//	Tally the words in the text.
-					$text = preg_replace('#https?:[^ ]+#', '', $tweet->text);
+					$text  = preg_replace('#https?:[^ ]+#', '', $tweet->text);
 					$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
 					foreach ($split as $s) {
-						$tallies->textwords->doTally($s);
+						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords) ) {
+							$tallies->textWords->doTally($s);
+						}
 					}
 
 					//	Tally user mentions.

@@ -12,7 +12,7 @@ use Diskerror\Typed\ArrayOptions as AO;
  * @property Diskerror\Typed\DateTime $created
  * @property TallyWords               $uniqueHashtags
  * @property TallyWords               $allHashtags
- * @property TallyWords               $textwords
+ * @property TallyWords               $textWords
  * @property TallyWords               $userMentions
  */
 class Tallies extends \Diskerror\Typed\TypedClass
@@ -23,7 +23,7 @@ class Tallies extends \Diskerror\Typed\TypedClass
 
 	protected $allHashtags = '__class__Structure\TallyWords()';
 
-	protected $textwords = '__class__Structure\TallyWords()';
+	protected $textWords = '__class__Structure\TallyWords()';
 
 	protected $userMentions = '__class__Structure\TallyWords()';
 
