@@ -28,7 +28,7 @@ return [
 		'database' => 'digester',
 	],
 
-	'tweets_expire' => 300, //	In seconds. Save tweets for 10 minutes.
+	'tweets_expire' => 600, //	In seconds. Save tweets for 10 minutes.
 
 	'word_stats' => [
 		'quantity' => 36,    //	return the top X items

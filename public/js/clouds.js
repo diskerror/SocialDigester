@@ -122,7 +122,7 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			},
 			complete: function() {
-				setTimeout(getTextWords, 3600);	//	milliseconds between cloud updates
+				setTimeout(getTextWords, 2300);	//	milliseconds between cloud updates
 			}
 		});
 	})();
@@ -152,7 +152,7 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			},
 			complete: function() {
-				setTimeout(getUserMentions, 3700);	//	milliseconds between cloud updates
+				setTimeout(getUserMentions, 4300);	//	milliseconds between cloud updates
 			}
 		});
 	})();

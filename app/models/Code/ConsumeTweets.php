@@ -3,17 +3,13 @@
 namespace Code;
 
 use Ds\Set;
-use function in_array;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
 use Phalcon\Config;
 use Resource\Messages;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
-use function strlen;
-use function strtolower;
 use Structure\Tallies;
-use Structure\TallyWords;
 use Structure\Tweet;
 
 final class ConsumeTweets
