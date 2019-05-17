@@ -12,6 +12,7 @@ use MongoDB\BSON\UTCDateTime;
 use Phalcon\Config;
 use Ds\Set;
 use Diskerror\Typed\TypedArray;
+use function preg_replace;
 use Resource\Tallies;
 use Structure\TallyWords;
 use Resource\Tweets;
@@ -187,7 +188,12 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config);
+		$tagCloud = self::_buildTagCloud($totals, $config);
+		foreach ($tagCloud as &$tc) {
+			$tc->link = strtr($tc->link, ['javascript:ToTwitter(' => 'javascript:ToTwitterAt(']);
+		}
+
+		return $tagCloud;
 	}
 
 }
