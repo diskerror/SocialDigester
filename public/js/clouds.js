@@ -128,6 +128,36 @@ $(function() {
 	})();
 
 
+	(function getUserMentions() {
+		if (!doRun) {
+			doRun = true;
+			setTimeout(getUserMentions, 2000);
+			return;
+		}
+
+
+		$.ajax({
+			url: '/index/usermentions',
+			dataType: 'json',
+			success: function(data) {
+				if (data.length !== 0) {
+					$('#user_mentions').jQCloud('update', data);
+				} else {
+					$('#user_mentions').jQCloud('update', [
+						{text: 'I’m sleeping...', weight: 10},
+						{text: ' « snore » ', weight: 6},
+						{text: ' ', weight: 1}
+					]);
+				}
+				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
+			},
+			complete: function() {
+				setTimeout(getUserMentions, 3700);	//	milliseconds between cloud updates
+			}
+		});
+	})();
+
+
 	(function getSummary() {
 		if (!doRun) {
 			setTimeout(getSummary, 3000);

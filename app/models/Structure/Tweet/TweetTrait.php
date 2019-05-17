@@ -7,7 +7,7 @@ namespace Structure\Tweet;
  *
  * @package Structure\Tweet
  *
- * @property Diskerror\Typed\DateTime $created_at
+ * @property \Diskerror\Typed\DateTime $created_at
  * @property Entities\Entities $entities
  * @property string $text
  */

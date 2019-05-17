@@ -169,4 +169,25 @@ final class TagCloud extends AbstractTally
 		return self::_buildTagCloud($totals, $config);
 	}
 
+	public static function getUserMentionsFromTallies(Config $config): TypedArray
+	{
+		$tallies = (new Tallies())->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		]);
+
+		$totals = new TallyWords();
+		foreach ($tallies as $tally) {
+			foreach ($tally->userMentions as $k => $v) {
+				if ($totals->offsetExists($k)) {
+					$totals[$k] += $v;
+				}
+				else {
+					$totals[$k] = $v;
+				}
+			}
+		}
+
+		return self::_buildTagCloud($totals, $config);
+	}
+
 }
