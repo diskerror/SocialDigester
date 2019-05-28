@@ -35,22 +35,21 @@
 		}
 
 		#clouds {
-			display: grid;
-			grid-template-areas: 'cloud1 cloud2' 'text_words user_mentions';
-			grid-gap: 1px;
 			text-align:center;
 			vertical-align:middle;
+			border-collapse:collapse;
+			width: 100%;
 		}
 
 		.cloud {
 			text-align:center;
 			vertical-align:middle;
-			width:100%;
 		}
 
 		.cloud > p {
+			z-index: -1;
 			text-align: left;
-			margin: 10px;
+			margin: 12px;
 			font-size: 10pt;
 		}
 	</style>
@@ -94,33 +93,38 @@
 	</div>
 </header>
 
-
-<div id="clouds">
-	<div class="cloud" id="cloud1">
-		<p>Hashtags averaged to the minute<br>from the last 5 minutes<br>counted once per tweet.</p>
-		<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
-			<use xlink:href="#consume"/>
-		</svg>
-	</div>
-	<div class="cloud" id="cloud2">
-		<p>All hashtags averaged to the minute<br>for the last 5 minutes.</p>
-		<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
-			<use xlink:href="#consume"/>
-		</svg>
-	</div>
-	<div class="cloud" id="text_words" style="font-size: 114%">
-		<p>Word count in the tweet’s text.</p>
-		<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
-			<use xlink:href="#consume"/>
-		</svg>
-	</div>
-	<div class="cloud" id="user_mentions">
-		<p>Count of user mentions.</p>
-		<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
-			<use xlink:href="#consume"/>
-		</svg>
-	</div>
-</div>
+<!-- I know, I know... I'm going to let someone else do this with divs. -->
+<table id="clouds">
+	<tr>
+		<td class="cloud" id="cloud1">
+			<p>Hashtags averaged to the minute<br>from the last 5 minutes<br>counted once per tweet.</p>
+			<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
+				<use xlink:href="#consume"/>
+			</svg>
+		</td>
+		<td class="cloud" id="cloud2">
+			<p>All hashtags averaged to the minute<br>for the last 5 minutes.</p>
+			<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
+				<use xlink:href="#consume"/>
+			</svg>
+		</td>
+	</tr>
+	<tr>
+		<td class="cloud" id="text_words" style="font-size: 114%">
+			<p>Word count in the tweet’s text.</p>
+			<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
+				<use xlink:href="#consume"/>
+			</svg>
+			</div>
+		</td>
+		<td class="cloud" id="user_mentions">
+			<p>Count of user mentions.</p>
+			<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
+				<use xlink:href="#consume"/>
+			</svg>
+		</td>
+	</tr>
+</table>
 
 
 <div style="width:100%;height:152px;text-align:center;vertical-align:middle;border-top:1px solid #AAC;font-size:15px">
