@@ -28,11 +28,11 @@ return [
 		'database' => 'digester',
 	],
 
-	'tweets_expire' => 600, //	In seconds. Save tweets for 10 minutes.
+	'tweets_expire' => 600,   //	In seconds. Save tweets for 10 minutes.
 
 	'word_stats' => [
-		'quantity' => 36,    //	return the top X items
-		'window'   => 300,    //	summarize the last X seconds
+		'quantity' => 32,     //	return the top X items
+		'window'   => 180,    //	summarize the last X seconds
 		'stop'     => [],     //	stop words
 	],
 
@@ -45,29 +45,38 @@ return [
 		],
 
 		'track' => [
-			'chuckschumer',
+			'congress',
 			'constitution',
+			'constitutionparty',
+			'court',
+			'democracy',
 			'democrat',
-			'donald',
-			'donaldtrump',
+			'democratic',
+			'democraticparty',
+			'democratparty',
+			'diplomacy',
+			'diplomatic',
+			'government',
 			'green',
-			'kevinmccarthy',
+			'greenparty',
+			'house',
+			'justice',
 			'libertarian',
-			'mccarthy',
-			'mcconnell',
-			'mikepence',
-			'mitch',
-			'mitchmcconnell',
-			'nancypelosi',
-			'paulryan',
-			'pelosi',
-			'pence',
+			'libertarianparty',
 			'potus',
+			'presidency',
+			'president',
+			'representative',
+			'republic',
 			'republican',
-			'schumer',
+			'republicanparty',
 			'scotus',
+			'senate',
+			'senator',
 			'socialdemocrat',
-			'trump',
+			'socialdemocraticparty',
+			'supreme',
+			'supremecourt',
 		],
 	],
 

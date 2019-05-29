@@ -38,8 +38,8 @@ class TallyWords extends TypedArray
 
 	public function scaleTally(float $div)
 	{
-		foreach ($this as &$v) {
-			$v = round($v / $div, 3);
+		foreach ($this->getContainerReference() as &$v) {
+			$v = round($v / $div, 2);
 		}
 	}
 }

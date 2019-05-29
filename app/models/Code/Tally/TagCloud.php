@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 6/26/18
- * Time: 1:00 PM
- */
 
 namespace Code\Tally;
 

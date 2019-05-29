@@ -88,6 +88,11 @@ final class ConsumeTweets
 
 					$tweet = new Tweet($packet);
 
+					//	If tweet is not in english then skip it.
+					if ($tweet->lang !== 'en') {
+						continue;
+					}
+
 					//	Pre calculate tallies for INSERT_COUNT of tweets.
 					$uniqueWords = new Set();
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.

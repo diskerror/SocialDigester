@@ -9,6 +9,7 @@ namespace Structure\Tweet;
  *
  * @property \Diskerror\Typed\DateTime $created_at
  * @property Entities\Entities $entities
+ * @property string $lang
  * @property string $text
  */
 trait TweetTrait
@@ -33,7 +34,7 @@ trait TweetTrait
 
 //	protected $is_quote_status           = false;
 
-//	protected $lang                      = 'en';
+	protected $lang                      = 'en';
 
 //	protected $place                     = '__class__Structure\Tweet\Place';
 
