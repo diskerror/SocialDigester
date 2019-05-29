@@ -103,11 +103,11 @@ final class TagCloud extends AbstractTally
 	 *
 	 * @return TypedArray
 	 */
-	private static function _buildTagCloud(TallyWords $tally, Config $config): TypedArray
+	private static function _buildTagCloud(TallyWords $tally, Config $config, $technique = 'metaphone'): TypedArray
 	{
 		$tally->scaleTally($config->window / 60.0); // changes value to count per minute
 
-		$normalizedGroups = self::_normalizeGroupsFromTally($tally, $config->quantity);
+		$normalizedGroups = self::_normalizeGroupsFromTally($tally, $config->quantity, $technique);
 
 		//	Sort on key.
 		ksort($normalizedGroups, SORT_NATURAL | SORT_FLAG_CASE);
@@ -167,7 +167,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config);
+		return self::_buildTagCloud($totals, $config, 'strtolower');
 	}
 
 	public static function getUserMentionsFromTallies(Config $config): TypedArray

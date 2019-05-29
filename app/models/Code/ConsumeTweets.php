@@ -14,7 +14,9 @@ use Structure\Tweet;
 
 final class ConsumeTweets
 {
-	const INSERT_COUNT = 10;
+	//	512 meg memory limit
+	const MEMORY_LIMIT = 512 * 1024 * 1024;
+	const INSERT_COUNT = 16;
 
 	private function __construct() { }
 
@@ -27,7 +29,7 @@ final class ConsumeTweets
 	 */
 	public static function exec(Config $config)
 	{
-		ini_set('memory_limit', 268435456);
+		ini_set('memory_limit', self::MEMORY_LIMIT);
 
 		try {
 			$stream     = new Stream($config->twitter->auth);
@@ -55,7 +57,7 @@ final class ConsumeTweets
 
 			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
-			$stopWords = (array) $config->word_stats->stop;
+			$stopWords = (array)$config->word_stats->stop;
 
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
@@ -101,9 +103,9 @@ final class ConsumeTweets
 
 					//	Tally the words in the text.
 					$text  = preg_replace('#https?:[^ ]+#', '', $tweet->text);
-					$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
+					$split = preg_split('/[^a-zA-Z0-9\']/', $text, null, PREG_SPLIT_NO_EMPTY);
 					foreach ($split as $s) {
-						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords) ) {
+						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords)) {
 							$tallies->textWords->doTally($s);
 						}
 					}
