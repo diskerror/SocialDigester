@@ -18,18 +18,18 @@ final class Summary
 	/**
 	 * Generate summary of tweet texts.
 	 *
-	 * @param Config      $config
+	 * @param Config $config
 	 *
 	 * @return array
 	 */
-	public static function get(Config $config) : array
+	public static function get(Config $config): array
 	{
-		ini_set('memory_limit', 268435456);
+		ini_set('memory_limit', 512 * 1024 * 1024);
 
 		$tweets = (new Tweets())->find(
 			[
 				'created_at' =>
-					['$gt' => new UTCDateTime( strtotime('99 seconds ago') * 1000)],
+					['$gt' => new UTCDateTime(strtotime('180 seconds ago') * 1000)],
 			],
 			[
 				'sort'       => [
