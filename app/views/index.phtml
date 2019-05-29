@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,58 +10,22 @@
 	<link rel="stylesheet" type="text/css" href="/css/jquery.qtip.min.css"/>
 	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"/>
 	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.structure.min.css"/>
-	<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="/js/jqcloud.min.js"></script>
-	<script type="text/javascript" src="/js/jquery.qtip.min.js"></script>
-	<script type="text/javascript" src="/js/imagesloaded.pkg.min.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/index.css"/>
+	<script src="/js/jquery-3.3.1.min.js"></script>
+	<script src="/js/jqcloud.min.js"></script>
+	<script src="/js/jquery.qtip.min.js"></script>
+	<script src="/js/imagesloaded.pkg.min.js"></script>
+	<script src="/js/jquery-ui.min.js"></script>
 	<?php $this->assets->outputJs() ?>
-	<style>
-		body {
-			font-family: Helvetica, Arial, sans-serif;
-			color: #08E;
-			padding: 0.5em;
-		}
-
-		svg.defs-only {
-			display: block;
-			position: absolute;
-			height: 0;
-			width: 0;
-			margin: 0;
-			padding: 0;
-			border: none;
-			overflow: hidden;
-		}
-
-		#clouds {
-			text-align:center;
-			vertical-align:middle;
-			border-collapse:collapse;
-			width: 100%;
-		}
-
-		.cloud {
-			text-align:center;
-			vertical-align:middle;
-		}
-
-		.cloud > p {
-			z-index: -1;
-			text-align: left;
-			margin: 12px;
-			font-size: 10pt;
-		}
-	</style>
 	<?php if (isset($tagCloud)): ?>
-		<script type="text/javascript">
+		<script>
 			var tagCloud = <?= Zend\Json\Json::encode($tagCloud, false, ['enableJsonExprFinder' => true]); ?>;
 		</script>
 	<?php endif; ?>
 </head>
 <body>
 <svg class="defs-only" xmlns="http://www.w3.org/2000/svg">
-	<symbol id="consume">
+	<symbol id="consumer">
 		<path d="M11.717,23.593c2.705-0.015,5.565-0.674,7.789-2.369c0.903,0.431,1.911,0.686,2.982,0.686
 		c1.037,0,2.018-0.232,2.898-0.639l1.362,1.49l0.489-2.738c1.294-1.223,2.103-2.938,2.103-4.84c0-3.716-3.067-6.728-6.854-6.728
 		c-1.481,0-2.865,0.388-3.996,1.117c-5.128,1.422-12.938,2.141-14.581-8.285C2.308,3.682,0,8.11,0,11.209
@@ -81,10 +45,10 @@
 	</symbol>
 </svg>
 
-<header style="width:100%;border-bottom:1px solid #AAC">
+<header>
 	<div style="float:left;padding:0 1em">
 		<svg viewBox="0 0 30 30" width="60" height="60" style="fill:#09F">
-			<use xlink:href="#consume"/>
+			<use xlink:href="#consumer"/>
 		</svg>
 	</div>
 	<div style=";height:60px">
@@ -93,48 +57,41 @@
 	</div>
 </header>
 
+
 <!-- I know, I know... I'm going to let someone else do this with divs. -->
 <table id="clouds">
 	<tr>
-		<td class="cloud" id="cloud1">
+		<td id="cloud1">
 			<p>Count of hashtags per minute<br>averaged from the last 3 minutes<br>counted once per tweet.</p>
-			<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
-				<use xlink:href="#consume"/>
-			</svg>
+			<svg viewBox="0 0 30 30" class="bg"><use xlink:href="#consumer"/></svg>
 		</td>
-		<td class="cloud" id="cloud2">
+		<td id="cloud2">
 			<p>Count of all hashtags per minute<br>for the last 3 minutes.</p>
-			<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
-				<use xlink:href="#consume"/>
-			</svg>
+			<svg viewBox="0 0 30 30" class="bg"><use xlink:href="#consumer"/></svg>
 		</td>
 	</tr>
 	<tr>
-		<td class="cloud" id="text_words">
+		<td id="text_words">
 			<p>Word count in the tweet’s text.</p>
-			<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
-				<use xlink:href="#consume"/>
-			</svg>
-			</div>
+			<svg viewBox="0 0 30 30" class="bg"><use xlink:href="#consumer"/></svg>
 		</td>
-		<td class="cloud" id="user_mentions">
+		<td id="user_mentions">
 			<p>Count of user mentions.</p>
-			<svg viewBox="0 0 30 30" width="440" height="440" style="vertical-align:middle;fill:#F8FBFF">
-				<use xlink:href="#consume"/>
-			</svg>
+			<svg viewBox="0 0 30 30" class="bg"><use xlink:href="#consumer"/></svg>
 		</td>
 	</tr>
 </table>
 
 
-<div style="width:100%;height:152px;text-align:center;vertical-align:middle;border-top:1px solid #AAC;font-size:15px">
+<div class="summary">
 	<div id="text1" style="width:100%;">
 		<?= isset($summary) ? '<p>' . implode("</p>\n\t\t<p>", $summary) . '</p>' : '' ?>
 	</div>
 </div>
 
-<footer style="width:100%;border-top:1px solid #AAC;padding:1em 0">
-	<div style="text-align:center;margin:auto;width:420px;height:50px">
+
+<footer>
+	<div style="text-align:center;margin:auto;width:460px;height:50px">
 		<div style="width:50px;height:100%;float:left">
 			<a href="http://www.twitter.com" target="_blank"><img src="img/twitter.png" alt="Twitter logo"
 						style="width:46px;height:42px"></a>

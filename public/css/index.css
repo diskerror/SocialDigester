@@ -1,0 +1,62 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	color: #08E;
+	padding: 0.5em;
+}
+
+header {
+	width:100%;
+	border-bottom:1px solid #AAC;
+}
+
+footer {
+	width:100%;
+	border-top:1px solid #AAC;
+	padding:1em 0;
+}
+
+.summary {
+	width:100%;
+	height:152px;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1px solid #AAC;
+	font-size:15px;
+}
+
+svg.defs-only {
+	display: block;
+	position: absolute;
+	height: 0;
+	width: 0;
+	margin: 0;
+	padding: 0;
+	border: none;
+	overflow: hidden;
+}
+
+svg.bg {
+	width:440px;
+	height:440px;
+	vertical-align:middle;
+	fill:#F8FBFF;
+}
+
+#clouds {
+	text-align:center;
+	vertical-align:middle;
+	border-collapse:collapse;
+	width: 100%;
+}
+
+#clouds td {
+	text-align:center;
+	vertical-align:middle;
+}
+
+#clouds td p {
+	z-index: -1;
+	text-align: left;
+	margin: 12px;
+	font-size: 10pt;
+}

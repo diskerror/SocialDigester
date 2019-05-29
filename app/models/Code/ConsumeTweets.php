@@ -86,6 +86,7 @@ final class ConsumeTweets
 						continue;
 					}
 
+					//	Filter. Use only part of returned structure.
 					$tweet = new Tweet($packet);
 
 					//	If tweet is not in english then skip it.
