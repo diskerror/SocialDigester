@@ -43,9 +43,14 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($tally, $config);
+		return self::_buildTagCloud($tally, $config->window, $config->quantity);
 	}
 
+	/**
+	 * @param Config $config
+	 *
+	 * @return TypedArray
+	 */
 	public static function getHashtagsFromTallies(Config $config): TypedArray
 	{
 		$tallies = (new Tallies())->find([
@@ -64,9 +69,14 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config);
+		return self::_buildTagCloud($totals, $config->window, $config->quantity);
 	}
 
+	/**
+	 * @param Config $config
+	 *
+	 * @return TypedArray
+	 */
 	public static function getAllHashtagsFromTallies(Config $config): TypedArray
 	{
 		$tallies = (new Tallies())->find([
@@ -85,7 +95,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config);
+		return self::_buildTagCloud($totals, $config->window, $config->quantity);
 	}
 
 	/**
@@ -97,11 +107,11 @@ final class TagCloud extends AbstractTally
 	 *
 	 * @return TypedArray
 	 */
-	private static function _buildTagCloud(TallyWords $tally, Config $config, $technique = 'metaphone'): TypedArray
+	private static function _buildTagCloud(TallyWords $tally, int $window, int $quantity, $technique = 'metaphone'): TypedArray
 	{
-		$tally->scaleTally($config->window / 60.0); // changes value to count per minute
+		$tally->scaleTally($window / 60.0); // changes value to count per minute
 
-		$normalizedGroups = self::_normalizeGroupsFromTally($tally, $config->quantity, $technique);
+		$normalizedGroups = self::_normalizeGroupsFromTally($tally, $quantity, $technique);
 
 		//	Sort on key.
 		ksort($normalizedGroups, SORT_NATURAL | SORT_FLAG_CASE);
@@ -161,9 +171,14 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config, 'strtolower');
+		return self::_buildTagCloud($totals, $config->window, (int)($config->quantity * 1.5), 'strtolower');
 	}
 
+	/**
+	 * @param Config $config
+	 *
+	 * @return TypedArray
+	 */
 	public static function getUserMentionsFromTallies(Config $config): TypedArray
 	{
 		$tallies = (new Tallies())->find([
@@ -182,7 +197,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		$tagCloud = self::_buildTagCloud($totals, $config);
+		$tagCloud = self::_buildTagCloud($totals, $config->window, $config->quantity);
 		foreach ($tagCloud as &$tc) {
 			$tc->link = strtr($tc->link, ['javascript:ToTwitter(' => 'javascript:ToTwitterAt(']);
 		}
