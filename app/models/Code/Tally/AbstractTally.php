@@ -2,9 +2,7 @@
 
 namespace Code\Tally;
 
-use function array_sum;
 use InvalidArgumentException;
-use function preg_match;
 use Structure\TallyWords;
 
 abstract class AbstractTally

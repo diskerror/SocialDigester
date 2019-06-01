@@ -98,6 +98,11 @@ final class ConsumeTweets
 					$uniqueWords = new Set();
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
+						foreach ($hashtag as $h) {
+							if ($h & 0x80) {
+								continue 2;	//	skip hashtag if it contains a non-ASCII byte
+							}
+						}
 						$uniqueWords->add($hashtag->text);
 						$tallies->allHashtags->doTally($hashtag->text);
 					}

@@ -102,8 +102,10 @@ final class TagCloud extends AbstractTally
 	 * Format data with TagCloud object.
 	 * Words are normalized and grouped under the same tag.
 	 *
-	 * @param \Structure\TallyWords $tally
-	 * @param Config                $config
+	 * @param TallyWords $tally
+	 * @param int        $window
+	 * @param int        $quantity
+	 * @param string     $technique
 	 *
 	 * @return TypedArray
 	 */
