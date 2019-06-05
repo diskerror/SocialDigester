@@ -65,7 +65,6 @@ return [
 			'government',
 			'green',
 			'greenparty',
-			'house',
 			'ice',
 			'justice',
 			'libertarian',
