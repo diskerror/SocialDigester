@@ -6,7 +6,6 @@ use MongoDB\BSON\UTCDateTime;
 use Phalcon\Config;
 use Ds\Set;
 use Diskerror\Typed\TypedArray;
-use function preg_replace;
 use Resource\Tallies;
 use Structure\TallyWords;
 use Resource\Tweets;

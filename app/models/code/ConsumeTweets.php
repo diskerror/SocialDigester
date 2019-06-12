@@ -9,7 +9,7 @@ use Phalcon\Config;
 use Resource\Messages;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
-use Structure\Tallies;
+use Structure\TallySet;
 use Structure\Tweet;
 
 final class ConsumeTweets
@@ -64,7 +64,7 @@ final class ConsumeTweets
 
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets  = [];
-				$tallies = new Tallies();
+				$tallySet = new TallySet();
 				for ($i = 0; $i < self::INSERT_COUNT; ++$i) {
 					//	get tweet
 					try {
@@ -94,7 +94,7 @@ final class ConsumeTweets
 						continue;
 					}
 
-					//	Pre calculate tallies for INSERT_COUNT of tweets.
+					//	Pre calculate tallySet for INSERT_COUNT of tweets.
 					$uniqueWords = new Set();
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
@@ -104,12 +104,12 @@ final class ConsumeTweets
 							}
 						}
 						$uniqueWords->add($hashtag->text);
-						$tallies->allHashtags->doTally($hashtag->text);
+						$tallySet->allHashtags->doTally($hashtag->text);
 					}
 
 					//	Count unique hashtags for this tweet.
 					foreach ($uniqueWords as $uniqeWord) {
-						$tallies->uniqueHashtags->doTally($uniqeWord);
+						$tallySet->uniqueHashtags->doTally($uniqeWord);
 					}
 
 					//	Tally the words in the text.
@@ -117,13 +117,13 @@ final class ConsumeTweets
 					$split = preg_split('/[^a-zA-Z0-9\']/', $text, null, PREG_SPLIT_NO_EMPTY);
 					foreach ($split as $s) {
 						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords)) {
-							$tallies->textWords->doTally($s);
+							$tallySet->textWords->doTally($s);
 						}
 					}
 
 					//	Tally user mentions.
 					foreach ($tweet->entities->user_mentions as $userMention) {
-						$tallies->userMentions->doTally($userMention->screen_name);
+						$tallySet->userMentions->doTally($userMention->screen_name);
 					}
 
 					//	remove URLs from text
@@ -144,13 +144,13 @@ final class ConsumeTweets
 //				}
 //				$tweet->pairs[] = $last;
 
-					$tweets[] = $tweet->toArray();
+					$tweets[] = $tweet; //->toArray();
 				}
 
 				try {
 					//	convert to Mongo compatible object and insert
 					$tweetsClient->insertMany($tweets, $insertOptions);
-					$talliesClient->insertOne($tallies->toArray(), $insertOptions);
+					$talliesClient->insertOne($tallySet/*->toArray()*/, $insertOptions);
 				}
 				catch (\Exception $e) {
 					$m = $e->getMessage();

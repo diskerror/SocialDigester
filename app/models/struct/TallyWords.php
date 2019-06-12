@@ -2,7 +2,7 @@
 
 namespace Structure;
 
-use Diskerror\Typed\TypedArray;
+use Diskerror\TypedBSON\TypedArray;
 
 /**
  * Class TallyWords

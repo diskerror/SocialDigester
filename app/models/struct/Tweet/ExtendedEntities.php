@@ -2,6 +2,8 @@
 
 namespace Structure\Tweet;
 
-class ExtendedEntities extends \Diskerror\Typed\TypedClass
+use Diskerror\Typed\TypedClass;
+
+class ExtendedEntities extends TypedClass
 {
 }

@@ -2,7 +2,7 @@
 
 namespace Structure\TagCloud;
 
-use Diskerror\Typed\TypedClass;
+use Diskerror\TypedBSON\TypedClass;
 
 class Html extends TypedClass
 {

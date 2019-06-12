@@ -2,7 +2,7 @@
 
 namespace Structure\TagCloud;
 
-use Diskerror\Typed\TypedClass;
+use Diskerror\TypedBSON\TypedClass;
 
 class Word extends TypedClass
 {
@@ -12,7 +12,7 @@ class Word extends TypedClass
 
 	protected $link            = '';
 
-	protected $html            = '__class__\Structure\TagCloud\Html';
+	protected $html            = [Html::class];
 
 	protected $handlers        = [];
 

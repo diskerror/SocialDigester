@@ -2,18 +2,31 @@
 
 namespace Structure;
 
-class Snapshot extends \Diskerror\Typed\TypedClass
+use Diskerror\Typed\DateTime;
+use Diskerror\TypedBSON\TypedArray;
+use Diskerror\TypedBSON\TypedClass;
+use Structure\TagCloud\Word;
+
+/**
+ * Class Snapshot
+ *
+ * @package Structure
+ *
+ * @property $_id
+ * @property $created
+ * @property $track
+ * @property $tagCloud
+ * @property $summary
+ */
+class Snapshot extends TypedClass
 {
-	protected $_nullCreatesNullInstance = true;
+	protected $_id      = null;
 
+	protected $created  = [DateTime::class];
 
-	protected $_id      = 0;    //	time()
+	protected $track    = [TypedArray::class, 'string'];
 
-	protected $created  = ['Diskerror\Typed\DateTime'];
+	protected $tagCloud = [TypedArray::class, Word::class];
 
-	protected $track    = ['Diskerror\Typed\TypedArray', 'string'];
-
-	protected $tagCloud = 'Diskerror\Typed\TypedArray(null, "\Structure\TagCloud\Word")';
-
-	protected $summary  = 'Diskerror\Typed\TypedArray(null, "string")';
+	protected $summary  = [TypedArray::class, 'string'];
 }
