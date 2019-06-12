@@ -2,7 +2,7 @@
 	"require": {
 		"php": "^7.1",
 		"ext-phalcon": "^3.3",
-		"diskerror/typed": "0.6a",
+		"diskerror/typedbson": "dev-master",
 		"zendframework/zend-json": "^3.0",
 		"mongodb/mongodb": "^1.4.0",
 		"php-ds/php-ds": "*",
@@ -19,5 +19,7 @@
 			"Resource\\": "app/models/Resource/",
 			"Structure\\": "app/models/Structure/"
 		}
-	}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }
