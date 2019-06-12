@@ -4,12 +4,6 @@ namespace Code;
 
 use Iterator;
 
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 6/23/18
- * Time: 5:46 PM
- */
 class TallyWords implements Iterator
 {
 	/**
