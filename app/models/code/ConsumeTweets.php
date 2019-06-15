@@ -62,9 +62,11 @@ final class ConsumeTweets
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
+			$tweet    = new Tweet();
+			$tallySet = new TallySet();
 			while ($pidHandler->exists() && !$stream->isEOF()) {
-				$tweets  = [];
-				$tallySet = new TallySet();
+				$tweets = [];
+				$tallySet->assign(null);
 				for ($i = 0; $i < self::INSERT_COUNT; ++$i) {
 					//	get tweet
 					try {
@@ -87,7 +89,7 @@ final class ConsumeTweets
 					}
 
 					//	Filter. Use only part of returned structure.
-					$tweet = new Tweet($packet);
+					$tweet->assign($packet);
 
 					//	If tweet is not in english then skip it.
 					if ($tweet->lang !== 'en') {
@@ -99,8 +101,8 @@ final class ConsumeTweets
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
 						foreach ($hashtag as $h) {
-							if ($h & 0x80) {
-								continue 2;	//	skip hashtag if it contains a non-ASCII byte
+							if (ord($h) & 0x80) {
+								continue 2;    //	skip hashtag if it contains a non-ASCII byte
 							}
 						}
 						$uniqueWords->add($hashtag->text);
@@ -113,7 +115,7 @@ final class ConsumeTweets
 					}
 
 					//	Tally the words in the text.
-					$text  = preg_replace('#https?:[^ ]+#', '', $tweet->text);
+					$text  = preg_replace('#https?:[^ ]+#', ' ', $tweet->text);
 					$split = preg_split('/[^a-zA-Z0-9\']/', $text, null, PREG_SPLIT_NO_EMPTY);
 					foreach ($split as $s) {
 						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords)) {

@@ -8,7 +8,7 @@
 
 namespace Resource;
 
-use Diskerror\Typed\ArrayOptions as AO;
+use Diskerror\TypedBSON\TypedArray;
 
 /**
  * Class MongoCollection
@@ -39,17 +39,17 @@ abstract class MongoCollection
 
 	public function insertOne($document, array $options = [])
 	{
-		if ($document instanceof \Diskerror\Typed\TypedClass) {
-			$argOptions = $document->getArrayOptions();
-			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
-
-			$res = $this->getClient()->insertOne($document->toArray(), $options);
-
-			$document->setArrayOptions($argOptions);
-		}
-		else {
+//		if ($document instanceof \Diskerror\Typed\TypedClass) {
+//			$argOptions = $document->getArrayOptions();
+//			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
+//
+//			$res = $this->getClient()->insertOne($document->toArray(), $options);
+//
+//			$document->setArrayOptions($argOptions);
+//		}
+//		else {
 			$res = $this->getClient()->insertOne($document, $options);
-		}
+//		}
 
 		return $res;
 	}
@@ -67,17 +67,17 @@ abstract class MongoCollection
 
 	public function insertMany($document, array $options = [])
 	{
-		if ($document instanceof \Diskerror\Typed\TypedArray) {
-			$argOptions = $document->getArrayOptions();
-			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
-
-			$res = $this->getClient()->insertMany($document->toArray(), $options);
-
-			$document->setArrayOptions($argOptions);
-		}
-		else {
+//		if ($document instanceof TypedArray) {
+//			$argOptions = $document->getArrayOptions();
+//			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
+//
+//			$res = $this->getClient()->insertMany($document->toArray(), $options);
+//
+//			$document->setArrayOptions($argOptions);
+//		}
+//		else {
 			$res = $this->getClient()->insertOne($document, $options);
-		}
+//		}
 
 		return $res;
 	}
@@ -102,7 +102,7 @@ abstract class MongoCollection
 	public function find($filter = [], array $options = [])
 	{
 		$res = $this->getClient()->find($filter, $options);
-		return new \Diskerror\Typed\TypedArray($res, $this->_class);
+		return new TypedArray($this->_class, $res);
 	}
 
 	public function findOne($filter = [], array $options = [])

@@ -2,7 +2,10 @@
 
 namespace Structure\Tweet\Entities;
 
-class UserMentions extends \Diskerror\Typed\TypedClass
+use Diskerror\TypedBSON\TypedArray;
+use Diskerror\TypedBSON\TypedClass;
+
+class UserMentions extends TypedClass
 {
 	protected $id          = '';
 
@@ -10,6 +13,6 @@ class UserMentions extends \Diskerror\Typed\TypedClass
 
 //	protected $name        = '';
 
-//	protected $indices     = '__class__Diskerror\Typed\TypedArray(null, "int")';
+//	protected $indices     = [TypedArray::class, 'int'];
 
 }

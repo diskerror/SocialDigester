@@ -2,7 +2,7 @@
 
 namespace Structure\Tweet;
 
-use Diskerror\Typed\TypedClass;
+use Diskerror\TypedBSON\TypedClass;
 
 class ExtendedEntities extends TypedClass
 {

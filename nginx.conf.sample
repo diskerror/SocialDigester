@@ -16,13 +16,16 @@
 server {
 	listen       80;
 	server_name  politicator.com;
-	root "/var/www/politicator/public";
-	index index.php;
+#	root "/var/www/politicator/public";
+	root "/var/www/politicator";
+#	index index.php;
+	index index.html;
 
 	try_files $uri $uri/ @rewrite;
 
 	location @rewrite {
-		rewrite ^/(.*)$ /index.php?_url=/$1;
+#		rewrite ^/(.*)$ /index.php?_url=/$1;
+		rewrite ^/.* /index.html;
 	}
 
 

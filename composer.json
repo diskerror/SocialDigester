@@ -1,5 +1,5 @@
 {
-	"name": "Twitter Digester",
+	"name": "diskerror/twitter-digester",
 	"description": "Consumes a Twitter stream and counts the hashtags, for starters...",
 	"type": "project",
 	"license": "public",

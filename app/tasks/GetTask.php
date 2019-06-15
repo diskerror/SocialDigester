@@ -36,7 +36,7 @@ class GetTask extends Cli
 	{
 		self::println(
 			json_encode(
-				array_slice(Code\Tally\TopList::getText($this->config->word_stats)->arr, 0, 25),
+				array_slice(Code\Tally\TopList::getText($this->config->word_stats)->toArray(), 0, 25),
 				JSON_PRETTY_PRINT
 			)
 		);
@@ -45,7 +45,7 @@ class GetTask extends Cli
 	public function summaryAction()
 	{
 		$summary = Code\Summary::get($this->config->word_stats);
-		self::print(implode("\n\n", $summary));
+		self::println(implode("\n\n", $summary));
 	}
 
 	public function snapshotAction()

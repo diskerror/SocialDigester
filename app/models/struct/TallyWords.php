@@ -33,12 +33,12 @@ class TallyWords extends TypedArray
 	 */
 	public function sort()
 	{
-		arsort($this->getContainerReference());
+		arsort($this->_container);
 	}
 
 	public function scaleTally(float $div)
 	{
-		foreach ($this->getContainerReference() as &$v) {
+		foreach ($this as &$v) {
 			$v = round($v / $div, 2);
 		}
 	}

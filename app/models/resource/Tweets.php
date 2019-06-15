@@ -2,12 +2,14 @@
 
 namespace Resource;
 
+use Structure\Tweet;
+
 class Tweets extends MongoCollection
 {
 	public function __construct()
 	{
 		$this->_collection = 'tweets';
-		$this->_class      = '\Structure\Tweet';
+		$this->_class      = Tweet::class;
 	}
 
 	public function doIndex(int $expire=0)
