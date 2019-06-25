@@ -2,13 +2,14 @@
 
 namespace Code\Tally;
 
+use Diskerror\Typed\TypedArray;
+use Ds\Set;
 use MongoDB\BSON\UTCDateTime;
 use Phalcon\Config;
-use Ds\Set;
-use Diskerror\Typed\TypedArray;
 use Resource\Tallies;
-use Structure\TallyWords;
 use Resource\Tweets;
+use Structure\TagCloud\Word;
+use Structure\TallyWords;
 
 final class TagCloud extends AbstractTally
 {
@@ -59,12 +60,7 @@ final class TagCloud extends AbstractTally
 		$totals = new TallyWords();
 		foreach ($tallies as $tally) {
 			foreach ($tally->uniqueHashtags as $k => $v) {
-				if ($totals->offsetExists($k)) {
-					$totals[$k] += $v;
-				}
-				else {
-					$totals[$k] = $v;
-				}
+				$totals->doTally($k, $v);
 			}
 		}
 
@@ -117,7 +113,7 @@ final class TagCloud extends AbstractTally
 		//	Sort on key.
 		ksort($normalizedGroups, SORT_NATURAL | SORT_FLAG_CASE);
 
-		$cloudWords = new TypedArray(null, 'Structure\TagCloud\Word');
+		$cloudWords = new TypedArray(Word::class);
 		foreach ($normalizedGroups as &$group) {
 			$totalTally = $group['_sum_'];
 			unset($group['_sum_']);

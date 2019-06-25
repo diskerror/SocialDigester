@@ -2,12 +2,12 @@
 
 namespace Code\Tally;
 
-use Resource\Tallies;
-use Structure\TallyWords;
 use Ds\Set;
 use MongoDB\BSON\UTCDateTime;
 use Phalcon\Config;
+use Resource\Tallies;
 use Resource\Tweets;
+use Structure\TallyWords;
 
 final class TopList extends AbstractTally
 {

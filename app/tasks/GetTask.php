@@ -31,6 +31,15 @@ class GetTask extends Cli
 			)
 		);
 	}
+	public function hashtagsAllAction()
+	{
+		self::println(
+			json_encode(
+				Code\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats),
+				JSON_PRETTY_PRINT
+			)
+		);
+	}
 
 	public function textwordsAction()
 	{

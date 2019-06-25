@@ -2,7 +2,6 @@
 
 namespace Structure\Tweet\Entities;
 
-use Diskerror\TypedBSON\TypedArray;
 use Diskerror\TypedBSON\TypedClass;
 
 class UserMentions extends TypedClass

@@ -17,14 +17,15 @@ class TallyWords extends TypedArray
 	 * Add word to array.
 	 *
 	 * @param string $word
+	 * @param int $q
 	 */
-	public function doTally(string $word)
+	public function doTally(string $word, int $q = 1)
 	{
 		if ($this->offsetExists($word)) {
-			++$this[$word];
+			$this[$word]->set($this[$word]->get() + $q);
 		}
 		else {
-			$this[$word] = 1;
+			$this[$word]->set($q);
 		}
 	}
 
@@ -34,6 +35,7 @@ class TallyWords extends TypedArray
 	public function sort()
 	{
 		arsort($this->_container);
+		return $this;
 	}
 
 	public function scaleTally(float $div)
