@@ -79,6 +79,7 @@ final class ConsumeTweets
 
 					//	Ignore bad data.
 					if (!is_array($packet)) {
+						$logger->info('bad packet');
 						continue;
 					}
 
@@ -93,6 +94,7 @@ final class ConsumeTweets
 
 					//	If tweet is not in english then skip it.
 					if ($tweet->lang !== 'en') {
+						$logger->info('lang not en');
 						continue;
 					}
 
