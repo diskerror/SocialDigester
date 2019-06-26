@@ -5,12 +5,6 @@ namespace Code;
 use Phalcon\Config;
 use Structure\Snapshot;
 
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 6/27/18
- * Time: 11:44 AM
- */
 final class Snapshots
 {
 	private function __construct() { }
@@ -30,7 +24,7 @@ final class Snapshots
 			'tagCloud' => Tally\TagCloud::getHashtags($config->word_stats),
 			'summary'  => Summary::get($config->word_stats),
 		]);
-		(new \Resource\Snapshots())->insertOne($snap);
+		(new \Resource\Snapshots())->getClient()->insertOne($snap);
 		return $snap->id_;
 	}
 }

@@ -15,7 +15,7 @@ abstract class AbstractTally
 		}
 
 		//	So "Schumer" == "Shumer".
-		$s = preg_replace('/sch/i', 'sh', $s);
+		$s = str_ireplace("sch", 'sh', $s);
 
 		//	Plural becomes singular for longer words.
 //		if (strlen($s) > 5) {
@@ -36,7 +36,7 @@ abstract class AbstractTally
 				return soundex($s);
 
 			case 'stem':
-				return \Diskerror\stem($s)[0];
+//				return \Diskerror\stem($s)[0];
 
 			default:
 				throw new InvalidArgumentException('bad normalize technique');
@@ -57,7 +57,7 @@ abstract class AbstractTally
 			$group['_sum_'] = array_sum($group);
 		}
 
-		//	Sort on size, decending.
+		//	Sort on size, descending.
 		uasort($normalizedGroups, 'self::_sortCountSumDesc');
 
 		//	Get the first X number of members.
@@ -66,6 +66,7 @@ abstract class AbstractTally
 		return $normalizedGroups;
 	}
 
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private static function _sortCountSumDesc($a, $b)
 	{
 		if ($a['_sum_'] === $b['_sum_']) {

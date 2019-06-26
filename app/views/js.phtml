@@ -1,2 +1,3 @@
-<?php header('Content-Type: application/json'); ?>
+<?php /** @noinspection PhpUndefinedVariableInspection */
+header('Content-Type: application/json'); ?>
 <?= Zend\Json\Json::encode($obj, false, ['enableJsonExprFinder' => true]); ?>

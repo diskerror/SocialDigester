@@ -1,14 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 7/17/18
- * Time: 5:44 PM
- */
 
 namespace Resource;
 
 use Diskerror\TypedBSON\TypedArray;
+use InvalidArgumentException;
+use MongoDB\Collection;
+use Phalcon\Di;
 
 /**
  * Class MongoCollection
@@ -30,56 +27,17 @@ abstract class MongoCollection
 
 	private $_client;
 
-	/**
-	 * MongoCollection constructor.
-	 */
-	public function __construct() { }
-
 	abstract public function doIndex(int $expire=0);
 
-	public function insertOne($document, array $options = [])
-	{
-//		if ($document instanceof \Diskerror\Typed\TypedClass) {
-//			$argOptions = $document->getArrayOptions();
-//			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
-//
-//			$res = $this->getClient()->insertOne($document->toArray(), $options);
-//
-//			$document->setArrayOptions($argOptions);
-//		}
-//		else {
-			$res = $this->getClient()->insertOne($document, $options);
-//		}
-
-		return $res;
-	}
-
 	/**
-	 * @return \MongoDB\Collection
+	 * @return Collection
 	 */
-	public function getClient()
+	public function getClient(): Collection
 	{
 		if (!isset($this->_client)) {
-			$this->_client = \Phalcon\Di::getDefault()->getShared('mongo')->{$this->_collection};
+			$this->_client = Di::getDefault()->getShared('mongo')->{$this->_collection};
 		}
 		return $this->_client;
-	}
-
-	public function insertMany($document, array $options = [])
-	{
-//		if ($document instanceof TypedArray) {
-//			$argOptions = $document->getArrayOptions();
-//			$document->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::SWITCH_ID | AO::TO_BSON_DATE);
-//
-//			$res = $this->getClient()->insertMany($document->toArray(), $options);
-//
-//			$document->setArrayOptions($argOptions);
-//		}
-//		else {
-			$res = $this->getClient()->insertOne($document, $options);
-//		}
-
-		return $res;
 	}
 
 	public function __call($name, $args)
@@ -95,7 +53,7 @@ abstract class MongoCollection
 				return $this->getClient()->{$name}($args[0], $args[1]);
 
 			default:
-				throw new \InvalidArgumentException('too many arguments');
+				throw new InvalidArgumentException('too many arguments');
 		}
 	}
 

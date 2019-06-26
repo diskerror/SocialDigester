@@ -21,6 +21,7 @@ class LoggerFactory
 
 	/**
 	 * Log format object.
+	 *
 	 * @type Line
 	 */
 	protected static $_format;
@@ -39,18 +40,18 @@ class LoggerFactory
 	 */
 	function __construct($fileName)
 	{
-		$this->_file   = self::getFile($fileName);
-		$this->_stream = self::getStream();
+		$this->_file   = self::getFileLogger($fileName);
+		$this->_stream = self::getStreamLogger();
 	}
 
-	public static function getFileLogger($fileName)
+	public static function getFileLogger($fileName): File
 	{
 		$file = new File($fileName);
 		$file->setFormatter(self::getFormatter());
 		return $file;
 	}
 
-	public static function getFormatter()
+	public static function getFormatter(): Line
 	{
 		if (!isset(self::$_format)) {
 			self::$_format = new Line(self::OUTPUT_FORMAT);
@@ -58,7 +59,7 @@ class LoggerFactory
 		return self::$_format;
 	}
 
-	public static function getStreamLogger()
+	public static function getStreamLogger(): Stream
 	{
 		$stream = new Stream('php://stderr');
 		$stream->setFormatter(self::getFormatter());

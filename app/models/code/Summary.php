@@ -3,7 +3,6 @@
 namespace Code;
 
 use MongoDB\BSON\UTCDateTime;
-use Phalcon\Config;
 use PhpScience\TextRank\Tool\Graph;
 use PhpScience\TextRank\Tool\Parser;
 use PhpScience\TextRank\Tool\Score;
@@ -18,15 +17,13 @@ final class Summary
 	/**
 	 * Generate summary of tweet texts.
 	 *
-	 * @param Config $config
-	 *
 	 * @return array
 	 */
-	public static function get(Config $config): array
+	public static function get(): array
 	{
 		ini_set('memory_limit', 512 * 1024 * 1024);
 
-		$tweets = (new Tweets())->find(
+		$tweets = (new Tweets())->getClient()->find(
 			[
 				'created_at' =>
 					['$gt' => new UTCDateTime(strtotime('180 seconds ago') * 1000)],
@@ -78,7 +75,7 @@ final class Summary
 		$outputArr    = [];
 		foreach ($summaries as $summary) {
 			$sub = substr($summary, 10, 30);
-			if (in_array($sub, $subSummaries)) {
+			if (in_array($sub, $subSummaries, true)) {
 				continue;
 			}
 

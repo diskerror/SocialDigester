@@ -18,11 +18,11 @@ final class TopList extends AbstractTally
 	 *
 	 * @param Config $config
 	 *
-	 * @return \Structure\TallyWords
+	 * @return TallyWords
 	 */
 	public static function getHashtags(Config $config): array
 	{
-		$tweets = (new Tweets())->find([
+		$tweets = (new Tweets())->getClient()->find([
 			'created_at'               => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
@@ -36,8 +36,8 @@ final class TopList extends AbstractTally
 				$uniqueWords->add($hashtag->text);
 			}
 
-			foreach ($uniqueWords as $uniqeWord) {
-				$tally->doTally($uniqeWord);
+			foreach ($uniqueWords as $uniqueWord) {
+				$tally->doTally($uniqueWord);
 			}
 		}
 
@@ -56,7 +56,7 @@ final class TopList extends AbstractTally
 
 	public static function getHashtagsFromTallies(Config $config): array
 	{
-		$tallies = (new Tallies())->find([
+		$tallies = (new Tallies())->getClient()->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
@@ -90,11 +90,11 @@ final class TopList extends AbstractTally
 	 *
 	 * @param Config $config
 	 *
-	 * @return \Structure\TallyWords
+	 * @return TallyWords
 	 */
 	public static function getText(Config $config): TallyWords
 	{
-		$tweets = (new Tweets())->find([
+		$tweets = (new Tweets())->getClient()->find([
 			'created_at' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 			'text'       => ['$gt' => ''],
 		]);

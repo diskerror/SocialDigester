@@ -1,12 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 6/27/18
- * Time: 1:43 AM
- */
 
-class SnapshotController extends \Phalcon\Mvc\Controller
+use Phalcon\Mvc\Controller;
+
+class SnapshotController extends Controller
 {
 	public function indexAction()
 	{

@@ -1,12 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: reid
- * Date: 7/22/18
- * Time: 3:57 PM
- */
 
-class Cli extends \Phalcon\Cli\Task
+use Phalcon\Cli\Task;
+
+
+class Cli extends Task
 {
 	protected static function print(string $s)
 	{

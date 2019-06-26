@@ -38,8 +38,8 @@ final class TagCloud extends AbstractTally
 				$uniqueWords->add($hashtag->text);
 			}
 
-			foreach ($uniqueWords as $uniqeWord) {
-				$tally->doTally($uniqeWord);
+			foreach ($uniqueWords as $uniqueWord) {
+				$tally->doTally($uniqueWord);
 			}
 		}
 
@@ -53,7 +53,7 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getHashtagsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->find([
+		$tallies = (new Tallies())->getClient()->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
@@ -74,7 +74,7 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getAllHashtagsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->find([
+		$tallies = (new Tallies())->getClient()->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
@@ -152,7 +152,7 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getText(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->find([
+		$tallies = (new Tallies())->getClient()->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
@@ -178,7 +178,7 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getUserMentionsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->find([
+		$tallies = (new Tallies())->getClient()->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 

@@ -3,10 +3,12 @@
 namespace Code;
 
 use Ds\Set;
+use Exception;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
 use Phalcon\Config;
 use Resource\Messages;
+use Resource\Tallies;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
 use Structure\TallySet;
@@ -23,31 +25,29 @@ final class ConsumeTweets
 	/**
 	 * Open and save a stream of tweets.
 	 *
-	 * @param Config     $tconfig
-	 * @param PidHandler $pid_handler
-	 *
+	 * @param Config $config
 	 */
 	public static function exec(Config $config)
 	{
 		ini_set('memory_limit', self::MEMORY_LIMIT);
 
+		$pidHandler = new PidHandler($config->process);
+
+//		$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $config->process->name . '.log');
+		$logger = LoggerFactory::getStreamLogger();
+
+//		$sh = new StemHandler();
+
 		try {
-			$stream     = new Stream($config->twitter->auth);
-			$pidHandler = new PidHandler($config->process);
-
-//			$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $config->process->name . '.log');
-			$logger = LoggerFactory::getStreamLogger();
-
-//			$sh = new StemHandler();
-
+			$stream         = new Stream($config->twitter->auth);
 			$tweetsClient   = (new Tweets())->getClient();
-			$talliesClient  = (new \Resource\Tallies())->getClient();
+			$talliesClient  = (new Tallies())->getClient();
 			$messagesClient = (new Messages())->getClient();
 
 
 			//	Send request to start a filtered stream.
 			$stream->filter([
-				'track'          => implode(',', (array)$config->twitter->track),
+				'track'          => implode(',', (array) $config->twitter->track),
 				'language'       => 'en',
 				'stall_warnings' => true,
 			]);
@@ -57,7 +57,7 @@ final class ConsumeTweets
 
 			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
-			$stopWords = (array)$config->word_stats->stop;
+			$stopWords = (array) $config->word_stats->stop;
 
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
@@ -72,8 +72,8 @@ final class ConsumeTweets
 					try {
 						$packet = $stream->read();
 					}
-					catch (\Exception $e) {
-						$logger->info((string)$e);
+					catch (Exception $e) {
+						$logger->info((string) $e);
 						continue;
 					}
 
@@ -112,15 +112,15 @@ final class ConsumeTweets
 					}
 
 					//	Count unique hashtags for this tweet.
-					foreach ($uniqueWords as $uniqeWord) {
-						$tallySet->uniqueHashtags->doTally($uniqeWord);
+					foreach ($uniqueWords as $uniqueWord) {
+						$tallySet->uniqueHashtags->doTally($uniqueWord);
 					}
 
 					//	Tally the words in the text.
 					$text  = preg_replace('#https?:[^ ]+#', ' ', $tweet->text);
 					$split = preg_split('/[^a-zA-Z0-9\']/', $text, null, PREG_SPLIT_NO_EMPTY);
 					foreach ($split as $s) {
-						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords)) {
+						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords, true)) {
 							$tallySet->textWords->doTally($s);
 						}
 					}
@@ -156,10 +156,10 @@ final class ConsumeTweets
 					$tweetsClient->insertMany($tweets, $insertOptions);
 					$talliesClient->insertOne($tallySet/*->toArray()*/, $insertOptions);
 				}
-				catch (\Exception $e) {
+				catch (Exception $e) {
 					$m = $e->getMessage();
 
-					if (preg_match('/Authentication/i', $m)) {
+					if (false !== stripos($m, "Authentication")) {
 						$logger->emergency('Mongo ' . $m);
 					}
 					else {
@@ -173,8 +173,8 @@ final class ConsumeTweets
 
 			$logger->info('Stopped capturing tweets.');
 		}
-		catch (\Exception $e) {
-			$logger->emergency((string)$e);
+		catch (Exception $e) {
+			$logger->emergency((string) $e);
 		}
 
 		$pidHandler->removeIfExists();

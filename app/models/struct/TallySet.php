@@ -2,7 +2,7 @@
 
 namespace Structure;
 
-use Diskerror\Typed\DateTime;
+use Diskerror\TypedBSON\DateTime;
 use Diskerror\TypedBSON\TypedClass;
 
 /**
@@ -10,11 +10,11 @@ use Diskerror\TypedBSON\TypedClass;
  *
  * @package Structure
  *
- * @property Diskerror\Typed\DateTime $created
- * @property TallyWords               $uniqueHashtags
- * @property TallyWords               $allHashtags
- * @property TallyWords               $textWords
- * @property TallyWords               $userMentions
+ * @property DateTime   $created
+ * @property TallyWords $uniqueHashtags
+ * @property TallyWords $allHashtags
+ * @property TallyWords $textWords
+ * @property TallyWords $userMentions
  */
 class TallySet extends TypedClass
 {

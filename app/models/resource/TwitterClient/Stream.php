@@ -2,6 +2,8 @@
 
 namespace Resource\TwitterClient;
 
+use BadMethodCallException;
+use Exception;
 use Phalcon\Config;
 
 class Stream extends ClientAbstract
@@ -30,8 +32,8 @@ class Stream extends ClientAbstract
 
 	public function __construct(Config $auth)
 	{
-		if (!`which curl`) {
-			throw new \Exception('The CLI program "curl" is required.');
+		if (!shell_exec('which curl')) {
+			throw new Exception('The CLI program "curl" is required.');
 		}
 		parent::__construct($auth);
 		$this->_baseURL .= 'statuses/';
@@ -81,7 +83,7 @@ class Stream extends ClientAbstract
 	 * https://dev.twitter.com/streaming/overview
 	 *
 	 * @return bool
-	 * @throws \BadMethodCallException
+	 * @throws BadMethodCallException
 	 */
 	public function __call($function, array $params = []): bool
 	{
@@ -91,7 +93,7 @@ class Stream extends ClientAbstract
 				break;
 
 			default:
-				throw new \BadMethodCallException();
+				throw new BadMethodCallException();
 		}
 
 		$this->_closeProcIfOpen();

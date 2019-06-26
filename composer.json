@@ -35,7 +35,6 @@
 	"autoload": {
 		"psr-4": {
 			"Code\\": "app/models/code/",
-			"Service\\": "app/models/service",
 			"Resource\\": "app/models/resource/",
 			"Structure\\": "app/models/struct/"
 		}

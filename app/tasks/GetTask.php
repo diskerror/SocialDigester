@@ -53,7 +53,7 @@ class GetTask extends Cli
 
 	public function summaryAction()
 	{
-		$summary = Code\Summary::get($this->config->word_stats);
+		$summary = Code\Summary::get();
 		self::println(implode("\n\n", $summary));
 	}
 

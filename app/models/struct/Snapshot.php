@@ -20,7 +20,7 @@ use Structure\TagCloud\Word;
  */
 class Snapshot extends TypedClass
 {
-	protected $_id      = null;
+	protected $_id;
 
 	protected $created  = [DateTime::class];
 
