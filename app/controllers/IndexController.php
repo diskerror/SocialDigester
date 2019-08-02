@@ -120,7 +120,7 @@ class IndexController extends Controller
 
 	public function infoAction()
 	{
-		phpinfo();
+//		phpinfo();
 	}
 
 }

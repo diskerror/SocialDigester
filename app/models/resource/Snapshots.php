@@ -12,11 +12,8 @@ use Structure\Snapshot;
 
 class Snapshots extends MongoCollection
 {
-	public function __construct()
-	{
-		$this->_collection = 'snapshots';
-		$this->_class      = Snapshot::class;
-	}
+	protected $_collection = 'snapshots';
+	protected $_class      = Snapshot::class;
 
 	public function doIndex(int $expire=0)
 	{

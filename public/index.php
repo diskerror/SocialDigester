@@ -1,5 +1,10 @@
 <?php
 
+use Phalcon\Di\FactoryDefault;
+use Phalcon\Loader;
+use Phalcon\Mvc\Application;
+use Phalcon\Mvc\View\Simple;
+
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
@@ -20,20 +25,20 @@ try {
 	//	Models are loaded with the Composer autoloader.
 	require BASE_PATH . '/vendor/autoload.php';
 
-	(new \Phalcon\Loader())
+	(new Loader())
 		->registerDirs([
 			APP_PATH . '/controllers/',
 		])
 		->register();
 
-	$di = new \Phalcon\Di\FactoryDefault();
+	$di = new FactoryDefault();
 
 	require APP_PATH . '/DiCommon.inc';
 
 	$di->setShared('view', function() {
 		static $view;
 		if (!isset($view)) {
-			$view = new Phalcon\Mvc\View\Simple();
+			$view = new Simple();
 			$view->setViewsDir(APP_PATH . '/views/');
 		}
 		return $view;
@@ -68,7 +73,7 @@ try {
 //		return $dispatcher;
 //	});
 
-	echo (new Phalcon\Mvc\Application($di))
+	echo (new Application($di))
 		->useImplicitView(false)
 		->handle()
 		->getContent();

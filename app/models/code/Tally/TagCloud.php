@@ -6,10 +6,13 @@ use Diskerror\Typed\TypedArray;
 use Ds\Set;
 use MongoDB\BSON\UTCDateTime;
 use Phalcon\Config;
+use function print_r;
 use Resource\Tallies;
 use Resource\Tweets;
+use const STDOUT;
 use Structure\TagCloud\Word;
 use Structure\TallyWords;
+use function var_dump;
 
 final class TagCloud extends AbstractTally
 {
@@ -53,7 +56,7 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getHashtagsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->getClient()->find([
+		$tallies = (new Tallies())->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
@@ -74,7 +77,7 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getAllHashtagsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->getClient()->find([
+		$tallies = (new Tallies())->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
@@ -82,7 +85,7 @@ final class TagCloud extends AbstractTally
 		foreach ($tallies as $tally) {
 			foreach ($tally->allHashtags as $k => $v) {
 				if ($totals->offsetExists($k)) {
-					$totals[$k] += $v;
+					$totals[$k] += (int)$v;
 				}
 				else {
 					$totals[$k] = $v;
@@ -152,7 +155,7 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getText(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->getClient()->find([
+		$tallies = (new Tallies())->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
@@ -178,7 +181,7 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getUserMentionsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->getClient()->find([
+		$tallies = (new Tallies())->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 

@@ -10,13 +10,10 @@ namespace Resource;
 
 class Messages extends MongoCollection
 {
-	public function __construct()
-	{
-		$this->_collection = 'messages';
-		$this->_class      = '';
-	}
+	protected $_collection = 'messages';
+	protected $_class      = '';
 
-	public function doIndex(int $expire=0)
+	public function doIndex(int $expire = 0)
 	{
 		$this->getClient()->insertOne([]);
 		$this->getClient()->dropIndexes();

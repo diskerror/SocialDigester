@@ -6,13 +6,10 @@ use Structure\TallySet;
 
 class Tallies extends MongoCollection
 {
-	public function __construct()
-	{
-		$this->_collection = 'tallies';
-		$this->_class      = TallySet::class;
-	}
+	protected $_collection = 'tallies';
+	protected $_class      = TallySet::class;
 
-	public function doIndex(int $expire=0)
+	public function doIndex(int $expire = 0)
 	{
 		$this->getClient()->insertOne([]);
 		$this->getClient()->dropIndexes();

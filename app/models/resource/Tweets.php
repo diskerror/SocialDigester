@@ -6,11 +6,8 @@ use Structure\Tweet;
 
 class Tweets extends MongoCollection
 {
-	public function __construct()
-	{
-		$this->_collection = 'tweets';
-		$this->_class      = Tweet::class;
-	}
+	protected $_collection = 'tweets';
+	protected $_class      = Tweet::class;
 
 	public function doIndex(int $expire=0)
 	{
