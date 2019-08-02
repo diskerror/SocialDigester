@@ -22,6 +22,20 @@ final class ConsumeTweets
 
 	private function __construct() { }
 
+	public static function getOne(Config $config)
+	{
+		$stream = new Stream($config->auth);
+
+		//	Send request to start a filtered stream.
+		$stream->filter([
+			'track'          => implode(',', (array) $config->track),
+			'language'       => 'en',
+			'stall_warnings' => true,
+		]);
+
+		return $stream->read();
+	}
+
 	/**
 	 * Open and save a stream of tweets.
 	 *
@@ -44,6 +58,12 @@ final class ConsumeTweets
 			$talliesClient  = (new Tallies())->getClient();
 			$messagesClient = (new Messages())->getClient();
 
+			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
+
+			$stopWords = (array) $config->word_stats->stop;
+
+			$tweet    = new Tweet();
+			$tallySet = new TallySet();
 
 			//	Send request to start a filtered stream.
 			$stream->filter([
@@ -55,15 +75,9 @@ final class ConsumeTweets
 			//	Set PID file to indicate whether we should keep running.
 			$pidHandler->setFile();
 
-			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
-
-			$stopWords = (array) $config->word_stats->stop;
-
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
-			$tweet    = new Tweet();
-			$tallySet = new TallySet();
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets = [];
 				$tallySet->assign(null);
@@ -79,7 +93,7 @@ final class ConsumeTweets
 
 					//	Ignore bad data.
 					if (!is_array($packet)) {
-						$logger->info('bad packet');
+						$logger->info(gettype($packet) . ' packet');
 						continue;
 					}
 

@@ -11,4 +11,4 @@ This is a work in progress but is fully functional. The code that is currently l
 
 This code uses a more streamlined process to connect to Twitter than [*fennb/phirehose*](https://github.com/fennb/phirehose) or [*OwlyCode/StreamingBird*](https://github.com/OwlyCode/StreamingBird).
 
-It requires PHP7, Phalcon, Composer, and the extension “Ds” available with PEAR. It is currently running on a ten year old box with Debian 9 (stretch), Nginx 1.10, PHP 7.2, and Phalcon 3.4 with a consumer fiber internet connection.
+It requires PHP7, Phalcon, Composer, and the extension “Ds” available with PEAR. It is currently running on a ten year old box with Debian 9 (stretch), Nginx 1.10, PHP 7.2, the command line tool “curl”, and Phalcon 3.4 with a consumer fiber internet connection.

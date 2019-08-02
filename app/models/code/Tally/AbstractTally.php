@@ -18,7 +18,7 @@ abstract class AbstractTally
 			}
 
 			//	So "Schumer" == "Shumer".
-			$k = str_ireplace("sch", 'sh', $k);
+			$k = str_ireplace('sch', 'sh', $k);
 
 			//	Plural becomes singular for longer words.
 //			if (strlen($s) > 5) {
@@ -27,23 +27,30 @@ abstract class AbstractTally
 
 			switch ($technique) {
 				case 'none':
-					return $k;
+					$normalized = $k;
+					break;
 
 				case 'strtolower':
-					return strtolower($k);
+					$normalized = strtolower($k);
+					break;
 
 				case 'metaphone':
-					return metaphone($k);
+					$normalized = metaphone($k);
+					break;
 
 				case 'soundex':
-					return soundex($k);
+					$normalized = soundex($k);
+					break;
 
 				case 'stem':
-//				return \Diskerror\stem($s)[0];
+//					$normalized = \Diskerror\stem($s)[0];
+//					break;
 
 				default:
 					throw new InvalidArgumentException('bad normalize technique');
 			}
+
+			$normalizedGroups[$normalized][$k] = $v;
 		}
 
 		//	Organize the group's properties.

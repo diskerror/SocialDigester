@@ -1,6 +1,10 @@
 #!/usr/bin/env php
 <?php
 
+use Phalcon\Cli\Console;
+use Phalcon\Di\FactoryDefault\Cli;
+use Phalcon\Loader;
+
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
@@ -21,13 +25,13 @@ try {
 	//	Models are loaded with the Composer autoloader.
 	require BASE_PATH . '/vendor/autoload.php';
 
-	(new \Phalcon\Loader())
+	(new Loader())
 		->registerDirs([
 			APP_PATH . '/tasks/',
 		])
 		->register();
 
-	$di = new Phalcon\Di\FactoryDefault\Cli();
+	$di = new Cli();
 
 	require APP_PATH . '/DiCommon.inc';
 
@@ -44,7 +48,7 @@ try {
 		}
 	}
 
-	(new Phalcon\Cli\Console($di))
+	(new Console($di))
 		->handle($arguments);
 
 //	fwrite(STDOUT, PHP_EOL);

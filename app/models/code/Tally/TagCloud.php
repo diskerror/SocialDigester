@@ -6,13 +6,10 @@ use Diskerror\Typed\TypedArray;
 use Ds\Set;
 use MongoDB\BSON\UTCDateTime;
 use Phalcon\Config;
-use function print_r;
 use Resource\Tallies;
 use Resource\Tweets;
-use const STDOUT;
 use Structure\TagCloud\Word;
 use Structure\TallyWords;
-use function var_dump;
 
 final class TagCloud extends AbstractTally
 {
