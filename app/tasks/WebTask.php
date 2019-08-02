@@ -2,8 +2,8 @@
 /**
  * Class WebTask
  *
- * Great for debugging the core calls used by a web controller.
- * 
+ * Great for debugging the core calls used by a web controller class.
+ *
  */
 
 class WebTask extends Cli
