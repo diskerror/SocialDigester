@@ -50,4 +50,9 @@ class TweetsTask extends Cli
 
 		self::println($t===0?0:1);
 	}
+
+	public function getoneAction()
+	{
+		self::println(json_encode(Code\ConsumeTweets::getOne($this->config->twitter), JSON_PRETTY_PRINT));
+	}
 }
