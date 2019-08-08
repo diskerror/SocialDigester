@@ -15,48 +15,52 @@ use Structure\TallyWords;
 
 abstract class AbstractTally
 {
-	protected static function _normalizeText($s, $technique = 'metaphone')
-	{
-		//	remove trailing digits
-		if (0 === preg_match('/^\d+$/', $s)) {
-			$s = preg_replace('/\d+$/', '', $s);
-		}
-
-		//	So "Schumer" == "Shumer".
-		$s = preg_replace('/sch/i', 'sh', $s);
-
-		//	Plural becomes singular for longer words.
-//		if (strlen($s) > 5) {
-//			$s = preg_replace('/s+$/i', '', $s);
-//		}
-
-		switch ($technique) {
-			case 'none':
-				return $s;
-
-			case 'strtolower':
-				return strtolower($s);
-
-			case 'metaphone':
-				return metaphone($s);
-
-			case 'soundex':
-				return soundex($s);
-
-			case 'stem':
-				return \Diskerror\stem($s)[0];
-
-			default:
-				throw new InvalidArgumentException('bad normalize technique');
-		}
-	}
-
 	protected static function _normalizeGroupsFromTally(TallyWords $tally, int $quantity, $technique = 'metaphone'): array
 	{
 		//	Group words by normalized value.
 		$normalizedGroups = [];
 		foreach ($tally as $realName => $v) {
-			$normalizedGroups[self::_normalizeText($realName, $technique)][$realName] = $v;
+			$tmpName = $realName;
+
+			//	remove trailing digits
+			if (0 === preg_match('/^\d+$/', $tmpName)) {
+				$tmpName = preg_replace('/\d+$/', '', $tmpName);
+			}
+
+			//	So "Schumer" == "Shumer".
+			$tmpName = preg_replace('/sch/i', 'sh', $tmpName);
+
+			//	Plural becomes singular for longer words.
+//		if (strlen($s) > 5) {
+//			$s = preg_replace('/s+$/i', '', $s);
+//		}
+
+			switch ($technique) {
+				case 'none':
+					$normalizedName = $tmpName;
+					break;
+
+				case 'strtolower':
+					$normalizedName = strtolower($tmpName);
+					break;
+
+				case 'metaphone':
+					$normalizedName = metaphone($tmpName);
+					break;
+
+				case 'soundex':
+					$normalizedName = soundex($tmpName);
+					break;
+
+				case 'stem':
+					$normalizedName = \Diskerror\stem($tmpName)[0];
+					break;
+
+				default:
+					throw new InvalidArgumentException('bad normalize technique');
+			}
+
+			$normalizedGroups[$normalizedName][$realName] = $v;
 		}
 
 		//	Get the sum of the counts of real names.
