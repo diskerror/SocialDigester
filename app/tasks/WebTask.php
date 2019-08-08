@@ -35,7 +35,7 @@ class WebTask extends Cli
 
 	public function summaryAction()
 	{
-		print_r(Code\Summary::get());
+		print_r(Code\Summary::get($this->config->word_stats));
 	}
 
 }
