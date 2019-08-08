@@ -29,7 +29,7 @@ final class Summary
 		$tweets = (new Tweets())->find(
 			[
 				'created_at' =>
-					['$gt' => new UTCDateTime(strtotime('180 seconds ago') * 1000)],
+					['$gt' => new UTCDateTime(strtotime('60 seconds ago') * 1000)],
 			],
 			[
 				'sort'       => [
