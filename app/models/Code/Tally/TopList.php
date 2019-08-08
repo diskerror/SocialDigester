@@ -2,6 +2,10 @@
 
 namespace Code\Tally;
 
+use function array_slice;
+use function arsort;
+use Ds\Pair;
+use Ds\PriorityQueue;
 use Resource\Tallies;
 use Structure\TallyWords;
 use Ds\Set;
@@ -41,8 +45,7 @@ final class TopList extends AbstractTally
 			}
 		}
 
-		$tally->sort();
-		$tally->scaleTally($config->window / 60.0);
+		$tally->scaleTally($config->window / 60.0);	//	This converts seconds to minutes.
 
 		$normalized = self::_normalizeGroupsFromTally($tally, $config->quantity);
 
@@ -72,27 +75,24 @@ final class TopList extends AbstractTally
 			}
 		}
 
-		$totals->sort();
-		$totals->scaleTally($config->window / 60.0);
-
 		$normalized = self::_normalizeGroupsFromTally($totals, $config->quantity);
 
 		$output = [];
 		foreach ($normalized as $n) {
-			$output[array_keys($n)[0]] = round($n['_sum_'], 2);
+			$output[array_keys($n)[0]] = round($n['_sum_']/60, 2);
 		}
 
 		return $output;
 	}
 
 	/**
-	 * Return quantity of each word in text field.
+	 * Return quantity of top words in text field.
 	 *
 	 * @param Config $config
 	 *
-	 * @return \Structure\TallyWords
+	 * @return array
 	 */
-	public static function getText(Config $config): TallyWords
+	public static function getText(Config $config): array
 	{
 		$tweets = (new Tweets())->find([
 			'created_at' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
@@ -103,19 +103,33 @@ final class TopList extends AbstractTally
 		foreach ($tweets as $tweet) {
 			$words = preg_split('/([^0-9a-zA-Z\']| )+/', $tweet->text);
 			foreach ($words as $word) {
-				if ((strlen($word) < 3 && !is_numeric($word)) || in_array(strtolower($word), (array)$config->stop,
-						true)) {
+				$lowerWord = strtolower($word);
+				if ((strlen($word) < 3 && !is_numeric($word)) ||
+					in_array($lowerWord, (array) $config->stop, true)
+				) {
 					continue;
 				}
 
-				$tally->doTally(strtolower($word));
+				$tally->doTally($lowerWord);
 			}
 		}
 
-		$tally->sort();
-		$tally->scaleTally(60);
+		$tallyPQ = new PriorityQueue();
+		$tallyPQ->allocate($config->quantity);
 
-		return $tally;
+		foreach ($tally as $word => $count) {
+			$tallyPQ->push([$word, $count], $count);
+		}
+
+		$tallyArr = array_slice($tallyPQ->toArray(), 0, $config->quantity);
+
+		//	convert to count per minute
+		$returnArr = [];
+		foreach ($tallyArr as $v) {
+			$returnArr[$v[0]] = round($v[1] / 60.0, 2);
+		}
+
+		return $returnArr;
 	}
 
 }

@@ -19,26 +19,22 @@ class GetTask extends Cli
 
 	public function cachePathAction()
 	{
-		self::println( $this->config->index_cache->back->cacheDir);
+		self::println($this->config->index_cache->back->cacheDir);
 	}
 
 	public function hashtagsAction()
 	{
+//		$start = microtime(true);
 		self::println(
-			json_encode(
-				array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats), 0, 25),
-				JSON_PRETTY_PRINT
-			)
+			json_encode(Code\Tally\TopList::getHashtags($this->config->word_stats), JSON_PRETTY_PRINT)
 		);
+//		self::println((microtime(true) - $start) * 1000);
 	}
 
 	public function textwordsAction()
 	{
 		self::println(
-			json_encode(
-				array_slice(Code\Tally\TopList::getText($this->config->word_stats)->arr, 0, 25),
-				JSON_PRETTY_PRINT
-			)
+			json_encode(Code\Tally\TopList::getText($this->config->word_stats), JSON_PRETTY_PRINT)
 		);
 	}
 

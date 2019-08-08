@@ -2,6 +2,14 @@
 
 namespace Code\Tally;
 
+use function array_key_exists;
+use function array_pop;
+use function array_slice;
+use function array_sum;
+use function arsort;
+use function count;
+use Ds\Map;
+use Ds\PriorityQueue;
 use InvalidArgumentException;
 use Structure\TallyWords;
 
@@ -47,23 +55,54 @@ abstract class AbstractTally
 	{
 		//	Group words by normalized value.
 		$normalizedGroups = [];
-		foreach ($tally as $k => $v) {
-			$normalizedGroups[self::_normalizeText($k, $technique)][$k] = $v;
+		foreach ($tally as $realName => $v) {
+			$normalizedGroups[self::_normalizeText($realName, $technique)][$realName] = $v;
 		}
 
-		//	Organize the group's properties.
+		//	Get the sum of the counts of real names.
 		foreach ($normalizedGroups as &$group) {
-			arsort($group);
 			$group['_sum_'] = array_sum($group);
 		}
 
-		//	Sort on size, decending.
-		uasort($normalizedGroups, 'self::_sortCountSumDesc');
+		//	Sort on size, descending.
+		$groupsPQ = new PriorityQueue();
+		$groupsPQ->allocate($quantity);        //	always allocates to the next power of 2
 
-		//	Get the first X number of members.
-		$normalizedGroups = array_slice($normalizedGroups, 0, $quantity);
+		foreach ($normalizedGroups as $normGroup) {
+			$groupsPQ->push($normGroup, $normGroup['_sum_']);
+		}
 
-		return $normalizedGroups;
+		return array_slice($groupsPQ->toArray(), 0, $quantity);	//	Now return the exact number.
+
+//		$groups = [];
+//		$i      = 0;
+//		foreach ($normalizedGroups as $name => $normGroup) {
+//			++$i;
+//			$groups[$name] = $normGroup;
+//			if ($i === $quantity) {
+//				break;
+//			}
+//		}
+//
+//		uasort($groups, 'self::_sortCountSumDesc');
+//
+//		if ($i < $quantity || count($normalizedGroups) === $quantity) {
+//			return $groups;
+//		}
+//
+//		$normalizedGroups = array_slice($normalizedGroups, $quantity);
+//
+//		$last = $quantity - 1;
+//		foreach ($normalizedGroups as $name => $normGroup) {
+//			if ($normGroup['_sum_'] < end($groups)['_sum_']) {
+//				continue;
+//			}
+//			$groups[$name] = $normGroup;
+//			uasort($groups, 'self::_sortCountSumDesc');
+//			array_pop($groups);
+//		}
+//
+//		return $groups;
 	}
 
 	private static function _sortCountSumDesc($a, $b)
