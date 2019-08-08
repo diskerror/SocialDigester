@@ -2,8 +2,6 @@
 
 namespace Resource\TwitterClient;
 
-use Resource\TwitterClient\ClientAbstract;
-
 class Rest extends ClientAbstract
 {
 

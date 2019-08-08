@@ -2,9 +2,6 @@
 
 namespace Code\Tally;
 
-use function array_slice;
-use function arsort;
-use Ds\Pair;
 use Ds\PriorityQueue;
 use Resource\Tallies;
 use Structure\TallyWords;

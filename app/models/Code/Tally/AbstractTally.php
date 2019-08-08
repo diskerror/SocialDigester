@@ -2,13 +2,6 @@
 
 namespace Code\Tally;
 
-use function array_key_exists;
-use function array_pop;
-use function array_slice;
-use function array_sum;
-use function arsort;
-use function count;
-use Ds\Map;
 use Ds\PriorityQueue;
 use InvalidArgumentException;
 use Structure\TallyWords;
