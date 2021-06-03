@@ -11,6 +11,10 @@ use Resource\Tweets;
 use Resource\TwitterClient\Stream;
 use Structure\Tallies;
 use Structure\Tweet;
+use function str_split;
+use function var_dump;
+use function var_export;
+use const PHP_EOL;
 
 final class ConsumeTweets
 {
@@ -47,7 +51,7 @@ final class ConsumeTweets
 
 			//	Send request to start a filtered stream.
 			$stream->filter([
-				'track'          => implode(',', (array)$config->twitter->track),
+				'track'          => implode(',', $config->twitter->track->toArray()),
 				'language'       => 'en',
 				'stall_warnings' => true,
 			]);
@@ -57,10 +61,11 @@ final class ConsumeTweets
 
 			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
-			$stopWords = (array)$config->word_stats->stop;
+			$stopWords = $config->word_stats->stop->toArray();
 
 			//	Announce that we're running.
-			$logger->info('Started capturing tweets.');
+//			$logger->info('Started capturing tweets.');
+			echo 'Started capturing tweets.' . PHP_EOL;	//	TODO: fix
 
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets  = [];
@@ -98,8 +103,9 @@ final class ConsumeTweets
 					$uniqueWords = new Set();
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
-						foreach ($hashtag as $h) {
-							if ($h & 0x80) {
+						$text = str_split($hashtag->text);
+						foreach ($text as $t) {
+							if ($t & chr(0x80)) {
 								continue 2;	//	skip hashtag if it contains a non-ASCII byte
 							}
 						}
@@ -156,21 +162,25 @@ final class ConsumeTweets
 					$m = $e->getMessage();
 
 					if (preg_match('/Authentication/i', $m)) {
-						$logger->emergency('Mongo ' . $m);
+//						$logger->emergency('Mongo ' . $m);
+						echo 'Mongo emergency ' . $m . PHP_EOL; //	TODO: fix this
 					}
 					else {
 						//	ignore duplicates
 						if (!preg_match('/duplicate.*key/i', $m)) {
-							$logger->warning('Mongo ' . $m);
+//							$logger->warning('Mongo ' . $m);
+							echo 'Mongo warning ' . $m . PHP_EOL; //	TODO: fix this
 						}
 					}
 				}
 			}
 
-			$logger->info('Stopped capturing tweets.');
+//			$logger->info('Stopped capturing tweets.');
+			echo 'Stopped capturing tweets.' . PHP_EOL; //	TODO: fix this
 		}
 		catch (\Exception $e) {
-			$logger->emergency((string)$e);
+//			$logger->emergency((string)$e);
+			echo (string)$e . PHP_EOL; //	TODO: fix this
 		}
 
 		$pidHandler->removeIfExists();

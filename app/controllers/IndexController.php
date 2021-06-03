@@ -1,7 +1,9 @@
 <?php
 
+use \Phalcon\Mvc\Controller;
 
-class IndexController extends \Phalcon\Mvc\Controller
+
+class IndexController extends Controller
 {
 	public function indexAction()
 	{
@@ -14,7 +16,7 @@ class IndexController extends \Phalcon\Mvc\Controller
 //		if ($output === null) {
 			$this->assets->addJs('js/clouds.js');
 
-			$this->view->setVar('track', (array)$this->config->twitter->track);
+			$this->view->setVar('track', $this->config->twitter->track->toArray());
 
 			$output = $this->view->render('index');
 //			$cache->save('', $output);

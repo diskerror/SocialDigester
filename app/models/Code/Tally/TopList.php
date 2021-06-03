@@ -103,7 +103,7 @@ final class TopList extends AbstractTally
 		foreach ($tweets as $tweet) {
 			$words = preg_split('/([^0-9a-zA-Z\']| )+/', $tweet->text);
 			foreach ($words as $word) {
-				if ((strlen($word) < 3 && !is_numeric($word)) || in_array(strtolower($word), (array)$config->stop,
+				if ((strlen($word) < 3 && !is_numeric($word)) || in_array(strtolower($word), $config->stop->toArray(),
 						true)) {
 					continue;
 				}
