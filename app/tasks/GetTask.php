@@ -34,7 +34,10 @@ class GetTask extends Cli
 	public function textwordsAction()
 	{
 		self::println(
-			json_encode(Code\Tally\TopList::getText($this->config->word_stats), JSON_PRETTY_PRINT)
+			json_encode(
+				array_slice(Code\Tally\TopList::getText($this->config->word_stats)->toArray(), 0, 25),
+				JSON_PRETTY_PRINT
+			)
 		);
 	}
 

@@ -51,8 +51,7 @@ abstract class ClientAbstract
 
 		$oauth['oauth_signature'] = base64_encode(hash_hmac(
 			'sha1',
-			$method . "&" . rawurlencode($url) . '&' . rawurlencode(implode('&',
-				$rawEncoded)),
+			$method . "&" . rawurlencode($url) . '&' . rawurlencode(implode('&', $rawEncoded)),
 			rawurlencode($this->_auth->consumer_secret) . '&' . rawurlencode($this->_auth->oauth_token_secret),
 			true
 		));

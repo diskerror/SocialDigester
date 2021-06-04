@@ -42,7 +42,7 @@ final class TopList extends AbstractTally
 			}
 		}
 
-		$tally->scaleTally($config->window / 60.0);	//	This converts seconds to minutes.
+		$tally->scaleTally($config->window / 60.0);    //	This converts seconds to minutes.
 
 		$normalized = self::_normalizeGroupsFromTally($tally, $config->quantity);
 
@@ -76,7 +76,7 @@ final class TopList extends AbstractTally
 
 		$output = [];
 		foreach ($normalized as $n) {
-			$output[array_keys($n)[0]] = round($n['_sum_']/60, 2);
+			$output[array_keys($n)[0]] = round($n['_sum_'] / 60, 2);
 		}
 
 		return $output;
@@ -102,7 +102,7 @@ final class TopList extends AbstractTally
 			foreach ($words as $word) {
 				$lowerWord = strtolower($word);
 				if ((strlen($word) < 3 && !is_numeric($word)) ||
-					in_array($lowerWord, (array) $config->stop, true)
+					in_array($lowerWord, $config->stop->toArray(), true)
 				) {
 					continue;
 				}
