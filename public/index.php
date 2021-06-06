@@ -75,7 +75,7 @@ try {
 
 	echo (new Application($di))
 		->useImplicitView(false)
-		->handle()
+		->handle($_SERVER["REQUEST_URI"])
 		->getContent();
 }
 catch (Throwable $t) {
