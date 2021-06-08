@@ -1,6 +1,8 @@
 <?php
 
-class GetController extends \Phalcon\Mvc\Controller
+use Phalcon\Mvc\Controller;
+
+class GetController extends Controller
 {
 	public function indexAction()
 	{

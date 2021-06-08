@@ -1,5 +1,7 @@
 <?php
 
+use MongoDB\BSON\UTCDateTime;
+
 class TweetsTask extends Cli
 {
 	public function mainAction()
@@ -25,9 +27,9 @@ class TweetsTask extends Cli
 
 	public function testAction()
 	{
-		$tweets = (new Resource\Tweets())->find([
+		$tweets = (new Resource\Tweets())->getClient()->find([
  			'entities.hashtags.0.text' => ['$gt' => ''],
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('10 seconds ago') * 1000)],
+			'created_at' => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
 
 		$t = 0;
@@ -42,8 +44,8 @@ class TweetsTask extends Cli
 
 	public function runningAction()
 	{
-		$t = (new Resource\Tweets())->count([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('10 seconds ago') * 1000)],
+		$t = (new Resource\Tweets())->getClient()->count([
+			'created_at' => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
 
 		self::println($t===0?0:1);

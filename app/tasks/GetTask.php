@@ -31,6 +31,15 @@ class GetTask extends Cli
 			)
 		);
 	}
+	public function hashtagsAllAction()
+	{
+		self::println(
+			json_encode(
+				Code\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats),
+				JSON_PRETTY_PRINT
+			)
+		);
+	}
 
 	public function textwordsAction()
 	{
@@ -44,8 +53,8 @@ class GetTask extends Cli
 
 	public function summaryAction()
 	{
-		$summary = Code\Summary::get($this->config->word_stats);
-		self::print(implode("\n\n", $summary));
+		$summary = Code\Summary::get();
+		self::println(implode("\n\n", $summary));
 	}
 
 	public function snapshotAction()

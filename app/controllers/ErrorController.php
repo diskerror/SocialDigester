@@ -1,6 +1,8 @@
 <?php
 
-class ErrorController extends \Phalcon\Mvc\Controller
+use Phalcon\Mvc\Controller;
+
+class ErrorController extends Controller
 {
 	public function indexAction()
 	{
