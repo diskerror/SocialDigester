@@ -40,7 +40,7 @@
 })(typeof window !== "undefined" ? window : this, function(window, noGlobal) {
 
 // Edge <= 12 - 13+, Firefox <=18 - 45+, IE 10 - 11, Safari 5.1 - 9+, iOS 6 - 9.1
-// throw exceptions when non-strict code (e.g., ASP.NET 4.5) accesses strict mode
+// throw exceptions when non-strict Code (e.g., ASP.NET 4.5) accesses strict mode
 // arguments.callee.caller (trac-13335). But as of jQuery 3.0 (2016), strict mode should be common
 // enough that all such attempts are guarded in a try block.
 	"use strict";
@@ -660,7 +660,7 @@
 							return "\uFFFD";
 						}
 
-						// Control characters and (dependent upon position) numbers get escaped as code points
+						// Control characters and (dependent upon position) numbers get escaped as Code points
 						return ch.slice(0, -1) + "\\" + ch.charCodeAt(ch.length - 1).toString(16) + " ";
 					}
 
@@ -4171,7 +4171,7 @@
 //	2. Improve the module's maintainability by reducing the storage
 //		paths to a single mechanism.
 //	3. Use the same single mechanism to support "private" and "user" data.
-//	4. _Never_ expose "private" data to user code (TODO: Drop _data, _removeData)
+//	4. _Never_ expose "private" data to user Code (TODO: Drop _data, _removeData)
 //	5. Avoid exposing implementation details on user objects (eg. expando properties)
 //	6. Provide a clear path for implementation upgrade to WeakMap in 2014
 
@@ -7735,7 +7735,7 @@
 // on the option
 // The getter ensures a default option is selected
 // when in an optgroup
-// eslint rule "no-unused-expressions" is disabled for this code
+// eslint rule "no-unused-expressions" is disabled for this Code
 // since it considers such accessions noop
 	if (!support.optSelected) {
 		jQuery.propHooks.selected = {
@@ -9459,7 +9459,7 @@
 
 	var xhrSuccessStatus = {
 
-			// File protocol always yields status code 0, assume 200
+			// File protocol always yields status Code 0, assume 200
 			0: 200,
 
 			// Support: IE <=9 only

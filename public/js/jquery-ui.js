@@ -94,7 +94,7 @@
 			}
 
 			// Allow instantiation without initializing for simple inheritance
-			// must use "new" keyword (the code above always passes args)
+			// must use "new" keyword (the Code above always passes args)
 			if (arguments.length) {
 				this._createWidget(options, element);
 			}

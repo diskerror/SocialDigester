@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains the common bootstrap code.
+ * This file contains the common bootstrap Code.
  */
 
 $di->setShared('config', function() {

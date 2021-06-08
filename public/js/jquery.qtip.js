@@ -2097,7 +2097,7 @@
 		});
 
 		/* Fire off 'removeqtip' handler in $.cleanData if jQuery UI not present (it already does similar).
-		 * This snippet is taken directly from jQuery UI source code found here:
+		 * This snippet is taken directly from jQuery UI source Code found here:
 		 *     http://code.jquery.com/ui/jquery-ui-git.js
 		 */
 		if (!$.ui) {
