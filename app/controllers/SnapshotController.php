@@ -21,7 +21,7 @@ class SnapshotController extends \Phalcon\Mvc\Controller
 		$this->view->setVar('created', $snapshot->created);
 		$this->view->setVar('track', $snapshot->track->toArray());
 		$this->view->setVar('tagCloud', $snapshot->tagCloud->toArray());
-		$this->view->setVar('Code\Summary', $snapshot->summary->toArray());
+		$this->view->setVar('Logic\Summary', $snapshot->summary->toArray());
 		$output = $this->view->render('index');
 
 		return $output;

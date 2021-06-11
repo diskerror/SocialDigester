@@ -1,6 +1,6 @@
 <?php
 
-namespace Code;
+namespace Logic;
 
 use Phalcon\Logger\Adapter\File;
 use Phalcon\Logger\Adapter\Stream;
