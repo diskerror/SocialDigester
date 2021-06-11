@@ -17,4 +17,4 @@ then
 fi
 
 sleep 1
-${DIR}/run tweets get &
+${DIR}/run tweets get > /dev/null 2>&1 &

@@ -15,27 +15,27 @@ class WebTask extends Cli
 
 	public function tagCloudAction()
 	{
-		print_r(Code\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats)->toArray());
+		print_r(Logic\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats)->toArray());
 	}
 
 	public function tagCloudAllAction()
 	{
-		print_r(Code\Tally\TagCloud::getAllHashtagsFromTallies($this->config->word_stats)->toArray());
+		print_r(Logic\Tally\TagCloud::getAllHashtagsFromTallies($this->config->word_stats)->toArray());
 	}
 
 	public function textWordsAction()
 	{
-		print_r(Code\Tally\TagCloud::getText($this->config->word_stats)->toArray());
+		print_r(Logic\Tally\TagCloud::getText($this->config->word_stats)->toArray());
 	}
 
 	public function userMentionsAction()
 	{
-		print_r(Code\Tally\TagCloud::getUserMentionsFromTallies($this->config->word_stats)->toArray());
+		print_r(Logic\Tally\TagCloud::getUserMentionsFromTallies($this->config->word_stats)->toArray());
 	}
 
 	public function summaryAction()
 	{
-		print_r(Code\Summary::get());
+		print_r(Logic\Summary::get());
 	}
 
 }

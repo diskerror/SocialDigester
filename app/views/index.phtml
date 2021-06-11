@@ -19,7 +19,7 @@
 	<?php $this->assets->outputJs() ?>
 	<?php if (isset($tagCloud)): ?>
 		<script>
-			tagCloud = <?= Zend\Json\Json::encode($tagCloud, false, ['enableJsonExprFinder' => true]) ?>;
+			tagCloud = <?= Laminas\Json\Json::encode($tagCloud, false, ['enableJsonExprFinder' => true]) ?>;
 		</script>
 	<?php endif; ?>
 </head>

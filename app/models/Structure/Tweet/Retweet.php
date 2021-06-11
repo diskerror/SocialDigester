@@ -6,7 +6,7 @@ use Diskerror\TypedBSON\TypedClass;
 
 class Retweet extends TypedClass
 {
-	protected $id = 0;
+	protected $id = '';
 
 	use TweetTrait;
 }

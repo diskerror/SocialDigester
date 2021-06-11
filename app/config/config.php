@@ -88,7 +88,7 @@ return [
 
 	'process' => [
 		'name'    => 'twitter_digester',
-		'path'    => '/var/run/twitter_digester',
+		'path'    => '/var/run/',
 		'procDir' => '/proc/'    //	location of actual PID
 	],
 
@@ -98,7 +98,7 @@ return [
 			'adapter'  => 'data',
 		],
 		'back'  => [
-			'cacheDir' => '/dev/shm/twitter_digester/',
+			'cacheDir' => '/run/shm/twitter_digester/',
 			'prefix'   => 'index',
 			'frontend' => null,
 			'adapter'  => 'file',
@@ -111,7 +111,7 @@ return [
 			'adapter'  => 'data',
 		],
 		'back'  => [
-			'cacheDir' => '/dev/shm/twitter_digester/',
+			'cacheDir' => '/run/shm/twitter_digester/',
 			'prefix'   => 'tag_cloud',
 			'frontend' => null,
 			'adapter'  => 'file',
@@ -124,7 +124,7 @@ return [
 			'adapter'  => 'data',
 		],
 		'back'  => [
-			'cacheDir' => '/dev/shm/twitter_digester/',
+			'cacheDir' => '/run/shm/twitter_digester/',
 			'prefix'   => 'summary',
 			'frontend' => null,
 			'adapter'  => 'file',

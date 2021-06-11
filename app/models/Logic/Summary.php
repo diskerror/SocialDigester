@@ -1,6 +1,6 @@
 <?php
 
-namespace Code;
+namespace Logic;
 
 use MongoDB\BSON\UTCDateTime;
 use PhpScience\TextRank\Tool\Graph;

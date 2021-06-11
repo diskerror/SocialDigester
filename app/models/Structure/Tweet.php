@@ -3,6 +3,7 @@
 namespace Structure;
 
 use Diskerror\TypedBSON\TypedClass;
+use Structure\Tweet\ExtendedTweet;
 use Structure\Tweet\TweetTrait;
 
 /**
@@ -33,14 +34,16 @@ use Structure\Tweet\TweetTrait;
 class Tweet extends TypedClass
 {
 	protected $_map = [
-		'id' => '_id',    //	from Twitter
+		'id_str' => '_id',    //	from Twitter
 	];
 	/**
-	 * Only this top level "id" is used for the MongoDb "_id" auto index.
+	 * Only this top level "id" is used for the MongoDb "_id" index.
 	 */
-	protected $_id              = 0;
+	protected $_id = '';
 //	protected $retweeted_status = [Retweet::class];
 
 	use TweetTrait;
+
+	protected $extended_tweet = [ExtendedTweet::class];
 
 }

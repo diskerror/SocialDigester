@@ -11,12 +11,12 @@ class TweetsTask extends Cli
 
 	public function getAction()
 	{
-		Code\ConsumeTweets::exec($this->config);
+		Logic\ConsumeTweets::exec($this->config);
 	}
 
 	public function stopAction()
 	{
-		$pidHandler = new Code\PidHandler($this->config->process);
+		$pidHandler = new Logic\PidHandler($this->config->process);
 		if ($pidHandler->removeIfExists()) {
 			self::println('Process was stopped.');
 		}

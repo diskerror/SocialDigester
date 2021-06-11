@@ -1,6 +1,6 @@
 <?php
 
-namespace Code;
+namespace Logic;
 
 use Exception;
 use Phalcon\Config;
@@ -33,15 +33,18 @@ class PidHandler
 
 	public function __destruct()
 	{
-//		if (file_exists($this->_fullProcessFileName)) {
-//			unlink($this->_fullProcessFileName);
-//		}
+		if (file_exists($this->_fullProcessFileName)) {
+			unlink($this->_fullProcessFileName);
+		}
 	}
 
-	public function setFile()
+	/**
+	 * @return boolean
+	 */
+	public function setFile(): bool
 	{
 		if (file_exists($this->_fullProcessFileName)) {
-			throw new Exception('process "' . $this->_fullProcessFileName . '" is already running or not stopped properly');
+			return false;
 		}
 
 		if (!file_exists($this->_basePath)) {
@@ -49,12 +52,13 @@ class PidHandler
 		}
 
 		file_put_contents($this->_fullProcessFileName, getmypid());
+		return true;
 	}
 
 	/**
 	 * @return boolean
 	 */
-	public function exists() : bool
+	public function exists(): bool
 	{
 		return file_exists($this->_fullProcessFileName);
 	}
@@ -62,7 +66,7 @@ class PidHandler
 	/**
 	 * @return boolean
 	 */
-	public function removeIfExists() : bool
+	public function removeIfExists(): bool
 	{
 		if (file_exists($this->_fullProcessFileName)) {
 			$running = file_exists($this->_procDir . file_get_contents($this->_fullProcessFileName));

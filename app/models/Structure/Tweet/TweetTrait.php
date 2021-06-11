@@ -2,9 +2,8 @@
 
 namespace Structure\Tweet;
 
-use Diskerror\Typed\DateTime;
-use Structure\NormalizeString;
-use Structure\Tweet\Entities\Entities;
+use Diskerror\Typed\Scalar\TStringNormalize;
+use Diskerror\TypedBSON\DateTime;
 
 /**
  * Trait TweetTrait
@@ -61,7 +60,7 @@ trait TweetTrait
 
 //	protected $source                    = '';
 
-	protected $text                      = [NormalizeString::class];
+	protected $text                      = [TStringNormalize::class];
 
 //	protected $truncated                 = false;
 

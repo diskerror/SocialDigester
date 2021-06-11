@@ -18,7 +18,7 @@ class IndexController extends Controller
 //		if ($output === null) {
 			$this->assets->addJs('js/clouds.js');
 
-			$this->view->setVar('track', (array)$this->config->twitter->track);
+			$this->view->setVar('track', $this->config->twitter->track->toArray());
 
 			$output = $this->view->render('index');
 //			$cache->save('', $output);
@@ -36,7 +36,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Code\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats);
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -54,7 +54,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Code\Tally\TagCloud::getAllHashtagsFromTallies($this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getAllHashtagsFromTallies($this->config->word_stats);
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -72,7 +72,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Code\Tally\TagCloud::getText($this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getText($this->config->word_stats);
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -90,7 +90,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Code\Tally\TagCloud::getUserMentionsFromTallies($this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getUserMentionsFromTallies($this->config->word_stats);
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -108,7 +108,7 @@ class IndexController extends Controller
 		$output = $cache->get('');
 
 		if ($output === null) {
-			$obj = Code\Summary::get();
+			$obj = Logic\Summary::get();
 			$this->view->setVar('obj', $obj);
 			$output = $this->view->render('js');
 			$cache->save('', $output);

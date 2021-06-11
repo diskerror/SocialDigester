@@ -18,7 +18,7 @@ class AdminTask extends Cli
 		self::println(json_encode($this->config, JSON_PRETTY_PRINT));
 	}
 
-	public function indexAction()
+	public function indexDbAction()
 	{
 		//	These only needs to be run on a new collection.
 		(new Resource\Tweets())->doIndex($this->config->tweets_expire);

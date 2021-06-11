@@ -4,14 +4,14 @@ namespace Structure\Tweet\Entities;
 
 use Diskerror\TypedBSON\TypedClass;
 
-class UserMentions extends TypedClass
+class UserMention extends TypedClass
 {
-	protected $id          = '';
+//	protected $id      = '';
 
 	protected $screen_name = '';
 
 //	protected $name        = '';
 
-//	protected $indices     = [TypedArray::class, 'int'];
+//	protected $indices     = [TypedArray::class, 0];
 
 }

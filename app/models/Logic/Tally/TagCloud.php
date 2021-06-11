@@ -1,6 +1,6 @@
 <?php
 
-namespace Code\Tally;
+namespace Logic\Tally;
 
 use Diskerror\Typed\TypedArray;
 use Ds\Set;

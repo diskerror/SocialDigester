@@ -2,7 +2,7 @@
 
 namespace Structure;
 
-use Diskerror\Typed\DateTime;
+use Diskerror\TypedBSON\DateTime;
 use Diskerror\TypedBSON\TypedArray;
 use Diskerror\TypedBSON\TypedClass;
 use Structure\TagCloud\Word;

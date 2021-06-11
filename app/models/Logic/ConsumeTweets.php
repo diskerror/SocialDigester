@@ -1,7 +1,8 @@
 <?php
 
-namespace Code;
+namespace Logic;
 
+use Diskerror\Typed\ArrayOptions as AO;
 use Ds\Set;
 use Exception;
 use MongoDB\BSON\UTCDateTime;
@@ -13,10 +14,6 @@ use Resource\Tweets;
 use Resource\TwitterClient\Stream;
 use Structure\TallySet;
 use Structure\Tweet;
-use function str_split;
-use function var_dump;
-use function var_export;
-use const PHP_EOL;
 
 final class ConsumeTweets
 {
@@ -37,8 +34,8 @@ final class ConsumeTweets
 
 		$pidHandler = new PidHandler($config->process);
 
-//		$logger = LoggerFactory::getFileLogger(APP_PATH . '/' . $config->process->name . '.log');
-		$logger = LoggerFactory::getStreamLogger();
+//		$logger = new LoggerFactory(APP_PATH . '/' . $config->process->name . '.log');
+		$logger = new LoggerFactory('php://stderr');
 
 //		$sh = new StemHandler();
 
@@ -57,18 +54,23 @@ final class ConsumeTweets
 			]);
 
 			//	Set PID file to indicate whether we should keep running.
-			$pidHandler->setFile();
+			if ($pidHandler->setFile() === false) {
+				$logger->error('Process "' . $config->process->path . $config->process->name . '" is already running or not stopped properly');
+				return;
+			}
 
 			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
 			$stopWords = $config->word_stats->stop->toArray();
 
 			//	Announce that we're running.
-//			$logger->info('Started capturing tweets.');
-			echo 'Started capturing tweets.' . PHP_EOL;	//	TODO: fix
+			$logger->info('Started capturing tweets.');
 
 			$tweet    = new Tweet();
+			$tweet->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::NO_CAST_BSON | AO::CAST_DATETIME_TO_BSON);
+
 			$tallySet = new TallySet();
+
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets = [];
 				$tallySet->assign(null);
@@ -84,7 +86,7 @@ final class ConsumeTweets
 
 					//	Ignore bad data.
 					if (!is_array($packet)) {
-						$logger->info('bad packet');
+//						$logger->info('bad packet');
 						continue;
 					}
 
@@ -94,7 +96,7 @@ final class ConsumeTweets
 						continue;
 					}
 
-					//	Filter. Use only part of returned structure.
+					//	Filter. Tweet structure accepts only part of the packet.
 					$tweet->assign($packet);
 
 					//	If tweet is not in english then skip it.
@@ -107,10 +109,10 @@ final class ConsumeTweets
 					$uniqueWords = new Set();
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
-						$text = str_split($hashtag->text);
-						foreach ($text as $t) {
+						$htext = str_split($hashtag->text);
+						foreach ($htext as $t) {
 							if ($t & chr(0x80)) {
-								continue 2;	//	skip hashtag if it contains a non-ASCII byte
+								continue 2;    //	skip hashtag if it contains a non-ASCII byte
 							}
 						}
 						$uniqueWords->add($hashtag->text);
@@ -123,8 +125,11 @@ final class ConsumeTweets
 					}
 
 					//	Tally the words in the text.
-					$text  = preg_replace('#https?:[^ ]+#', ' ', $tweet->text);
-					$split = preg_split('/[^a-zA-Z0-9\']/', $text, null, PREG_SPLIT_NO_EMPTY);
+					$text = strlen($tweet->extended_tweet->full_text) > strlen($tweet->text) ?
+						$tweet->extended_tweet->full_text : $tweet->text;
+
+					$text  = preg_replace('#https?://[^ ]+#', '', $text);
+					$split = preg_split('/[^a-zA-Z0-9_\']/', $text, null, PREG_SPLIT_NO_EMPTY);
 					foreach ($split as $s) {
 						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords, true)) {
 							$tallySet->textWords->doTally($s);
@@ -154,37 +159,33 @@ final class ConsumeTweets
 //				}
 //				$tweet->pairs[] = $last;
 
-					$tweets[] = $tweet; //->toArray();
+					$tweets[] = $tweet->toArray();
 				}
 
 				try {
 					//	convert to Mongo compatible object and insert
 					$tweetsClient->insertMany($tweets, $insertOptions);
-					$talliesClient->insertOne($tallySet/*->toArray()*/, $insertOptions);
+					$talliesClient->insertOne($tallySet->toArray(), $insertOptions);
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();
 
 					if (preg_match('/Authentication/i', $m)) {
-//						$logger->emergency('Mongo ' . $m);
-						echo 'Mongo emergency ' . $m . PHP_EOL; //	TODO: fix this
+						$logger->emergency('Mongo ' . $m);
 					}
 					else {
 						//	ignore duplicates
 						if (!preg_match('/duplicate.*key/i', $m)) {
-//							$logger->warning('Mongo ' . $m);
-							echo 'Mongo warning ' . $m . PHP_EOL; //	TODO: fix this
+							$logger->warning('Mongo ' . $m);
 						}
 					}
 				}
 			}
 
-//			$logger->info('Stopped capturing tweets.');
-			echo 'Stopped capturing tweets.' . PHP_EOL; //	TODO: fix this
+			$logger->info('Stopped capturing tweets.');
 		}
 		catch (\Exception $e) {
-//			$logger->emergency((string)$e);
-			echo (string)$e . PHP_EOL; //	TODO: fix this
+			$logger->emergency((string) $e);
 		}
 
 		$pidHandler->removeIfExists();

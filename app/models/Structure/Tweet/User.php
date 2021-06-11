@@ -2,13 +2,13 @@
 
 namespace Structure\Tweet;
 
-use Diskerror\Typed\DateTime;
+use Diskerror\Typed\Scalar\TStringNormalize;
+use Diskerror\TypedBSON\DateTime;
 use Diskerror\TypedBSON\TypedClass;
-use Structure\NormalizeString;
 
 class User extends TypedClass
 {
-	protected $id                   = 0;
+	protected $id                   = '';
 
 	protected $name                 = '';
 
@@ -20,7 +20,7 @@ class User extends TypedClass
 
 	protected $created_at           = [DateTime::class];
 
-	protected $description          = [NormalizeString::class];
+	protected $description          = [TStringNormalize::class];
 
 	protected $favourites_count     = 0;
 

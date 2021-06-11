@@ -5,7 +5,7 @@ namespace Structure\Tweet\Entities;
 use Diskerror\TypedBSON\TypedArray;
 use Diskerror\TypedBSON\TypedClass;
 
-class Urls extends TypedClass
+class Url extends TypedClass
 {
 	protected $url          = '';
 

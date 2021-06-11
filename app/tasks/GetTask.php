@@ -26,7 +26,7 @@ class GetTask extends Cli
 	{
 		self::println(
 			json_encode(
-				array_slice(Code\Tally\TopList::getHashtags($this->config->word_stats), 0, 25),
+				array_slice(Logic\Tally\TopList::getHashtags($this->config->word_stats), 0, 25),
 				JSON_PRETTY_PRINT
 			)
 		);
@@ -35,7 +35,7 @@ class GetTask extends Cli
 	{
 		self::println(
 			json_encode(
-				Code\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats),
+				Logic\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats),
 				JSON_PRETTY_PRINT
 			)
 		);
@@ -45,7 +45,7 @@ class GetTask extends Cli
 	{
 		self::println(
 			json_encode(
-				array_slice(Code\Tally\TopList::getText($this->config->word_stats)->toArray(), 0, 25),
+				array_slice(Logic\Tally\TopList::getText($this->config->word_stats)->toArray(), 0, 25),
 				JSON_PRETTY_PRINT
 			)
 		);
@@ -53,12 +53,12 @@ class GetTask extends Cli
 
 	public function summaryAction()
 	{
-		$summary = Code\Summary::get();
+		$summary = Logic\Summary::get();
 		self::println(implode("\n\n", $summary));
 	}
 
 	public function snapshotAction()
 	{
-		self::println(Code\Snapshots::make($this->config));
+		self::println(Logic\Snapshots::make($this->config));
 	}
 }

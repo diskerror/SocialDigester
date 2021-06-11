@@ -2,11 +2,12 @@
 
 namespace Structure\Tweet\Entities;
 
+use Diskerror\Typed\Scalar\TStringNormalize;
 use Diskerror\TypedBSON\TypedClass;
 
-class Hashtags extends TypedClass
+class Hashtag extends TypedClass
 {
-	protected $text    = '';
+	protected $text    = [TStringNormalize::class];
 
 //	protected $indices = [TypedArray::class, 'int'];
 }
