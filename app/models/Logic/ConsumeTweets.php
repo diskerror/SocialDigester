@@ -14,6 +14,7 @@ use Resource\Tweets;
 use Resource\TwitterClient\Stream;
 use Structure\TallySet;
 use Structure\Tweet;
+use const PHP_EOL;
 
 final class ConsumeTweets
 {
@@ -109,12 +110,13 @@ final class ConsumeTweets
 					$uniqueWords = new Set();
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
-						$htext = str_split($hashtag->text);
-						foreach ($htext as $t) {
-							if ($t & chr(0x80)) {
-								continue 2;    //	skip hashtag if it contains a non-ASCII byte
-							}
-						}
+//						$htext = str_split($hashtag->text);
+//						foreach ($htext as $t) {
+//							if ($t & chr(0x80)) {
+//								continue 2;    //	skip hashtag if it contains a non-ASCII byte
+//							}
+//						}
+						echo $hashtag->text, PHP_EOL;
 						$uniqueWords->add($hashtag->text);
 						$tallySet->allHashtags->doTally($hashtag->text);
 					}

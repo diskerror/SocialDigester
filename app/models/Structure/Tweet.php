@@ -30,6 +30,7 @@ use Structure\Tweet\TweetTrait;
  * @property $truncated
  * @property $user
  * @property $retweeted_status
+ * @property $extended_tweet
  */
 class Tweet extends TypedClass
 {

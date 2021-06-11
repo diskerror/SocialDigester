@@ -7,10 +7,10 @@ class AdminTask extends Cli
 	public function rateAction()
 	{
 		$t = (new Resource\Tweets())->count([
-			'created_at' => ['$gt' => new UTCDateTime(strtotime('60 seconds ago') * 1000)],
+			'created_at' => ['$gt' => new UTCDateTime(strtotime('20 seconds ago') * 1000)],
 		]);
 
-		fprintf(STDOUT, "Tweets are being received at a rate of %.2f per second.\n", $t/60.0);
+		fprintf(STDOUT, "Tweets are being received at a rate of %.2f per second.\n", $t/20.0);
 	}
 
 	public function showConfigAction()
