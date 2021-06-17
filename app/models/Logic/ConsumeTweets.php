@@ -3,7 +3,7 @@
 namespace Logic;
 
 use Diskerror\Typed\ArrayOptions as AO;
-use Ds\Set;
+use Ds\Set as DsSet;
 use Exception;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
@@ -12,9 +12,9 @@ use Resource\Messages;
 use Resource\Tallies;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
-use Structure\TallySet;
+use Structure\Tally;
 use Structure\Tweet;
-use const PHP_EOL;
+use function jsonPrint;
 
 final class ConsumeTweets
 {
@@ -67,14 +67,14 @@ final class ConsumeTweets
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
-			$tweet    = new Tweet();
-			$tweet->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::NO_CAST_BSON | AO::CAST_DATETIME_TO_BSON);
+			$tweet = new Tweet();
+			$tweet->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::NO_CAST_BSON | AO::CAST_DATETIME_TO_BSON | AO::CAST_ID_TO_OBJECTID);
 
-			$tallySet = new TallySet();
+			$tally = new Tally();
 
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets = [];
-				$tallySet->assign(null);
+				$tally->assign(null);
 				for ($i = 0; $i < self::INSERT_COUNT; ++$i) {
 					//	get tweet
 					try {
@@ -92,7 +92,7 @@ final class ConsumeTweets
 					}
 
 					if ($stream::isMessage($packet)) {
-						$packet['created'] = new UTCDateTime();
+						$packet['created'] = new UTCDateTime(time() * 1000);
 						$messagesClient->insertOne($packet);
 						continue;
 					}
@@ -102,12 +102,22 @@ final class ConsumeTweets
 
 					//	If tweet is not in english then skip it.
 					if ($tweet->lang !== 'en') {
-						$logger->info('lang not en');
+//						$logger->info('lang not en');
 						continue;
 					}
 
-					//	Pre calculate tallySet for INSERT_COUNT of tweets.
-					$uniqueWords = new Set();
+					// Check for and use extended tweet if it exists.
+					if (strlen($tweet->extended_tweet->full_text) > strlen($tweet->text)) {
+						$tweet->text                      = $tweet->extended_tweet->full_text;
+						$tweet->extended_tweet->full_text = '';
+
+						$tweet->entities = $tweet->extended_tweet->entities;
+						unset($tweet->extended_tweet->entities);
+					}
+
+					//	Pre calculate tally for INSERT_COUNT of tweets.
+					$hashtagSet = new DsSet();
+
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
 //						$htext = str_split($hashtag->text);
@@ -116,50 +126,48 @@ final class ConsumeTweets
 //								continue 2;    //	skip hashtag if it contains a non-ASCII byte
 //							}
 //						}
-						echo $hashtag->text, PHP_EOL;
-						$uniqueWords->add($hashtag->text);
-						$tallySet->allHashtags->doTally($hashtag->text);
+
+						$hashtagSet->add($hashtag->text);
+						$tally->allHashtags->doTally($hashtag->text);
 					}
 
 					//	Count unique hashtags for this tweet.
-					foreach ($uniqueWords as $uniqueWord) {
-						$tallySet->uniqueHashtags->doTally($uniqueWord);
+					foreach ($hashtagSet->toArray() as $uniqueHashtag) {
+						$tally->uniqueHashtags->doTally($uniqueHashtag);
 					}
 
-					//	Tally the words in the text.
-					$text = strlen($tweet->extended_tweet->full_text) > strlen($tweet->text) ?
-						$tweet->extended_tweet->full_text : $tweet->text;
+					//	remove URLs from text
+//					$text  = preg_replace('#https?://[^ ]+#', '', $tweet->text);
+					$text  = preg_replace('#https?://#', '', $tweet->text);
 
-					$text  = preg_replace('#https?://[^ ]+#', '', $text);
+					//	Tally the words in the text.
 					$split = preg_split('/[^a-zA-Z0-9_\']/', $text, null, PREG_SPLIT_NO_EMPTY);
 					foreach ($split as $s) {
 						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords, true)) {
-							$tallySet->textWords->doTally($s);
+							$tally->textWords->doTally($s);
 						}
 					}
 
 					//	Tally user mentions.
 					foreach ($tweet->entities->user_mentions as $userMention) {
-						$tallySet->userMentions->doTally($userMention->screen_name);
+						$tally->userMentions->doTally($userMention->screen_name);
 					}
 
-					//	remove URLs from text
-//				$text  = preg_replace('#https?:[^ ]+#', '', $tweet->text);
-//				$words = [];
+//					$words = [];
 //
-//				//	build the two stem lists
-//				$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
-//				foreach ($split as $s) {
-//					$words[] = $sh->get($s);
-//				}
+//					//	build the two stem lists
+//					$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
+//					foreach ($split as $s) {
+//						$words[] = $sh->get($s);
+//					}
 //
-//				//	build stem pairs
-//				$last = '';
-//				foreach ($tweet->words as $w) {
-//					$tweet->pairs[] = $last . $w;
-//					$last           = $w;
-//				}
-//				$tweet->pairs[] = $last;
+//					//	build stem pairs
+//					$last = '';
+//					foreach ($tweet->words as $w) {
+//						$tweet->pairs[] = $last . $w;
+//						$last           = $w;
+//					}
+//					$tweet->pairs[] = $last;
 
 					$tweets[] = $tweet->toArray();
 				}
@@ -167,7 +175,7 @@ final class ConsumeTweets
 				try {
 					//	convert to Mongo compatible object and insert
 					$tweetsClient->insertMany($tweets, $insertOptions);
-					$talliesClient->insertOne($tallySet->toArray(), $insertOptions);
+					$talliesClient->insertOne($tally->toArray(), $insertOptions);
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();
@@ -186,7 +194,7 @@ final class ConsumeTweets
 
 			$logger->info('Stopped capturing tweets.');
 		}
-		catch (\Exception $e) {
+		catch (Exception $e) {
 			$logger->emergency((string) $e);
 		}
 

@@ -2,12 +2,12 @@
 
 namespace Resource;
 
-use Structure\TallySet;
+use Structure\Tally;
 
 class Tallies extends MongoCollection
 {
 	protected $_collection = 'tallies';
-	protected $_class      = TallySet::class;
+	protected $_class      = Tally::class;
 
 	public function doIndex(int $expire = 0)
 	{

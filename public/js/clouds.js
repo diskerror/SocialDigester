@@ -5,7 +5,11 @@ $(function() {
 		delay: 0
 	};
 
-	var doRun = false;
+	setTimeout(getHashtags, 1400);
+	setTimeout(getAllHashtags, 1600);
+	setTimeout(getTextWords, 1800);
+	setTimeout(getUserMentions, 2000);
+	setTimeout(getSummary, 2600);
 
 	$('#cloud1').jQCloud(
 		[
@@ -25,12 +29,8 @@ $(function() {
 		],
 		cloudOptions);
 
-	(function getHashtags() {
-		if (!doRun) {
-			doRun = true;
-			setTimeout(getHashtags, 1700);
-			return;
-		}
+	function getHashtags() {
+		setTimeout(getHashtags, 3400);	//	milliseconds between cloud updates
 
 		// (function(i, s, o, g, r, a, m) {
 		// 	i['GoogleAnalyticsObject'] = r;
@@ -60,21 +60,13 @@ $(function() {
 					]);
 				}
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
-			},
-			complete: function() {
-				setTimeout(getHashtags, 3400);	//	milliseconds between cloud updates
 			}
 		});
-	})();
+	};
 
 
-	(function getAllHashtags() {
-		if (!doRun) {
-			doRun = true;
-			setTimeout(getAllHashtags, 1900);
-			return;
-		}
-
+	function getAllHashtags() {
+		setTimeout(getAllHashtags, 3500);	//	milliseconds between cloud updates
 
 		$.ajax({
 			url: '/index/tagcloudall',
@@ -90,22 +82,13 @@ $(function() {
 					]);
 				}
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
-			},
-			complete: function() {
-				setTimeout(getAllHashtags, 3500);	//	milliseconds between cloud updates
 			}
 		});
-	})();
+	};
 
 
-	(function getTextWords() {
-		if (!doRun) {
-			doRun = true;
-			setTimeout(getTextWords, 1900);
-			return;
-		}
-
-
+	function getTextWords() {
+		setTimeout(getTextWords, 2300);	//	milliseconds between cloud updates
 		$.ajax({
 			url: '/index/textwords',
 			dataType: 'json',
@@ -120,21 +103,13 @@ $(function() {
 					]);
 				}
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
-			},
-			complete: function() {
-				setTimeout(getTextWords, 2300);	//	milliseconds between cloud updates
 			}
 		});
-	})();
+	};
 
 
-	(function getUserMentions() {
-		if (!doRun) {
-			doRun = true;
-			setTimeout(getUserMentions, 2000);
-			return;
-		}
-
+	function getUserMentions() {
+		setTimeout(getUserMentions, 4300);	//	milliseconds between cloud updates
 
 		$.ajax({
 			url: '/index/usermentions',
@@ -150,31 +125,22 @@ $(function() {
 					]);
 				}
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
-			},
-			complete: function() {
-				setTimeout(getUserMentions, 4300);	//	milliseconds between cloud updates
 			}
 		});
-	})();
+	};
 
 
-	(function getSummary() {
-		if (!doRun) {
-			setTimeout(getSummary, 3000);
-			return;
-		}
+	function getSummary() {
+		setTimeout(getSummary, 11000);
 
 		$.ajax({
 			url: '/index/summary',
 			dataType: 'json',
 			success: function(data) {
 				$('#text1').html('<p>' + data.join('</p><p>') + '</p>');
-			},
-			complete: function() {
-				setTimeout(getSummary, 11000);	//	milliseconds between text updates
 			}
 		});
-	})();
+	};
 
 });
 

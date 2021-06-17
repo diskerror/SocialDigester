@@ -16,7 +16,7 @@ use Diskerror\TypedBSON\TypedClass;
  * @property TallyWords $textWords
  * @property TallyWords $userMentions
  */
-class TallySet extends TypedClass
+class Tally extends TypedClass
 {
 	protected $created = [DateTime::class];
 

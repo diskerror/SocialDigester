@@ -2,6 +2,7 @@
 
 namespace Logic;
 
+use Ds\Vector;
 use MongoDB\BSON\UTCDateTime;
 use PhpScience\TextRank\Tool\Graph;
 use PhpScience\TextRank\Tool\Parser;
@@ -12,6 +13,9 @@ use Resource\Tweets;
 
 final class Summary
 {
+	private const HISTORY_WINDOW = '90';
+	private const RETURN_COUNT = 3;
+
 	private function __construct() { }
 
 	/**
@@ -26,7 +30,7 @@ final class Summary
 		$tweets = (new Tweets())->getClient()->find(
 			[
 				'created_at' =>
-					['$gt' => new UTCDateTime(strtotime('180 seconds ago') * 1000)],
+					['$gt' => new UTCDateTime(strtotime(self::HISTORY_WINDOW . ' seconds ago') * 1000)],
 			],
 			[
 				'sort'       => [
@@ -50,7 +54,7 @@ final class Summary
 		}
 
 		$parser = new Parser();
-		$parser->setMinimumWordLength(2);
+		$parser->setMinimumWordLength(3);
 		$parser->setRawText($text);
 		$parser->setStopWords(new English());
 
@@ -61,20 +65,25 @@ final class Summary
 
 		$scores = (new Score())->calculate($graph, $text);
 
-		$summaries = (new Summarize())->getSummarize(
+		$summaries = new Vector();
+
+		$summaries->push(...(new Summarize())->getSummarize(
 			$scores,
 			$graph,
 			$text,
-			10,
-			100,
+			16,	//	how many words to test
+			64,	//	size of array to return
 			Summarize::GET_ALL_IMPORTANT
-		);
+		));
 
+		$summary = '';
 		$subSummaries = [];
 		$summaryCount = 0;
 		$outputArr    = [];
-		foreach ($summaries as $summary) {
-			$sub = substr($summary, 10, 30);
+		while (!$summaries->isEmpty()) {
+			//	remove leading "@user: " if any
+			$summary = preg_replace('/^@\w+: /', '', $summaries->pop());
+			$sub = substr($summary, 0, 64);
 			if (in_array($sub, $subSummaries, true)) {
 				continue;
 			}
@@ -82,7 +91,7 @@ final class Summary
 			$subSummaries[] = $sub;
 			$outputArr[]    = $summary;
 
-			if (++$summaryCount >= 3) {
+			if (++$summaryCount >= self::RETURN_COUNT) {
 				break;
 			}
 		}

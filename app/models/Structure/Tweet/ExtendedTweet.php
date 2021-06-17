@@ -28,7 +28,7 @@ class ExtendedTweet extends TypedClass
 	/**
 	 * @var array
 	 */
-	protected $display_text_range = [TypedArray::class, TIntegerUnsigned::class];
+//	protected $display_text_range = [TypedArray::class, TIntegerUnsigned::class];
 
 	/**
 	 * @var Entities

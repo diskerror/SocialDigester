@@ -101,18 +101,18 @@ class IndexController extends Controller
 
 	public function summaryAction()
 	{
-		$cacheConfig                 = $this->config->summary_cache;
-		$cacheConfig->back->frontend = FFactory::load($cacheConfig->front);
-		$cache                       = BFactory::load($cacheConfig->back);
-
-		$output = $cache->get('');
-
-		if ($output === null) {
+//		$cacheConfig                 = $this->config->summary_cache;
+//		$cacheConfig->back->frontend = FFactory::load($cacheConfig->front);
+//		$cache                       = BFactory::load($cacheConfig->back);
+//
+//		$output = $cache->get('');
+//
+//		if ($output === null) {
 			$obj = Logic\Summary::get();
 			$this->view->setVar('obj', $obj);
 			$output = $this->view->render('js');
-			$cache->save('', $output);
-		}
+//			$cache->save('', $output);
+//		}
 
 		return $output;
 	}

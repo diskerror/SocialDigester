@@ -53,8 +53,10 @@ class GetTask extends Cli
 
 	public function summaryAction()
 	{
+		self::println('');
 		$summary = Logic\Summary::get();
 		self::println(implode("\n\n", $summary));
+		self::println('');
 	}
 
 	public function snapshotAction()
