@@ -7,7 +7,7 @@ class TweetsTask extends TaskMaster
 {
 	public function getAction()
 	{
-		Code\ConsumeTweets::exec(
+		Logic\ConsumeTweets::exec(
 			$this->stream,
 			$this->config->track->toArray(),
 			$this->pidHandler,

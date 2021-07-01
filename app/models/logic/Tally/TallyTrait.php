@@ -1,6 +1,6 @@
 <?php
 
-namespace Code\Tally;
+namespace Logic\Tally;
 
 use MongoDB\BSON\UTCDateTime;
 

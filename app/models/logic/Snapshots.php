@@ -1,8 +1,8 @@
 <?php
 
-namespace Code;
+namespace Logic;
 
-use Code\Tally\TagCloud;
+use Logic\Tally\TagCloud;
 use Resource\MongoCollectionManager;
 use Structure\Config;
 use Structure\Snapshot;

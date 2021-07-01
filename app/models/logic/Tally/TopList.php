@@ -6,9 +6,9 @@
  * Time: 2:22 PM
  */
 
-namespace Code\Tally;
+namespace Logic\Tally;
 
-use Code\TallyWords;
+use Logic\TallyWords;
 use Resource\MongoCollectionManager;
 use Structure\Config\WordStats;
 use function strtolower;

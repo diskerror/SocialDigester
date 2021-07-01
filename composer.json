@@ -27,7 +27,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Code\\": "app/models/code/",
+			"Logic\\": "app/models/logic/",
 			"Service\\": "app/models/service",
 			"Resource\\": "app/models/resource/",
 			"Structure\\": "app/models/struct/"

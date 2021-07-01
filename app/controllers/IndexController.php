@@ -34,7 +34,7 @@ var_dump($this->config);die;
 		$output = $cache->get('');
 
 		if ($output === null) {
-			$obj = Code\Tally\TagCloud::getHashtags($this->mongodb, $this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getHashtags($this->mongodb, $this->config->word_stats);
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 			$cache->save('', $output);
@@ -52,7 +52,7 @@ var_dump($this->config);die;
 		$output = $cache->get('');
 
 		if ($output === null) {
-			$obj = Code\Summary::get($this->mongodb, $this->config->word_stats);
+			$obj = Logic\Summary::get($this->mongodb, $this->config->word_stats);
 			$this->view->setVar('obj', $obj);
 			$output = $this->view->render('js');
 			$cache->save('', $output);

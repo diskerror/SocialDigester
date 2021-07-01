@@ -6,9 +6,9 @@
  * Time: 1:00 PM
  */
 
-namespace Code\Tally;
+namespace Logic\Tally;
 
-use Code\TallyWords;
+use Logic\TallyWords;
 use Diskerror\Typed\TypedArray;
 use Ds\Set;
 use Resource\MongoCollectionManager;

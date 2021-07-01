@@ -1,6 +1,6 @@
 <?php
 
-namespace Code;
+namespace Logic;
 
 use PhpScience\TextRank\Tool\Graph;
 use PhpScience\TextRank\Tool\Parser;
