@@ -1,6 +1,7 @@
 <?php
 
 
+use Logic\ConfigFactory;
 use Phalcon\Cache\Backend\Factory as BFactory;
 use Phalcon\Cache\Frontend\Factory as FFactory;
 use Phalcon\Mvc\Controller;
@@ -17,9 +18,7 @@ class IndexController extends Controller
 //
 //		if ($output === null) {
 			$this->assets->addJs('js/clouds.js');
-
-			$this->view->setVar('track', $this->config->twitter->track->toArray());
-
+			$this->view->setVar('track', ConfigFactory::get()->twitter->track->toArray());
 			$output = $this->view->render('index');
 //			$cache->save('', $output);
 //		}
@@ -36,7 +35,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Logic\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getHashtagsFromTallies(ConfigFactory::get());
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -54,7 +53,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Logic\Tally\TagCloud::getAllHashtagsFromTallies($this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getAllHashtagsFromTallies(ConfigFactory::get());
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -72,7 +71,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Logic\Tally\TagCloud::getText($this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getText(ConfigFactory::get());
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -90,7 +89,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Logic\Tally\TagCloud::getUserMentionsFromTallies($this->config->word_stats);
+			$obj = Logic\Tally\TagCloud::getUserMentionsFromTallies(ConfigFactory::get());
 			$this->view->setVar('obj', $obj->toArray());
 			$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -108,7 +107,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-			$obj = Logic\Summary::get();
+			$obj = Logic\Summary::get(ConfigFactory::get()->mongo_db);
 			$this->view->setVar('obj', $obj);
 			$output = $this->view->render('js');
 //			$cache->save('', $output);

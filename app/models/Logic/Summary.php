@@ -10,6 +10,7 @@ use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
 use Resource\Tweets;
+use Structure\Config\Mongo;
 
 final class Summary
 {
@@ -21,13 +22,15 @@ final class Summary
 	/**
 	 * Generate summary of tweet texts.
 	 *
+	 * @param Mongo $mongoConfig
+	 *
 	 * @return array
 	 */
-	public static function get(): array
+	public static function get(Mongo $mongoConfig): array
 	{
 		ini_set('memory_limit', 512 * 1024 * 1024);
 
-		$tweets = (new Tweets())->getClient()->find(
+		$tweets = (new Tweets($mongoConfig))->find(
 			[
 				'created_at' =>
 					['$gt' => new UTCDateTime(strtotime(self::HISTORY_WINDOW . ' seconds ago') * 1000)],

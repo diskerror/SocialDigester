@@ -24,7 +24,7 @@ final class Snapshots
 			'tagCloud' => Tally\TagCloud::getHashtags($config->word_stats),
 			'summary'  => Summary::get($config->word_stats),
 		]);
-		(new \Resource\Snapshots())->getClient()->insertOne($snap);
+		(new \Resource\Snapshots($config->mongo_db))->insertOne($snap);
 		return $snap->id_;
 	}
 }

@@ -3,6 +3,7 @@
 namespace Resource\TwitterClient;
 
 use Phalcon\Config;
+use Structure\Config\TwitterAuth;
 
 abstract class ClientAbstract
 {
@@ -22,7 +23,12 @@ abstract class ClientAbstract
 	protected $_baseURL;
 
 
-	public function __construct(Config $auth)
+	/**
+	 * ClientAbstract constructor.
+	 *
+	 * @param TwitterAuth $auth
+	 */
+	public function __construct(TwitterAuth $auth)
 	{
 		$this->_auth = $auth;
 		$this->_baseURL = 'https://stream.twitter.com/1.1/';

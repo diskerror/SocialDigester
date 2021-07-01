@@ -1,4 +1,7 @@
 <?php
+
+use Logic\ConfigFactory;
+
 /**
  * Class WebTask
  *
@@ -15,27 +18,27 @@ class WebTask extends Cli
 
 	public function tagCloudAction()
 	{
-		print_r(Logic\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats)->toArray());
+		print_r(Logic\Tally\TagCloud::getHashtagsFromTallies(ConfigFactory::get())->toArray());
 	}
 
 	public function tagCloudAllAction()
 	{
-		print_r(Logic\Tally\TagCloud::getAllHashtagsFromTallies($this->config->word_stats)->toArray());
+		print_r(Logic\Tally\TagCloud::getAllHashtagsFromTallies(ConfigFactory::get())->toArray());
 	}
 
 	public function textWordsAction()
 	{
-		print_r(Logic\Tally\TagCloud::getText($this->config->word_stats)->toArray());
+		print_r(Logic\Tally\TagCloud::getText(ConfigFactory::get())->toArray());
 	}
 
 	public function userMentionsAction()
 	{
-		print_r(Logic\Tally\TagCloud::getUserMentionsFromTallies($this->config->word_stats)->toArray());
+		print_r(Logic\Tally\TagCloud::getUserMentionsFromTallies(ConfigFactory::get())->toArray());
 	}
 
 	public function summaryAction()
 	{
-		print_r(Logic\Summary::get());
+		print_r(Logic\Summary::get(ConfigFactory::get()->mongo_db));
 	}
 
 }

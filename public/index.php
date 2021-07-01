@@ -33,8 +33,6 @@ try {
 
 	$di = new FactoryDefault();
 
-	require APP_PATH . '/DiCommon.inc';
-
 	$di->setShared('view', function() {
 		static $view;
 		if (!isset($view)) {

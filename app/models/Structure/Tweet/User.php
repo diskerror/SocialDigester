@@ -3,7 +3,6 @@
 namespace Structure\Tweet;
 
 use Diskerror\Typed\Scalar\TStringNormalize;
-use Diskerror\TypedBSON\DateTime;
 use Diskerror\TypedBSON\TypedClass;
 
 class User extends TypedClass
@@ -18,7 +17,7 @@ class User extends TypedClass
 
 	protected $contributors_enabled = false;
 
-	protected $created_at           = [DateTime::class];
+	protected $created_at           = [Created::class];
 
 	protected $description          = [TStringNormalize::class];
 

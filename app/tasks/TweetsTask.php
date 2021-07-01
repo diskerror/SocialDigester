@@ -1,5 +1,6 @@
 <?php
 
+use Logic\ConfigFactory;
 use MongoDB\BSON\UTCDateTime;
 
 class TweetsTask extends Cli
@@ -11,14 +12,14 @@ class TweetsTask extends Cli
 
 	public function getAction()
 	{
-		Logic\ConsumeTweets::exec($this->config);
+		Logic\ConsumeTweets::exec(ConfigFactory::get());
 	}
 
 	public function stopAction()
 	{
-		$pidHandler = new Logic\PidHandler($this->config->process);
+		$pidHandler = new Logic\PidHandler(ConfigFactory::get()->process);
 		if ($pidHandler->removeIfExists()) {
-			self::println('Process was stopped.');
+			self::println('Running process was stopped.');
 		}
 		else {
 			self::println('Process was not running.');
@@ -27,7 +28,7 @@ class TweetsTask extends Cli
 
 	public function testAction()
 	{
-		$tweets = (new Resource\Tweets())->getClient()->find([
+		$tweets = (new Resource\Tweets(ConfigFactory::get()->mongo_db))->find([
  			'entities.hashtags.0.text' => ['$gt' => ''],
 			'created_at' => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
@@ -36,7 +37,7 @@ class TweetsTask extends Cli
 		$obj = new Structure\Tweet();
 		foreach ($tweets as $tweet) {
 			$obj->assign($tweet);
-			print_r($obj->toArray());
+			var_export($obj->toArray());
 			$t++;
 		}
 		self::println($t);
@@ -44,7 +45,7 @@ class TweetsTask extends Cli
 
 	public function runningAction()
 	{
-		$t = (new Resource\Tweets())->getClient()->count([
+		$t = (new Resource\Tweets(ConfigFactory::get()->mongo_db))->count([
 			'created_at' => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
 

@@ -12,14 +12,14 @@ use Structure\Snapshot;
 
 class Snapshots extends MongoCollection
 {
-	protected $_collection = 'snapshots';
-	protected $_class      = Snapshot::class;
+	protected $_collectionName = 'snapshots';
+	protected $_class          = Snapshot::class;
 
 	public function doIndex(int $expire=0)
 	{
-		$this->getClient()->insertOne([]);
-		$this->getClient()->dropIndexes();
-		$this->getClient()->createIndex(
+		$this->_collection->insertOne([]);
+		$this->_collection->dropIndexes();
+		$this->_collection->createIndex(
 			['created' => 1]
 		);
 	}

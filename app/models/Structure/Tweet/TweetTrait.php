@@ -3,7 +3,6 @@
 namespace Structure\Tweet;
 
 use Diskerror\Typed\Scalar\TStringNormalize;
-use Diskerror\TypedBSON\DateTime;
 
 /**
  * Trait TweetTrait
@@ -30,7 +29,7 @@ use Diskerror\TypedBSON\DateTime;
  */
 trait TweetTrait
 {
-	protected $created_at                = [DateTime::class];
+	protected $created_at                = [Created::class];
 
 //	protected $contributors              = null;
 

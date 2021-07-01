@@ -21,15 +21,11 @@ try {
 	//	Models are loaded with the Composer autoloader.
 	require BASE_PATH . '/vendor/autoload.php';
 
-	(new \Phalcon\Loader())
+	(new Phalcon\Loader())
 		->registerDirs([
 			APP_PATH . '/tasks/',
 		])
 		->register();
-
-	$di = new Phalcon\Di\FactoryDefault\Cli();
-
-	require APP_PATH . '/DiCommon.inc';
 
 	$arguments = [];
 	if (array_key_exists(1, $argv)) {
@@ -43,6 +39,8 @@ try {
 			}
 		}
 	}
+
+	$di = new \Phalcon\Di\FactoryDefault\Cli();
 
 	(new Phalcon\Cli\Console($di))
 		->handle($arguments);

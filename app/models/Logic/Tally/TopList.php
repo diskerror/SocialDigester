@@ -22,7 +22,7 @@ final class TopList extends AbstractTally
 	 */
 	public static function getHashtags(Config $config): array
 	{
-		$tweets = (new Tweets())->getClient()->find([
+		$tweets = (new Tweets())->find([
 			'created_at'               => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
@@ -56,7 +56,7 @@ final class TopList extends AbstractTally
 
 	public static function getHashtagsFromTallies(Config $config): array
 	{
-		$tallies = (new Tallies())->getClient()->find([
+		$tallies = (new Tallies())->find([
 			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
 		]);
 
@@ -94,8 +94,8 @@ final class TopList extends AbstractTally
 	 */
 	public static function getText(Config $config): TallyWords
 	{
-		$tweets = (new Tweets())->getClient()->find([
-			'created_at' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		$tweets = (new Tweets($config->mongo_db))->find([
+			'created_at' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 			'text'       => ['$gt' => ''],
 		]);
 

@@ -1,10 +1,17 @@
-#!/bin/bash
+#!/bin/zsh
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#
+#RUNNING=$(${DIR}/run tweets running);
+#
+#if [ "$RUNNING" -eq 0 ]
+#then
+#    ${DIR}/restart_tweets.sh
+#fi
 
-RUNNING=$(${DIR}/run tweets running);
+RUNNING=$(/var/www/politicator/run tweets running);
 
 if [ "$RUNNING" -eq 0 ]
 then
-    ${DIR}/restart_tweets.sh
+    /var/www/politicator/restart_tweets.sh
 fi

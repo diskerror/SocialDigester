@@ -92,43 +92,46 @@ return [
 		'procDir' => '/proc/'    //	location of actual PID
 	],
 
-	'index_cache' => [
-		'front' => [
-			'lifetime' => 600,    //	ten minutes
-			'adapter'  => 'data',
+	'cache' => [
+		'index' => [
+			'front' => [
+				'lifetime' => 600,    //	ten minutes
+				'adapter'  => 'data',
+			],
+			'back'  => [
+				'dir'      => '/run/shm/twitter_digester/',
+				'prefix'   => 'index',
+				'frontend' => null,
+				'adapter'  => 'file',
+			],
 		],
-		'back'  => [
-			'cacheDir' => '/run/shm/twitter_digester/',
-			'prefix'   => 'index',
-			'frontend' => null,
-			'adapter'  => 'file',
-		],
-	],
 
-	'tag_cloud_cache' => [
-		'front' => [
-			'lifetime' => 2,    //	two seconds
-			'adapter'  => 'data',
+		'tag_cloud' => [
+			'front' => [
+				'lifetime' => 2,    //	two seconds
+				'adapter'  => 'data',
+			],
+			'back'  => [
+				'dir'      => '/run/shm/twitter_digester/',
+				'prefix'   => 'tag_cloud',
+				'frontend' => null,
+				'adapter'  => 'file',
+			],
 		],
-		'back'  => [
-			'cacheDir' => '/run/shm/twitter_digester/',
-			'prefix'   => 'tag_cloud',
-			'frontend' => null,
-			'adapter'  => 'file',
-		],
-	],
 
-	'summary_cache' => [
-		'front' => [
-			'lifetime' => 6,    //	six seconds
-			'adapter'  => 'data',
+		'summary' => [
+			'front' => [
+				'lifetime' => 6,    //	six seconds
+				'adapter'  => 'data',
+			],
+			'back'  => [
+				'dir'      => '/run/shm/twitter_digester/',
+				'prefix'   => 'summary',
+				'frontend' => null,
+				'adapter'  => 'file',
+			],
 		],
-		'back'  => [
-			'cacheDir' => '/run/shm/twitter_digester/',
-			'prefix'   => 'summary',
-			'frontend' => null,
-			'adapter'  => 'file',
-		],
+
 	],
 
 ];

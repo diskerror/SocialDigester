@@ -5,6 +5,9 @@ namespace Logic;
 use Phalcon\Logger;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Formatter\Line;
+use function fwrite;
+use const PHP_EOL;
+use const STDERR;
 
 /**
  * This logger class writes to both a named file and to STDERR.
@@ -42,12 +45,14 @@ class LoggerFactory
 	 */
 	function __call($level, $params)
 	{
-//		switch ($level) {
-//			case 'critical':
-//			case 'emergency':
+		switch ($level) {
+			case 'critical':
+			case 'emergency':
+			case 'error':
 //			case 'debug':
+				fwrite(STDERR, $params[0] . PHP_EOL);
+		}
 		$this->_logger->$level($params[0]);
 	}
-//	}
 
 }

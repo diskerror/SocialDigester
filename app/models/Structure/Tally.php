@@ -2,6 +2,7 @@
 
 namespace Structure;
 
+use Diskerror\Typed\ArrayOptions;
 use Diskerror\TypedBSON\DateTime;
 use Diskerror\TypedBSON\TypedClass;
 
@@ -18,6 +19,9 @@ use Diskerror\TypedBSON\TypedClass;
  */
 class Tally extends TypedClass
 {
+	protected $_jsonOptionDefaults =
+		ArrayOptions::OMIT_EMPTY | ArrayOptions::OMIT_RESOURCE | ArrayOptions::KEEP_JSON_EXPR;
+
 	protected $created = [DateTime::class];
 
 	protected $uniqueHashtags = [TallyWords::class];

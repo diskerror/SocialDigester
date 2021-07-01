@@ -2,19 +2,18 @@
 
 namespace Logic;
 
-use Diskerror\Typed\ArrayOptions as AO;
 use Ds\Set as DsSet;
+use Ds\Vector;
 use Exception;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
-use Phalcon\Config;
 use Resource\Messages;
 use Resource\Tallies;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
+use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
-use function jsonPrint;
 
 final class ConsumeTweets
 {
@@ -35,17 +34,16 @@ final class ConsumeTweets
 
 		$pidHandler = new PidHandler($config->process);
 
-//		$logger = new LoggerFactory(APP_PATH . '/' . $config->process->name . '.log');
-		$logger = new LoggerFactory('php://stderr');
+		$logger = new LoggerFactory(BASE_PATH . '/consume.log');
+//		$logger = new LoggerFactory('php://stderr');
 
 //		$sh = new StemHandler();
 
 		try {
 			$stream         = new Stream($config->twitter->auth);
-			$tweetsClient   = (new Tweets())->getClient();
-			$talliesClient  = (new Tallies())->getClient();
-			$messagesClient = (new Messages())->getClient();
-
+			$tweetsClient   = new Tweets($config->mongo_db);
+			$talliesClient  = new Tallies($config->mongo_db);
+			$messagesClient = new Messages($config->mongo_db);
 
 			//	Send request to start a filtered stream.
 			$stream->filter([
@@ -62,35 +60,36 @@ final class ConsumeTweets
 
 			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
-			$stopWords = $config->word_stats->stop->toArray();
+			$stopWords = new Vector($config->word_stats->stop->toArray());
 
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
-			$tweet = new Tweet();
-			$tweet->setArrayOptions(AO::OMIT_EMPTY | AO::OMIT_RESOURCE | AO::NO_CAST_BSON | AO::CAST_DATETIME_TO_BSON | AO::CAST_ID_TO_OBJECTID);
-
+			$tweet  = new Tweet();
+			$tweets = new Vector();
+			$tweets->allocate(self::INSERT_COUNT);
 			$tally = new Tally();
 
 			while ($pidHandler->exists() && !$stream->isEOF()) {
-				$tweets = [];
+				$tweets->clear();
 				$tally->assign(null);
+
 				for ($i = 0; $i < self::INSERT_COUNT; ++$i) {
 					//	get tweet
-					try {
-						$packet = $stream->read();
-					}
-					catch (Exception $e) {
-						$logger->info((string) $e);
+					$packet = $stream->read();
+
+					//	Ignore nulls.
+					if (null === $packet) {
 						continue;
 					}
 
-					//	Ignore bad data.
+					//	Log bad data.
 					if (!is_array($packet)) {
-//						$logger->info('bad packet');
+						$logger->info('bad packet' . PHP_EOL . var_export($packet, true));
 						continue;
 					}
 
+					//	Save Twitter messages.
 					if ($stream::isMessage($packet)) {
 						$packet['created'] = new UTCDateTime(time() * 1000);
 						$messagesClient->insertOne($packet);
@@ -98,18 +97,19 @@ final class ConsumeTweets
 					}
 
 					//	Filter. Tweet structure accepts only part of the packet.
+					var_export($packet);
 					$tweet->assign($packet);
 
 					//	If tweet is not in english then skip it.
 					if ($tweet->lang !== 'en') {
-//						$logger->info('lang not en');
+						$logger->info('packet lang not en');
 						continue;
 					}
 
 					// Check for and use extended tweet if it exists.
 					if (strlen($tweet->extended_tweet->full_text) > strlen($tweet->text)) {
-						$tweet->text                      = $tweet->extended_tweet->full_text;
-						$tweet->extended_tweet->full_text = '';
+						$tweet->text = $tweet->extended_tweet->full_text;
+						unset($tweet->extended_tweet->full_text);
 
 						$tweet->entities = $tweet->extended_tweet->entities;
 						unset($tweet->extended_tweet->entities);
@@ -136,14 +136,10 @@ final class ConsumeTweets
 						$tally->uniqueHashtags->doTally($uniqueHashtag);
 					}
 
-					//	remove URLs from text
-//					$text  = preg_replace('#https?://[^ ]+#', '', $tweet->text);
-					$text  = preg_replace('#https?://#', '', $tweet->text);
-
 					//	Tally the words in the text.
-					$split = preg_split('/[^a-zA-Z0-9_\']/', $text, null, PREG_SPLIT_NO_EMPTY);
+					$split = preg_split('/[^a-zA-Z0-9_\']/', $tweet->text, null, PREG_SPLIT_NO_EMPTY);
 					foreach ($split as $s) {
-						if (strlen($s) > 2 && !in_array(strtolower($s), $stopWords, true)) {
+						if (strlen($s) > 2 && !$stopWords->contains(strtolower($s))) {
 							$tally->textWords->doTally($s);
 						}
 					}
@@ -169,13 +165,14 @@ final class ConsumeTweets
 //					}
 //					$tweet->pairs[] = $last;
 
-					$tweets[] = $tweet->toArray();
+					var_export($tweet->toArray());
+					$tweets->push($tweet->bsonSerialize());
 				}
 
 				try {
 					//	convert to Mongo compatible object and insert
-					$tweetsClient->insertMany($tweets, $insertOptions);
-					$talliesClient->insertOne($tally->toArray(), $insertOptions);
+					$tweetsClient->insertMany($tweets->toArray(), $insertOptions);
+					$talliesClient->insertOne($tally->bsonSerialize(), $insertOptions);
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();
@@ -197,8 +194,6 @@ final class ConsumeTweets
 		catch (Exception $e) {
 			$logger->emergency((string) $e);
 		}
-
-		$pidHandler->removeIfExists();
 	}
 
 }

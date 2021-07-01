@@ -10,14 +10,14 @@ namespace Resource;
 
 class Messages extends MongoCollection
 {
-	protected $_collection = 'messages';
-	protected $_class      = '';
+	protected $_collectionName = 'messages';
+	protected $_class          = '';
 
 	public function doIndex(int $expire = 0)
 	{
-		$this->getClient()->insertOne([]);
-		$this->getClient()->dropIndexes();
-		$this->getClient()->createIndex(
+		$this->_collection->insertOne([]);
+		$this->_collection->dropIndexes();
+		$this->_collection->createIndex(
 			['created' => 1],
 			['expireAfterSeconds' => $expire]
 		);

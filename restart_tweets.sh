@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/bin/zsh
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=/var/www/politicator
 
 ${DIR}/run tweets stop
 

@@ -1,5 +1,7 @@
 <?php
 
+use Logic\ConfigFactory;
+
 class GetTask extends Cli
 {
 	public function mainAction()
@@ -9,24 +11,24 @@ class GetTask extends Cli
 
 	public function versionAction()
 	{
-		self::println($this->config->version);
+		self::println(ConfigFactory::get()->version);
 	}
 
 	public function pidPathAction()
 	{
-		self::println($this->config->process->path);
+		self::println(ConfigFactory::get()->process->path);
 	}
 
 	public function cachePathAction()
 	{
-		self::println( $this->config->index_cache->back->cacheDir);
+		self::println(ConfigFactory::get()->cache->index->back->dir);
 	}
 
 	public function hashtagsAction()
 	{
 		self::println(
 			json_encode(
-				array_slice(Logic\Tally\TopList::getHashtags($this->config->word_stats), 0, 25),
+				array_slice(Logic\Tally\TopList::getHashtags(ConfigFactory::get()), 0, 25),
 				JSON_PRETTY_PRINT
 			)
 		);
@@ -35,7 +37,7 @@ class GetTask extends Cli
 	{
 		self::println(
 			json_encode(
-				Logic\Tally\TagCloud::getHashtagsFromTallies($this->config->word_stats),
+				Logic\Tally\TagCloud::getHashtagsFromTallies(ConfigFactory::get()),
 				JSON_PRETTY_PRINT
 			)
 		);
@@ -45,7 +47,7 @@ class GetTask extends Cli
 	{
 		self::println(
 			json_encode(
-				array_slice(Logic\Tally\TopList::getText($this->config->word_stats)->toArray(), 0, 25),
+				array_slice(Logic\Tally\TopList::getText(ConfigFactory::get())->toArray(), 0, 25),
 				JSON_PRETTY_PRINT
 			)
 		);
@@ -54,13 +56,12 @@ class GetTask extends Cli
 	public function summaryAction()
 	{
 		self::println('');
-		$summary = Logic\Summary::get();
-		self::println(implode("\n\n", $summary));
+		self::println(implode("\n\n", Logic\Summary::get(ConfigFactory::get())));
 		self::println('');
 	}
 
 	public function snapshotAction()
 	{
-		self::println(Logic\Snapshots::make($this->config));
+		self::println(Logic\Snapshots::make(ConfigFactory::get()));
 	}
 }

@@ -3,7 +3,7 @@
 namespace Logic;
 
 use Exception;
-use Phalcon\Config;
+use Structure\Config\Process;
 
 class PidHandler
 {
@@ -14,9 +14,9 @@ class PidHandler
 	protected $_procDir;
 
 	/**
-	 * @param Config $config
+	 * @param Process $config
 	 */
-	public function __construct(Config $config)
+	public function __construct(Process $config)
 	{
 		$this->_procDir = $config->procDir;
 		if (substr($this->_procDir, -1) !== '/') {
@@ -33,9 +33,7 @@ class PidHandler
 
 	public function __destruct()
 	{
-		if (file_exists($this->_fullProcessFileName)) {
-			unlink($this->_fullProcessFileName);
-		}
+		$this->removeIfExists();
 	}
 
 	/**

@@ -5,14 +5,11 @@ namespace Logic\Tally;
 use Diskerror\Typed\TypedArray;
 use Ds\Set;
 use MongoDB\BSON\UTCDateTime;
-use Phalcon\Config;
-use function print_r;
 use Resource\Tallies;
 use Resource\Tweets;
-use const STDOUT;
+use Structure\Config;
 use Structure\TagCloud\Word;
 use Structure\TallyWords;
-use function var_dump;
 
 final class TagCloud extends AbstractTally
 {
@@ -56,8 +53,8 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getHashtagsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		$tallies = (new Tallies($config->mongo_db))->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 		]);
 
 		$totals = new TallyWords();
@@ -67,7 +64,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config->window, $config->quantity);
+		return self::_buildTagCloud($totals, $config->word_stats->window, $config->word_stats->quantity);
 	}
 
 	/**
@@ -77,8 +74,8 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getAllHashtagsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		$tallies = (new Tallies($config->mongo_db))->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 		]);
 
 		$totals = new TallyWords();
@@ -93,7 +90,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config->window, $config->quantity);
+		return self::_buildTagCloud($totals, $config->word_stats->window, $config->word_stats->quantity);
 	}
 
 	/**
@@ -155,8 +152,8 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getText(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		$tallies = (new Tallies($config->mongo_db))->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 		]);
 
 		$totals = new TallyWords();
@@ -171,7 +168,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config->window, (int)($config->quantity * 1.5), 'strtolower');
+		return self::_buildTagCloud($totals, $config->word_stats->window, (int)($config->word_stats->quantity * 1.5), 'strtolower');
 	}
 
 	/**
@@ -181,8 +178,8 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getUserMentionsFromTallies(Config $config): TypedArray
 	{
-		$tallies = (new Tallies())->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		$tallies = (new Tallies($config->mongo_db))->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 		]);
 
 		$totals = new TallyWords();
@@ -197,7 +194,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		$tagCloud = self::_buildTagCloud($totals, $config->window, $config->quantity);
+		$tagCloud = self::_buildTagCloud($totals, $config->word_stats->window, $config->word_stats->quantity);
 		foreach ($tagCloud as &$tc) {
 			$tc->link = strtr($tc->link, ['javascript:ToTwitter(' => 'javascript:ToTwitterAt(']);
 		}

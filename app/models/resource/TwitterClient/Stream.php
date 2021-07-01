@@ -4,7 +4,9 @@ namespace Resource\TwitterClient;
 
 use BadMethodCallException;
 use Exception;
-use Phalcon\Config;
+use MongoDB\Driver\Exception\AuthenticationException;
+use Structure\Config\TwitterAuth;
+use function strstr;
 
 class Stream extends ClientAbstract
 {
@@ -30,7 +32,14 @@ class Stream extends ClientAbstract
 	 */
 	protected $_proc;
 
-	public function __construct(Config $auth)
+	/**
+	 * Stream constructor.
+	 *
+	 * @param TwitterAuth $auth
+	 *
+	 * @throws Exception
+	 */
+	public function __construct(TwitterAuth $auth)
 	{
 		if (!shell_exec('which curl')) {
 			throw new Exception('The CLI program "curl" is required.');
@@ -75,6 +84,10 @@ class Stream extends ClientAbstract
 	{
 		$json = trim(fgets($this->_proc, 16384), "\x00..\x20\x7F");
 
+		if (strstr($json, 'Error 401 Unauthorized')) {
+			throw new Exception('Twitter: Error 401 Unauthorized');
+		}
+
 		return json_decode($json, true);
 	}
 
@@ -109,10 +122,10 @@ class Stream extends ClientAbstract
 		}
 
 		$header = $this->_getHeader($url, 'GET', $params[0]);
-//		cout('curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n");die;
+//		echo 'curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n";die;
 		$this->_proc = popen('curl -s --compressed --get ' . $url . $data . ' --header \'' . $header . '\'', 'r');
 
-		return (bool)$this->_proc;
+		return (bool) $this->_proc;
 	}
 
 }
