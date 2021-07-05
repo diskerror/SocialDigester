@@ -21,9 +21,9 @@
 		"diskerror/typedbson": "dev-master",
 		"laminas/laminas-json": "^3.0",
 		"laminas/laminas-server": "^2.8.0",
-		"laminas/laminas-stdlib": "^2.7 || ^3.0",
+		"laminas/laminas-stdlib": "^3.0",
 		"mongodb/mongodb": "^1.4",
-		"php-ds/php-ds": "^1.2 || ^2.0",
+		"php-ds/php-ds": "^1.2",
 		"php-science/textrank": "^1.0"
 	},
 	"suggest": {
@@ -35,9 +35,9 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Logic\\": "app/models/Logic/",
-			"Resource\\": "app/models/Resource/",
-			"Structure\\": "app/models/Structure/"
+			"Logic\\": "app/models/logic/",
+			"Resource\\": "app/models/resource/",
+			"Structure\\": "app/models/struct/"
 		}
 	}
 }
