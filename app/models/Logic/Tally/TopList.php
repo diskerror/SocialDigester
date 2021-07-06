@@ -4,17 +4,18 @@ namespace Logic\Tally;
 
 use Ds\Set;
 use MongoDB\BSON\UTCDateTime;
-use Phalcon\Config;
 use Resource\Tallies;
 use Resource\Tweets;
+use Structure\Config;
 use Structure\TallyWords;
+use function var_export;
 
 final class TopList extends AbstractTally
 {
 	private function __construct() { }
 
 	/**
-	 * Return quantity of each current hashtag.
+	 * Return the top requested count of current hashtags.
 	 *
 	 * @param Config $config
 	 *
@@ -22,8 +23,8 @@ final class TopList extends AbstractTally
 	 */
 	public static function getHashtags(Config $config): array
 	{
-		$tweets = (new Tweets())->find([
-			'created_at'               => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		$tweets = (new Tweets($config->mongo_db))->find([
+			'created_at'               => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
 
@@ -42,9 +43,9 @@ final class TopList extends AbstractTally
 		}
 
 		$tally->sort();
-		$tally->scaleTally($config->window / 60.0);
+		$tally->scaleTally($config->word_stats->window / 60.0);
 
-		$normalized = self::_normalizeGroupsFromTally($tally, $config->quantity);
+		$normalized = self::_normalizeGroupsFromTally($tally, $config->word_stats->quantity);
 
 		$output = [];
 		foreach ($normalized as $n) {
@@ -54,15 +55,22 @@ final class TopList extends AbstractTally
 		return $output;
 	}
 
+	/**
+	 * Return the top requested count of current hashtags.
+	 *
+	 * @param Config $config
+	 *
+	 * @return TallyWords
+	 */
 	public static function getHashtagsFromTallies(Config $config): array
 	{
-		$tallies = (new Tallies())->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		$tallies = (new Tallies($config->mongo_db))->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 		]);
 
 		$totals = new TallyWords();
 		foreach ($tallies as $tally) {
-			foreach ($tally->hashtags as $k => $v) {
+			foreach ($tally->allHashtags as $k => $v) {
 				if ($totals->offsetExists($k)) {
 					$totals[$k] += $v;
 				}
@@ -73,9 +81,9 @@ final class TopList extends AbstractTally
 		}
 
 		$totals->sort();
-		$totals->scaleTally($config->window / 60.0);
+		$totals->scaleTally($config->word_stats->window / 60.0);
 
-		$normalized = self::_normalizeGroupsFromTally($totals, $config->quantity);
+		$normalized = self::_normalizeGroupsFromTally($totals, $config->word_stats->quantity);
 
 		$output = [];
 		foreach ($normalized as $n) {
@@ -103,7 +111,7 @@ final class TopList extends AbstractTally
 		foreach ($tweets as $tweet) {
 			$words = preg_split('/([^0-9a-zA-Z\']| )+/', $tweet->text);
 			foreach ($words as $word) {
-				if ((strlen($word) < 3 && !is_numeric($word)) || in_array(strtolower($word), $config->stop->toArray(),
+				if ((strlen($word) < 3 && !is_numeric($word)) || in_array(strtolower($word), $config->word_stats->stop->toArray(),
 						true)) {
 					continue;
 				}

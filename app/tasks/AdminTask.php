@@ -2,24 +2,36 @@
 
 use Logic\ConfigFactory;
 use MongoDB\BSON\UTCDateTime;
+use Service\StdIo;
 
-class AdminTask extends Cli
+class AdminTask extends TaskMaster
 {
+	/**
+	 * Displays the rate at which tweets are being consumed.
+	 */
 	public function rateAction()
 	{
-		$cnt = (new Resource\Tweets(ConfigFactory::get()->mongo_db))->count([
+		$mongo_db = ConfigFactory::get()->mongo_db;
+
+		$cnt = (new Resource\Tweets($mongo_db))->count([
 			'created_at' => ['$gt' => new UTCDateTime(strtotime('20 seconds ago') * 1000)],
 		]);
 
-		fprintf(STDOUT, "Tweets are being received at a rate of %.2f per second.\n", $cnt / 20.0);
+		StdIo::outln('Tweets are being received at a rate of ' . $t / 20 . ' per second.');
 	}
 
+	/**
+	 * Display the current aggregate configuration.
+	 */
 	public function showConfigAction()
 	{
 		$config = ConfigFactory::get();
-		self::println(json_encode($config->toArray(), JSON_PRETTY_PRINT));
+		StdIo::phpOut($config->toArray());
 	}
 
+	/**
+	 * Reindex MongoDB collections.
+	 */
 	public function indexDbAction()
 	{
 		$config = ConfigFactory::get();

@@ -7,19 +7,22 @@
  * create another file in this directory
  * that ends in '.php' with contents like:
  *
- * $config->twitter->offsetSet(
- *     'auth',
- *     [
- *         'consumer_key'          => 'wwww',
- *         'consumer_secret'       => 'xxxx',
- *         'oauth_token'           => 'yyyy',
- *         'oauth_token_secret'    => 'zzzz',
- *     ]
- * );
- *
+ * return [
+ *        'twitter'    => [
+ *            'auth' => [
+ *                'consumer_key'       => 'wwww',
+ *                'consumer_secret'    => 'xxxx',
+ *                'oauth_token'        => 'yyyy',
+ *                'oauth_token_secret' => 'zzzz',
+ *            ],
+ *        ],
+ *    ];
  */
 
 return [
+
+	//	Name of the user's configuration file.
+	'userConfigName' => '.politicator.php',
 
 	'version' => '0.4',
 

@@ -9,7 +9,7 @@ class ConfigFactory
 {
 	protected static $config;
 
-	public static function get()
+	public static function get(): Config
 	{
 		if (!isset(self::$config)) {
 			//	Always open this configuration file with it's default values.

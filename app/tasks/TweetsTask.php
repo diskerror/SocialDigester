@@ -1,54 +1,64 @@
 <?php
 
 use Logic\ConfigFactory;
+use Logic\PidHandler;
 use MongoDB\BSON\UTCDateTime;
+use Resource\Tweets;
+use Service\StdIo;
 
-class TweetsTask extends Cli
+class TweetsTask extends TaskMaster
 {
-	public function mainAction()
-	{
-		self::println('And do what?');
-	}
-
+	/**
+	 * Start process of receiving tweets.
+	 */
 	public function getAction()
 	{
 		Logic\ConsumeTweets::exec(ConfigFactory::get());
 	}
 
+	/**
+	 * Stop tweet consumption.
+	 */
 	public function stopAction()
 	{
-		$pidHandler = new Logic\PidHandler(ConfigFactory::get()->process);
+		$pidHandler = new PidHandler(ConfigFactory::get()->process);
 		if ($pidHandler->removeIfExists()) {
-			self::println('Running process was stopped.');
+			StdIo::outln('Running process was stopped.');
 		}
 		else {
-			self::println('Process was not running.');
+			StdIo::outln('Process was not running.');
 		}
 	}
 
+	/**
+	 * Place for test code.
+	 */
 	public function testAction()
 	{
-		$tweets = (new Resource\Tweets(ConfigFactory::get()->mongo_db))->find([
- 			'entities.hashtags.0.text' => ['$gt' => ''],
-			'created_at' => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
+		$tweets = (new Tweets(ConfigFactory::get()->mongo_db))->find([
+			'entities.hashtags.0.text' => ['$gt' => ''],
+			'created_at'               => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
 
-		$t = 0;
+		$t   = 0;
 		$obj = new Structure\Tweet();
 		foreach ($tweets as $tweet) {
 			$obj->assign($tweet);
-			var_export($obj->toArray());
+			StdIo::phpOut($obj->toArray());
 			$t++;
 		}
-		self::println($t);
+		StdIo::outln($t);
 	}
 
+	/**
+	 * Returns 1 if consume process is running, zero if not.
+	 */
 	public function runningAction()
 	{
-		$t = (new Resource\Tweets(ConfigFactory::get()->mongo_db))->count([
-			'created_at' => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
+		$t = (new Tweets(ConfigFactory::get()->mongo_db))->count([
+			'created_at' => ['$gt' => new UTCDateTime(strtotime('4 seconds ago') * 1000)],
 		]);
 
-		self::println($t===0?0:1);
+		StdIo::outln(($t === 0 ? 0 : 1));
 	}
 }

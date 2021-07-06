@@ -1,67 +1,73 @@
 <?php
 
 use Logic\ConfigFactory;
+use Service\StdIo;
 
-class GetTask extends Cli
+class GetTask extends TaskMaster
 {
-	public function mainAction()
-	{
-		self::println("Get what?");
-	}
-
+	/**
+	 * Get current version.
+	 */
 	public function versionAction()
 	{
-		self::println(ConfigFactory::get()->version);
+		StdIo::outln(ConfigFactory::get()->version);
 	}
 
+	/**
+	 * Get PID path.
+	 */
 	public function pidPathAction()
 	{
-		self::println(ConfigFactory::get()->process->path);
+		StdIo::outln(ConfigFactory::get()->process->path);
 	}
 
+	/**
+	 * Get cache path.
+	 */
 	public function cachePathAction()
 	{
-		self::println(ConfigFactory::get()->cache->index->back->dir);
+		StdIo::outln(ConfigFactory::get()->cache->index->back->dir);
 	}
 
+	/**
+	 * Display PHP array of Twitter hashtag statistics once per tweet.
+	 */
 	public function hashtagsAction()
 	{
-		self::println(
-			json_encode(
-				array_slice(Logic\Tally\TopList::getHashtags(ConfigFactory::get()), 0, 25),
-				JSON_PRETTY_PRINT
-			)
-		);
+		StdIo::phpOut(array_slice(Logic\Tally\TopList::getHashtags(ConfigFactory::get()), 0, 25));
 	}
+
+	/**
+	 * Display PHP array of all hashtag statistics.
+	 */
 	public function hashtagsAllAction()
 	{
-		self::println(
-			json_encode(
-				Logic\Tally\TagCloud::getHashtagsFromTallies(ConfigFactory::get()),
-				JSON_PRETTY_PRINT
-			)
-		);
+		StdIo::phpOut(Logic\Tally\TopList::getHashtagsFromTallies(ConfigFactory::get()));
 	}
 
+	/**
+	 * Display PHP array of Twitter tweet word count statistics.
+	 */
 	public function textwordsAction()
 	{
-		self::println(
-			json_encode(
-				array_slice(Logic\Tally\TopList::getText(ConfigFactory::get())->toArray(), 0, 25),
-				JSON_PRETTY_PRINT
-			)
-		);
+		StdIo::phpOut(array_slice(Logic\Tally\TopList::getText(ConfigFactory::get())->toArray(), 0, 32));
 	}
 
+	/**
+	 * Display a summary of all current tweets.
+	 */
 	public function summaryAction()
 	{
-		self::println('');
-		self::println(implode("\n\n", Logic\Summary::get(ConfigFactory::get())));
-		self::println('');
+		StdIo::outln('');
+		StdIo::outln(implode("\n\n", Logic\Summary::get(ConfigFactory::get()->mongo_db)));
+		StdIo::outln('');
 	}
 
+	/**
+	 * Store a snapshot of the current Twitter activity.
+	 */
 	public function snapshotAction()
 	{
-		self::println(Logic\Snapshots::make(ConfigFactory::get()));
+//		StdIo::outln(Logic\Snapshots::make($this->mongodb, ConfigFactory::get()));
 	}
 }

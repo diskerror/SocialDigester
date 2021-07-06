@@ -47,7 +47,7 @@ $(function() {
 		// ga('send', 'pageview');
 
 		$.ajax({
-			url: '/index/tagcloud',
+			url: '/index/tagCloud',
 			dataType: 'json',
 			success: function(data) {
 				if (data.length !== 0) {
@@ -69,7 +69,7 @@ $(function() {
 		setTimeout(getAllHashtags, 3500);	//	milliseconds between cloud updates
 
 		$.ajax({
-			url: '/index/tagcloudall',
+			url: '/index/tagCloudAll',
 			dataType: 'json',
 			success: function(data) {
 				if (data.length !== 0) {
