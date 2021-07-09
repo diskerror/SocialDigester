@@ -24,8 +24,8 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getHashtags(Config $config): TypedArray
 	{
-		$tweets = (new Tweets())->find([
-			'created_at'               => ['$gte' => new UTCDateTime((time() - $config->window) * 1000)],
+		$tweets = (new Tweets($config->mongo_db))->find([
+			'created_at'               => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
 
@@ -43,7 +43,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($tally, $config->window, $config->quantity);
+		return self::_buildTagCloud($tally, $config->word_stats->window, $config->word_stats->quantity);
 	}
 
 	/**

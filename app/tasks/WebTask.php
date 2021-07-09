@@ -1,6 +1,9 @@
 <?php
 
 use Logic\ConfigFactory;
+use Logic\Summary;
+use Logic\Tally\TagCloud;
+use Service\StdIo;
 
 /**
  * Class WebTask
@@ -8,37 +11,31 @@ use Logic\ConfigFactory;
  * Great for debugging the core calls used by a web controller class.
  *
  */
-
-class WebTask extends Cli
+class WebTask extends TaskMaster
 {
-	public function mainAction()
-	{
-		self::println('And do what?');
-	}
-
 	public function tagCloudAction()
 	{
-		print_r(Logic\Tally\TagCloud::getHashtagsFromTallies(ConfigFactory::get())->toArray());
+		StdIo::phpOut(TagCloud::getHashtagsFromTallies(ConfigFactory::get())->toArray());
 	}
 
 	public function tagCloudAllAction()
 	{
-		print_r(Logic\Tally\TagCloud::getAllHashtagsFromTallies(ConfigFactory::get())->toArray());
+		StdIo::phpOut(TagCloud::getAllHashtagsFromTallies(ConfigFactory::get())->toArray());
 	}
 
 	public function textWordsAction()
 	{
-		print_r(Logic\Tally\TagCloud::getText(ConfigFactory::get())->toArray());
+		StdIo::phpOut(TagCloud::getText(ConfigFactory::get())->toArray());
 	}
 
 	public function userMentionsAction()
 	{
-		print_r(Logic\Tally\TagCloud::getUserMentionsFromTallies(ConfigFactory::get())->toArray());
+		StdIo::phpOut(TagCloud::getUserMentionsFromTallies(ConfigFactory::get())->toArray());
 	}
 
 	public function summaryAction()
 	{
-		print_r(Logic\Summary::get(ConfigFactory::get()->mongo_db));
+		StdIo::phpOut(Summary::get(ConfigFactory::get()->mongo_db));
 	}
 
 }

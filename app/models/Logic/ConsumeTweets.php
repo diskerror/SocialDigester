@@ -97,7 +97,6 @@ final class ConsumeTweets
 					}
 
 					//	Filter. Tweet structure accepts only part of the packet.
-					var_export($packet);
 					$tweet->assign($packet);
 
 					//	If tweet is not in english then skip it.
@@ -120,12 +119,12 @@ final class ConsumeTweets
 
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
 					foreach ($tweet->entities->hashtags as $hashtag) {
-//						$htext = str_split($hashtag->text);
-//						foreach ($htext as $t) {
-//							if ($t & chr(0x80)) {
-//								continue 2;    //	skip hashtag if it contains a non-ASCII byte
-//							}
-//						}
+						$htext = str_split($hashtag->text);
+						foreach ($htext as $t) {
+							if ($t & chr(0x80)) {
+								continue 2;    //	skip hashtag if it contains a non-ASCII byte
+							}
+						}
 
 						$hashtagSet->add($hashtag->text);
 						$tally->allHashtags->doTally($hashtag->text);
@@ -165,7 +164,6 @@ final class ConsumeTweets
 //					}
 //					$tweet->pairs[] = $last;
 
-					var_export($tweet->toArray());
 					$tweets->push($tweet->bsonSerialize());
 				}
 

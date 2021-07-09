@@ -15,6 +15,7 @@ use Structure\Config\WordStats;
 /**
  * Class Config
  *
+ * @param $userConfigName
  * @param $version
  * @param $mongo_db
  * @param $tweets_expire
@@ -28,11 +29,12 @@ use Structure\Config\WordStats;
  */
 class Config extends TypedClass
 {
-	protected $version       = [TString::class];
-	protected $mongo_db      = [Mongo::class];
-	protected $tweets_expire = 600;
-	protected $word_stats    = [WordStats::class];
-	protected $twitter       = [Twitter::class];
-	protected $process       = [Process::class];
-	protected $cache         = [Caches::class];
+	protected $userConfigName = [TString::class];
+	protected $version        = [TString::class];
+	protected $mongo_db       = [Mongo::class];
+	protected $tweets_expire  = 600;
+	protected $word_stats     = [WordStats::class];
+	protected $twitter        = [Twitter::class];
+	protected $process        = [Process::class];
+	protected $cache          = [Caches::class];
 }
