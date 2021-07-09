@@ -11,15 +11,21 @@ error_reporting(E_ALL);
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
-/**
- * Convert all errors into ErrorExceptions
- */
-set_error_handler(
-	function($severity, $errstr, $errfile, $errline) {
-		throw new ErrorException($errstr, 1, $severity, $errfile, $errline);
-	},
-	E_ERROR
-);
+//try {
+//	//	Models are loaded with the Composer autoloader.
+//	require BASE_PATH . '/vendor/autoload.php';
+//
+//	(new Phalcon\Loader())
+//		->registerDirs([BASE_PATH . '/app/controllers/'])
+//		->register();
+//
+//	(new Service\Application\Http(__DIR__))
+//		->init()
+//		->run($_SERVER);
+//}
+//catch (Throwable $t) {
+//	echo $t;
+//}
 
 try {
 	//	Models are loaded with the Composer autoloader.

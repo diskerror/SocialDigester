@@ -17,6 +17,9 @@ class Cli extends DiAbstract
 	 */
 	public function init(): self
 	{
+//		$this->_loader->registerDirs([__DIR__ . '/app/tasks/'])
+//					  ->register();
+
 		$di = new FdCli();
 
 		parent::_commonDi($di);
@@ -48,7 +51,7 @@ class Cli extends DiAbstract
 	 *
 	 * @throws Exception
 	 */
-	public function run(array $argv = []): void
+	public function run(array $argv): string
 	{
 		try {
 			// Parse CLI arguments.
@@ -77,5 +80,7 @@ class Cli extends DiAbstract
 				throw $e;
 			}
 		}
+
+		return '';
 	}
 }
