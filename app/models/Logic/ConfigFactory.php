@@ -13,12 +13,12 @@ class ConfigFactory
 	{
 		if (!isset(self::$config)) {
 			//	Always open this configuration file with it's default values.
-			$configFile   = APP_PATH . '/config/config.php';
+			$configFile   = BASE_PATH . '/app/config/config.php';
 			self::$config = new Config(require $configFile);
 
 			//	Open all other files ending with '.php' as a configuration file.
 			//	'glob' defaults to sorted.
-			foreach (glob(APP_PATH . '/config/*.php') as $cnf) {
+			foreach (glob(BASE_PATH . '/app/config/*.php') as $cnf) {
 				if ($cnf !== $configFile && !is_dir($cnf)) {
 					self::$config->replace(require $cnf);
 				}

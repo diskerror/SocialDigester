@@ -17,7 +17,7 @@ class AdminTask extends TaskMaster
 			'created_at' => ['$gt' => new UTCDateTime(strtotime('20 seconds ago') * 1000)],
 		]);
 
-		StdIo::outln('Tweets are being received at a rate of ' . $t / 20 . ' per second.');
+		StdIo::outln('Tweets are being received at a rate of ' . $cnt / 20 . ' per second.');
 	}
 
 	/**
