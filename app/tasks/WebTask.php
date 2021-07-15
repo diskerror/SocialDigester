@@ -1,6 +1,5 @@
 <?php
 
-use Logic\ConfigFactory;
 use Logic\Summary;
 use Logic\Tally\TagCloud;
 use Service\StdIo;
@@ -15,27 +14,27 @@ class WebTask extends TaskMaster
 {
 	public function tagCloudAction()
 	{
-		StdIo::phpOut(TagCloud::getHashtagsFromTallies(ConfigFactory::get())->toArray());
+		StdIo::phpOut(TagCloud::getHashtagsFromTallies($this->config)->toArray());
 	}
 
 	public function tagCloudAllAction()
 	{
-		StdIo::phpOut(TagCloud::getAllHashtagsFromTallies(ConfigFactory::get())->toArray());
+		StdIo::phpOut(TagCloud::getAllHashtagsFromTallies($this->config)->toArray());
 	}
 
 	public function textWordsAction()
 	{
-		StdIo::phpOut(TagCloud::getText(ConfigFactory::get())->toArray());
+		StdIo::phpOut(TagCloud::getText($this->config)->toArray());
 	}
 
 	public function userMentionsAction()
 	{
-		StdIo::phpOut(TagCloud::getUserMentionsFromTallies(ConfigFactory::get())->toArray());
+		StdIo::phpOut(TagCloud::getUserMentionsFromTallies($this->config)->toArray());
 	}
 
 	public function summaryAction()
 	{
-		StdIo::phpOut(Summary::get(ConfigFactory::get()->mongo_db));
+		StdIo::phpOut(Summary::get($this->config->mongo_db));
 	}
 
 }

@@ -9,6 +9,7 @@ use Phalcon\Di\FactoryDefault\Cli as FdCli;
 use Resource\PidHandler;
 use Resource\TwitterStream;
 use Service\StdIo;
+use const PHP_EOL;
 
 class Cli extends DiAbstract
 {
@@ -78,6 +79,6 @@ class Cli extends DiAbstract
 			}
 		}
 
-		return '';
+		return PHP_EOL;
 	}
 }

@@ -1,6 +1,5 @@
 <?php
 
-use Logic\ConfigFactory;
 use Service\StdIo;
 
 class MainTask extends TaskMaster

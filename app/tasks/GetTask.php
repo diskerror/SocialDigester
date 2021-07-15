@@ -1,6 +1,5 @@
 <?php
 
-use Logic\ConfigFactory;
 use Service\StdIo;
 
 class GetTask extends TaskMaster
@@ -10,7 +9,7 @@ class GetTask extends TaskMaster
 	 */
 	public function versionAction()
 	{
-		StdIo::outln(ConfigFactory::get()->version);
+		StdIo::outln($this->config->version);
 	}
 
 	/**
@@ -18,7 +17,7 @@ class GetTask extends TaskMaster
 	 */
 	public function pidPathAction()
 	{
-		StdIo::outln(ConfigFactory::get()->process->path);
+		StdIo::outln($this->config->process->path);
 	}
 
 	/**
@@ -26,7 +25,7 @@ class GetTask extends TaskMaster
 	 */
 	public function cachePathAction()
 	{
-		StdIo::outln(ConfigFactory::get()->cache->index->back->dir);
+		StdIo::outln($this->config->cache->index->back->dir);
 	}
 
 	/**
@@ -34,7 +33,7 @@ class GetTask extends TaskMaster
 	 */
 	public function hashtagsAction()
 	{
-		StdIo::phpOut(array_slice(Logic\Tally\TopList::getHashtags(ConfigFactory::get()), 0, 25));
+		StdIo::phpOut(array_slice(Logic\Tally\TopList::getHashtags($this->config), 0, 25));
 	}
 
 	/**
@@ -42,7 +41,7 @@ class GetTask extends TaskMaster
 	 */
 	public function hashtagsAllAction()
 	{
-		StdIo::phpOut(Logic\Tally\TopList::getHashtagsFromTallies(ConfigFactory::get()));
+		StdIo::phpOut(Logic\Tally\TopList::getHashtagsFromTallies($this->config));
 	}
 
 	/**
@@ -50,7 +49,7 @@ class GetTask extends TaskMaster
 	 */
 	public function textwordsAction()
 	{
-		StdIo::phpOut(array_slice(Logic\Tally\TopList::getText(ConfigFactory::get())->toArray(), 0, 32));
+		StdIo::phpOut(array_slice(Logic\Tally\TopList::getText($this->config)->toArray(), 0, 32));
 	}
 
 	/**
@@ -59,7 +58,7 @@ class GetTask extends TaskMaster
 	public function summaryAction()
 	{
 		StdIo::outln('');
-		StdIo::outln(implode("\n\n", Logic\Summary::get(ConfigFactory::get()->mongo_db)));
+		StdIo::outln(implode("\n\n", Logic\Summary::get($this->config->mongo_db)));
 		StdIo::outln('');
 	}
 
@@ -68,6 +67,6 @@ class GetTask extends TaskMaster
 	 */
 	public function snapshotAction()
 	{
-//		StdIo::outln(Logic\Snapshots::make($this->mongodb, ConfigFactory::get()));
+//		StdIo::outln(Logic\Snapshots::make($this->mongodb, $this->config));
 	}
 }

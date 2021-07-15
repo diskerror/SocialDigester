@@ -1,6 +1,5 @@
 <?php
 
-use Logic\ConfigFactory;
 use MongoDB\BSON\UTCDateTime;
 use Service\StdIo;
 
@@ -11,9 +10,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function rateAction()
 	{
-		$mongo_db = ConfigFactory::get()->mongo_db;
-
-		$cnt = (new Resource\Tweets($mongo_db))->count([
+		$cnt = (new Resource\Tweets($this->config->mongo_db))->count([
 			'created_at' => ['$gt' => new UTCDateTime(strtotime('20 seconds ago') * 1000)],
 		]);
 
@@ -25,8 +22,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function showConfigAction()
 	{
-		$config = ConfigFactory::get();
-		StdIo::phpOut($config->toArray());
+		StdIo::phpOut($this->config->toArray());
 	}
 
 	/**
@@ -34,13 +30,11 @@ class AdminTask extends TaskMaster
 	 */
 	public function indexDbAction()
 	{
-		$config = ConfigFactory::get();
-
 		//	These only needs to be run on a new collection.
-		(new Resource\Tweets($config->mongo_db))->doIndex($config->tweets_expire);
-		(new Resource\Tallies($config->mongo_db))->doIndex($config->tweets_expire);
-		(new Resource\Snapshots($config->mongo_db))->doIndex();        //	snapshots don't expire
-		(new Resource\Messages($config->mongo_db))->doIndex(36000);    //	ten hours
+		(new Resource\Tweets($this->config->mongo_db))->doIndex($this->config->tweets_expire);
+		(new Resource\Tallies($this->config->mongo_db))->doIndex($this->config->tweets_expire);
+		(new Resource\Snapshots($this->config->mongo_db))->doIndex();        //	snapshots don't expire
+		(new Resource\Messages($this->config->mongo_db))->doIndex(36000);    //	ten hours
 	}
 
 	public function handleRunningAction()

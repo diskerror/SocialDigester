@@ -1,6 +1,5 @@
 <?php
 
-use Logic\ConfigFactory;
 use Phalcon\Mvc\Controller;
 use Resource\Snapshots;
 
@@ -10,8 +9,8 @@ class SnapshotController extends Controller
 	{
 		$this->assets->addJs('js/snapshot.js');
 
-		$snapshot = (new Snapshots(ConfigFactory::get()->mongo_db))
-			->find(['_id' => (int)$this->dispatcher->getParam('id')]);
+		$snapshot = (new Snapshots($this->config->mongo_db))
+			->find(['_id' => (int) $this->dispatcher->getParam('id')]);
 
 		if (!$snapshot) {
 			return $this->response->redirect('/', true);
