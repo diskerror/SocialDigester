@@ -17,9 +17,6 @@ class Cli extends DiAbstract
 	 */
 	public function init(): self
 	{
-//		$this->_loader->registerDirs([__DIR__ . '/app/tasks/'])
-//					  ->register();
-
 		$di = new FdCli();
 
 		parent::_commonDi($di);

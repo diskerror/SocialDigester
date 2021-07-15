@@ -28,8 +28,6 @@ abstract class DiAbstract
 	 */
 	protected $_application;
 
-	protected $_loader;
-
 	/**
 	 * DiAbstract constructor.
 	 *
@@ -42,7 +40,6 @@ abstract class DiAbstract
 		}
 
 		$this->_basePath = $basePath;
-//		$this->_loader= new Loader();
 	}
 
 	/**

@@ -7,6 +7,7 @@ use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Application;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Url;
+use Phalcon\Mvc\View\Engine\Php;
 use Phalcon\Mvc\View\Simple;
 use Service\View;
 
@@ -19,9 +20,6 @@ class Http extends DiAbstract
 {
 	public function init(): self
 	{
-//		$this->_loader->registerDirs([$this->_basePath . '/app/controllers/'])
-//					  ->register();
-
 		$di = new FactoryDefault();
 
 		parent::_commonDi($di);
@@ -45,6 +43,7 @@ class Http extends DiAbstract
 			if (!isset($view)) {
 				$view = new Simple();
 				$view->setViewsDir($self->_basePath . '/app/views/');
+				$view->registerEngines(['.phtml' => Php::class]);
 			}
 			return $view;
 		});
@@ -114,7 +113,7 @@ class Http extends DiAbstract
 	 */
 	public function run(array $argv): string
 	{
-		$ri = $this->_application->handle($argv['REQUEST_URI']);
-		return $ri->getContent();
+		$uri = $this->_application->handle($argv['REQUEST_URI']);
+		return $uri->getContent();
 	}
 }
