@@ -1,14 +1,19 @@
 <?php
 
-namespace Resource\TwitterClient;
+namespace Resource;
 
-use BadMethodCallException;
-use Exception;
-use MongoDB\Driver\Exception\AuthenticationException;
-use Structure\Config\OAuth;
-use function strstr;
+use Service\OAuth;
+use Structure\Config\Twitter;
 
-class Stream extends ClientAbstract
+/**
+ * Class TwitterStream
+ *
+ * @package Resource
+ *
+ * @method filter($in = [])
+ * @method sample($in = [])
+ */
+class TwitterStream
 {
 	protected static $_messageKeys = [
 		'control'         => 0,
@@ -27,25 +32,24 @@ class Stream extends ClientAbstract
 		'warning'         => 0,
 	];
 
+	protected $_oauth;
+
+	protected $_baseURL;
+
 	/**
 	 * @var resource
 	 */
 	protected $_proc;
 
 	/**
-	 * Stream constructor.
+	 * TwitterStream constructor.
 	 *
-	 * @param OAuth $auth
-	 *
-	 * @throws Exception
+	 * @param Twitter $config
 	 */
-	public function __construct(OAuth $auth)
+	public function __construct(Twitter $config)
 	{
-		if (!shell_exec('which curl')) {
-			throw new Exception('The CLI program "curl" is required.');
-		}
-		parent::__construct($auth);
-		$this->_baseURL .= 'statuses/';
+		$this->_oauth   = new OAuth($config->oauth);
+		$this->_baseURL = $config->url . 'statuses/';
 	}
 
 	public static function isMessage(array $packet)
@@ -82,11 +86,12 @@ class Stream extends ClientAbstract
 	 */
 	public function read()
 	{
-		$json = trim(fgets($this->_proc, 16384), "\x00..\x20\x7F");
-
-		if (strstr($json, 'Error 401 Unauthorized')) {
-			throw new Exception('Twitter: Error 401 Unauthorized');
+		$str = fgets($this->_proc, 65536);
+		if (false === $str) {
+			return null;
 		}
+
+		$json = trim($str, "\x00..\x20\x7F");
 
 		return json_decode($json, true);
 	}
@@ -96,7 +101,7 @@ class Stream extends ClientAbstract
 	 * https://dev.twitter.com/streaming/overview
 	 *
 	 * @return bool
-	 * @throws BadMethodCallException
+	 * @throws \BadMethodCallException
 	 */
 	public function __call($function, array $params = []): bool
 	{
@@ -106,7 +111,7 @@ class Stream extends ClientAbstract
 				break;
 
 			default:
-				throw new BadMethodCallException();
+				throw new \BadMethodCallException();
 		}
 
 		$this->_closeProcIfOpen();
@@ -121,8 +126,8 @@ class Stream extends ClientAbstract
 			$data = ' --data \'' . rawurlencode($params[0]) . '\'';
 		}
 
-		$header = $this->_getHeader($url, 'GET', $params[0]);
-//		echo 'curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n";die;
+		$header = $this->_oauth->getHeader($url, 'GET', $params[0]);
+//		cout('curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n");die;
 		$this->_proc = popen('curl -s --compressed --get ' . $url . $data . ' --header \'' . $header . '\'', 'r');
 
 		return (bool) $this->_proc;

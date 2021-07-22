@@ -16,10 +16,10 @@ class TallyWords extends TypedArray
 	/**
 	 * Add word to array.
 	 *
-	 * @param string $word
-	 * @param int    $q
+	 * @param     $word
+	 * @param int $q
 	 */
-	public function doTally(string $word, float $q = 1)
+	public function doTally($word, float $q = 1)
 	{
 		if ($this->offsetExists($word)) {
 			$this[$word] += $q;

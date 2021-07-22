@@ -40,6 +40,8 @@ return [
 	],
 
 	'twitter' => [
+		'url' => 'https://stream.twitter.com/1.1/',
+
 		'auth' => [
 			'consumer_key'       => '',
 			'consumer_secret'    => '',

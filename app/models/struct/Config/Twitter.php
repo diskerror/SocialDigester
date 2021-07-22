@@ -3,11 +3,13 @@
 namespace Structure\Config;
 
 
+use Diskerror\Typed\Scalar\TStringTrim;
 use Diskerror\Typed\TypedClass;
 
 /**
  * Class Twitter
  *
+ * @param $url
  * @param $auth
  * @param $track
  *
@@ -15,6 +17,7 @@ use Diskerror\Typed\TypedClass;
  */
 class Twitter extends TypedClass
 {
-	protected $auth  = [TwitterAuth::class];
+	protected $url   = [TStringTrim::class];
+	protected $auth  = [OAuth::class];
 	protected $track = [WordList::class];
 }

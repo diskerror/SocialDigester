@@ -15,14 +15,14 @@ use Structure\Config\WordStats;
 /**
  * Class Config
  *
- * @param $userConfigName
- * @param $version
- * @param $mongo_db
- * @param $tweets_expire
- * @param $word_stats
- * @param $twitter
- * @param $process
- * @param $caches
+ * @param TString   $userConfigName
+ * @param TString   $version
+ * @param Mongo     $mongo_db
+ * @param integer   $tweets_expire
+ * @param WordStats $word_stats
+ * @param Twitter   $twitter
+ * @param Process   $process
+ * @param Caches    $caches
  *
  * @package Structure
  *
