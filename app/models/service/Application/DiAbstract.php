@@ -8,7 +8,7 @@ use Phalcon\Events\Manager;
 use Resource\LoggerFactory;
 use Resource\MongoCollectionManager;
 use Structure\Config;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ArrayUtils;
 
 /**
  * Class DiAbstract

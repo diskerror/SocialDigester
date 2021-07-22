@@ -9,6 +9,8 @@
 namespace Service;
 
 
+use Laminas\Server\Reflection;
+
 /**
  * Class Reflector
  *
@@ -23,7 +25,7 @@ class Reflector
 
 	public function __construct($class)
 	{
-		$this->_reflectedClass = \Zend\Server\Reflection::reflectClass($class);
+		$this->_reflectedClass = Reflection::reflectClass($class);
 	}
 
 	public function getFormattedDescriptions(): array
