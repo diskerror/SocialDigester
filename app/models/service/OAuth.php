@@ -24,17 +24,17 @@ class OAuth
 	/**
 	 * OAuth constructor.
 	 *
-	 * @param sOAuth $auth
+	 * @param sOAuth $config
 	 */
-	public function __construct(sOAuth $auth)
+	public function __construct(sOAuth $config)
 	{
 		$this->_secret =
-			rawurldecode($auth->consumer_secret) . '&' . rawurldecode($auth->oauth_token_secret);
+			rawurldecode($config->consumer_secret) . '&' . rawurldecode($config->oauth_token_secret);
 
 		$this->_baseOauth = [
-			'oauth_consumer_key'     => $auth->consumer_key,
+			'oauth_consumer_key'     => $config->consumer_key,
 			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_token'            => $auth->oauth_token,
+			'oauth_token'            => $config->oauth_token,
 			'oauth_version'          => '1.0',
 		];
 	}

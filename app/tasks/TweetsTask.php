@@ -1,8 +1,8 @@
 <?php
 
-use Logic\ConfigFactory;
 use Logic\PidHandler;
 use MongoDB\BSON\UTCDateTime;
+use Resource\MongoCollection;
 use Resource\Tweets;
 use Service\StdIo;
 
@@ -13,7 +13,7 @@ class TweetsTask extends TaskMaster
 	 */
 	public function getAction()
 	{
-		Logic\ConsumeTweets::exec(ConfigFactory::get());
+		Logic\ConsumeTweets::exec($this->config);
 	}
 
 	/**
@@ -21,7 +21,7 @@ class TweetsTask extends TaskMaster
 	 */
 	public function stopAction()
 	{
-		$pidHandler = new PidHandler(ConfigFactory::get()->process);
+		$pidHandler = new PidHandler($this->config->process);
 		if ($pidHandler->removeIfExists()) {
 			StdIo::outln('Running process was stopped.');
 		}
@@ -35,19 +35,23 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		$tweets = (new Tweets(ConfigFactory::get()->mongo_db))->find([
-			'entities.hashtags.0.text' => ['$gt' => ''],
-			'created_at'               => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
+		$tallies = (new Tallies($this->config->mongo_db))->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $this->config->word_stats->window) * 1000)],
 		]);
 
-		$t   = 0;
-		$obj = new Structure\Tweet();
-		foreach ($tweets as $tweet) {
-			$obj->assign($tweet);
-			StdIo::phpOut($obj->toArray());
-			$t++;
-		}
-		StdIo::outln($t);
+//		$tweets = (new Tweets($this->config->mongo_db))->find([
+//			'entities.hashtags.0.text' => ['$gt' => ''],
+//			'created_at'               => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
+//		]);
+//
+//		$t   = 0;
+//		$obj = new Structure\Tweet();
+//		foreach ($tweets as $tweet) {
+//			$obj->assign($tweet);
+//			StdIo::phpOut($obj->toArray());
+//			$t++;
+//		}
+//		StdIo::outln($t);
 	}
 
 	/**
@@ -55,7 +59,7 @@ class TweetsTask extends TaskMaster
 	 */
 	public function runningAction()
 	{
-		$t = (new Tweets(ConfigFactory::get()->mongo_db))->count([
+		$t = (new Tweets($this->config->mongo_db))->count([
 			'created_at' => ['$gt' => new UTCDateTime(strtotime('4 seconds ago') * 1000)],
 		]);
 

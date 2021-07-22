@@ -6,8 +6,8 @@ error_reporting(E_ALL);
 define('BASE_PATH', dirname(__DIR__));
 
 try {
-	require 'vendor/autoload.php';
-	require 'app/Loader.php';
+	require BASE_PATH . '/vendor/autoload.php';
+	require BASE_PATH . '/app/Loader.php';
 	Loader::register([BASE_PATH . '/app/controllers/']);
 
 	$app = new Service\Application\Http(BASE_PATH);

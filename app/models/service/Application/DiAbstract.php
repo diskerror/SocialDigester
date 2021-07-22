@@ -5,7 +5,6 @@ namespace Service\Application;
 use OutOfRangeException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager;
-use Phalcon\Loader;
 use Resource\LoggerFactory;
 use Resource\MongoCollectionManager;
 use Structure\Config;
@@ -51,10 +50,10 @@ abstract class DiAbstract
 	{
 		$self = $this;
 
-//		$di->setShared('config', function() use ($self) {
-//			static $config;
-//
-//			if (!isset($config)) {
+		$di->setShared('config', function() use ($self) {
+			static $config;
+
+			if (!isset($config)) {
 //				$configName = $self->_basePath . '/app/config/application.config.php';
 //				$devName    = $self->_basePath . '/app/config/development.config.php';
 //
@@ -74,18 +73,22 @@ abstract class DiAbstract
 //						$config->replace(require $g);
 //					}
 //				}
-//			}
-//
-//			return $config;
-//		});
-//
-//		$di->setShared('mongodb', function() use ($di) {
-//			static $mongodb;
-//			if (!isset($mongodb)) {
-//				$mongodb = new MongoCollectionManager($di->getShared('config')->mongodb);
-//			}
-//			return $mongodb;
-//		});
+
+				//	Always open this configuration file with it's default values.
+				$configFile = BASE_PATH . '/app/config/config.php';
+				$config     = new Config(require $configFile);
+
+				//	Open all other files ending with '.php' as a configuration file.
+				//	'glob' defaults to sorted.
+				foreach (glob(BASE_PATH . '/app/config/*.php') as $cnf) {
+					if ($cnf !== $configFile && !is_dir($cnf)) {
+						$config->replace(require $cnf);
+					}
+				}
+			}
+
+			return $config;
+		});
 
 		$di->setShared('eventsManager', function() {
 			static $eventsManager;
@@ -94,15 +97,6 @@ abstract class DiAbstract
 			}
 			return $eventsManager;
 		});
-
-//		$di->setShared('logger', function() use ($self) {
-//			static $logger;
-//			if (!isset($logger)) {
-////				$logger = LoggerFactory::getFileLogger($self->_basePath . '/' . $config->process->name . '.log');
-//				$logger = LoggerFactory::getStreamLogger();
-//			}
-//			return $logger;
-//		});
 	}
 
 	/**

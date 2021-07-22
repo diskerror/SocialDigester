@@ -1,20 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-ini_set('display_errors', '1');
-error_reporting(E_ALL);
+//ini_set('display_errors', '0');
+//error_reporting(E_ERROR);
 
 define('BASE_PATH', __DIR__);
-
-/**
- * Convert all errors into ErrorExceptions
- */
-set_error_handler(
-	function($severity, $errstr, $errfile, $errline) {
-		throw new ErrorException($errstr, 1, $severity, $errfile, $errline);
-	},
-	E_ERROR
-);
 
 try {
 	require 'vendor/autoload.php';
@@ -24,6 +14,9 @@ try {
 	$cli = new Service\Application\Cli(__DIR__);
 	$cli->init();
 	$cli->run($argv);
+}
+catch (Phalcon\Cli\Dispatcher\Exception $e) {
+	fwrite(STDERR, $e->getMessage() . PHP_EOL);
 }
 catch (Throwable $t) {
 	fwrite(STDERR, $t . PHP_EOL);
