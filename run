@@ -6,16 +6,6 @@
 
 define('BASE_PATH', __DIR__);
 
-/**
- * Convert all errors into ErrorExceptions
- */
-set_error_handler(
-	function($severity, $errstr, $errfile, $errline) {
-		throw new ErrorException($errstr, 1, $severity, $errfile, $errline);
-	},
-	E_ERROR
-);
-
 try {
 	require 'vendor/autoload.php';
 	require 'app/Loader.php';
