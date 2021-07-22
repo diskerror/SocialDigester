@@ -1,29 +1,40 @@
 {
-	"name": "Twitter Digester",
+	"name": "diskerror/twitter-digester",
 	"description": "Consumes a Twitter stream and counts the hashtags, for starters...",
 	"type": "project",
 	"license": "public",
 	"homepage": "http://www.politicator.com/",
+	"authors": [
+		{
+			"name": "Reid Woodbury Jr",
+			"email": "reid@rawsound.com",
+			"homepage": "http://www.rawsound.com",
+			"role": "Developer"
+		}
+	],
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"require": {
-		"php": "^7.1",
-		"ext-phalcon": "^3.3",
+		"php": "^7.4",
 		"ext-intl": "*",
+		"ext-json": "*",
 		"ext-mbstring": "*",
+		"ext-mongodb": "1.9.*",
+		"ext-phalcon": "^4.1",
 		"diskerror/typedbson": "dev-master",
-		"zendframework/zend-json": "^3.0",
-		"zendframework/zend-stdlib": "^2.7 || ^3.0",
-		"php-ds/php-ds": "^1.2 || ^2.0",
-		"php-science/textrank": "^1.0",
-		"zendframework/zend-server": "^2.8.0"
+		"laminas/laminas-json": "^3.2",
+		"laminas/laminas-server": "^2.10",
+		"laminas/laminas-stdlib": "^3.4",
+		"mongodb/mongodb": "^1.4",
+		"php-ds/php-ds": "^1.3",
+		"php-science/textrank": "^1.2"
 	},
 	"suggest": {
 		"ext-ds": "*"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"phalcon/ide-stubs": "3.3"
+		"phalcon/ide-stubs": "^4.1"
 	},
 	"autoload": {
 		"psr-4": {
