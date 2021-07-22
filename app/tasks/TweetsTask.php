@@ -2,6 +2,7 @@
 
 use Logic\PidHandler;
 use MongoDB\BSON\UTCDateTime;
+use Resource\MongoCollection;
 use Resource\Tweets;
 use Service\StdIo;
 
@@ -34,19 +35,23 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		$tweets = (new Tweets($this->config->mongo_db))->find([
-			'entities.hashtags.0.text' => ['$gt' => ''],
-			'created_at'               => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
+		$tallies = (new Tallies($this->config->mongo_db))->find([
+			'created' => ['$gte' => new UTCDateTime((time() - $this->config->word_stats->window) * 1000)],
 		]);
 
-		$t   = 0;
-		$obj = new Structure\Tweet();
-		foreach ($tweets as $tweet) {
-			$obj->assign($tweet);
-			StdIo::phpOut($obj->toArray());
-			$t++;
-		}
-		StdIo::outln($t);
+//		$tweets = (new Tweets($this->config->mongo_db))->find([
+//			'entities.hashtags.0.text' => ['$gt' => ''],
+//			'created_at'               => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
+//		]);
+//
+//		$t   = 0;
+//		$obj = new Structure\Tweet();
+//		foreach ($tweets as $tweet) {
+//			$obj->assign($tweet);
+//			StdIo::phpOut($obj->toArray());
+//			$t++;
+//		}
+//		StdIo::outln($t);
 	}
 
 	/**

@@ -21,7 +21,7 @@ final class ConsumeTweets
 	const MEMORY_LIMIT = 512 * 1024 * 1024;
 	const INSERT_COUNT = 16;
 
-	private function __construct() { }
+	private final function __construct() { }
 
 	/**
 	 * Open and save a stream of tweets.
@@ -114,24 +114,17 @@ final class ConsumeTweets
 						unset($tweet->extended_tweet->entities);
 					}
 
-					//	Pre calculate tally for INSERT_COUNT of tweets.
-					$hashtagSet = new DsSet();
-
 					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
+					$uniqueHashtags = new DsSet();
 					foreach ($tweet->entities->hashtags as $hashtag) {
-						$htext = str_split($hashtag->text);
-						foreach ($htext as $t) {
-							if ($t & chr(0x80)) {
-								continue 2;    //	skip hashtag if it contains a non-ASCII byte
-							}
+						if ($hashtag->text != '') {
+							$uniqueHashtags->add($hashtag->text);
+							$tally->allHashtags->doTally($hashtag->text);
 						}
-
-						$hashtagSet->add($hashtag->text);
-						$tally->allHashtags->doTally($hashtag->text);
 					}
 
 					//	Count unique hashtags for this tweet.
-					foreach ($hashtagSet->toArray() as $uniqueHashtag) {
+					foreach ($uniqueHashtags as $uniqueHashtag) {
 						$tally->uniqueHashtags->doTally($uniqueHashtag);
 					}
 
