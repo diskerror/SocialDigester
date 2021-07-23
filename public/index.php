@@ -3,17 +3,16 @@
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
+define('BASE_PATH', dirname(__DIR__));
+
 try {
-	//	Models are loaded with the Composer autoloader.
-	require __DIR__ . '/../vendor/autoload.php';
+	require BASE_PATH . '/vendor/autoload.php';
+	require BASE_PATH . '/app/Loader.php';
+	Loader::register([BASE_PATH . '/app/controllers/']);
 
-	(new Phalcon\Loader())
-		->registerDirs([__DIR__ . '/../app/controllers/'])
-		->register();
-
-	(new Service\Application\Http(__DIR__ . '/..'))
-		->init()
-		->run();
+	$app = new Service\Application\Http(BASE_PATH);
+	$app->init();
+	echo $app->run($_SERVER);
 }
 catch (Throwable $t) {
 	echo $t;

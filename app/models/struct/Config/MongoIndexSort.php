@@ -9,19 +9,19 @@
 namespace Structure\Config;
 
 
-use Diskerror\Typed\SAInteger;
+use Diskerror\Typed\Scalar\TInteger;
 
-class MongoIndexSort extends SAInteger
+class MongoIndexSort extends TInteger
 {
-    /**
-     * MongoIndexSort constructor.
-     *
-     * @param mixed $in
-     * @param bool  $allowNull
-     */
-    public function __construct($in = 1, bool $allowNull = false)
-    {
-        parent::__construct($in, $allowNull);
+	/**
+	 * MongoIndexSort constructor.
+	 *
+	 * @param mixed $in
+	 * @param bool  $allowNull
+	 */
+	public function __construct($in = 1, bool $allowNull = false)
+	{
+		parent::__construct($in, $allowNull);
     }
 
     public function set($in)

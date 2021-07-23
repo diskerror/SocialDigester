@@ -1,10 +1,10 @@
 /vendor
-._*
+._.*
 composer.lock
 *.log
 
-/config
-!/config/config.php
+app/config
+!app/config/config.php
 
 .idea
-
+.DS_Store

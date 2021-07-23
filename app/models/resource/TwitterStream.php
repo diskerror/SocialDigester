@@ -4,14 +4,15 @@ namespace Resource;
 
 use Service\OAuth;
 use Structure\Config\Twitter;
+use function var_export;
 
 /**
  * Class TwitterStream
  *
  * @package Resource
  *
- * @method filter($in=[])
- * @method sample($in=[])
+ * @method filter($in = [])
+ * @method sample($in = [])
  */
 class TwitterStream
 {
@@ -41,10 +42,17 @@ class TwitterStream
 	 */
 	protected $_proc;
 
+	/**
+	 * TwitterStream constructor.
+	 *
+	 * @param Twitter $config
+	 */
 	public function __construct(Twitter $config)
 	{
-		$this->_oauth   = new OAuth($config->oauth);
-		$this->_baseURL = $config->url . 'statuses/';
+		var_export($config->toArray());
+		exit;
+		$this->_oauth   = new OAuth($config->twitter->auth);
+		$this->_baseURL = $config->twitter->url . 'statuses/';
 	}
 
 	public static function isMessage(array $packet)
@@ -81,7 +89,7 @@ class TwitterStream
 	 */
 	public function read()
 	{
-		$str = fgets($this->_proc, 16384);
+		$str = fgets($this->_proc, 65536);
 		if (false === $str) {
 			return null;
 		}
@@ -125,7 +133,7 @@ class TwitterStream
 //		cout('curl --get ' . $url . $data . ' --header \'' . $header . '\'' . "\n");die;
 		$this->_proc = popen('curl -s --compressed --get ' . $url . $data . ' --header \'' . $header . '\'', 'r');
 
-		return (bool)$this->_proc;
+		return (bool) $this->_proc;
 	}
 
 }

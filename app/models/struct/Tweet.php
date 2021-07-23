@@ -2,7 +2,6 @@
 
 namespace Structure;
 
-use Diskerror\Typed\ArrayOptions;
 use Diskerror\Typed\TypedClass;
 use Structure\Tweet\Retweet;
 use Structure\Tweet\TweetTrait;

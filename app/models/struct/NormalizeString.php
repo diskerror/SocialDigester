@@ -9,10 +9,10 @@
 namespace Structure;
 
 
-use Diskerror\Typed\SAString;
+use Diskerror\Typed\Scalar\TString;
 use Normalizer;
 
-class NormalizeString extends SAString
+class NormalizeString extends TString
 {
 	public function set($in)
 	{

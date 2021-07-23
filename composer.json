@@ -35,13 +35,5 @@
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
 		"phalcon/ide-stubs": "^4.1"
-	},
-	"autoload": {
-		"psr-4": {
-			"Logic\\": "app/models/logic/",
-			"Service\\": "app/models/service",
-			"Resource\\": "app/models/resource/",
-			"Structure\\": "app/models/struct/"
-		}
 	}
 }

@@ -93,15 +93,6 @@ abstract class DiAbstract
 			}
 			return $eventsManager;
 		});
-
-		$di->setShared('logger', function() use ($self) {
-			static $logger;
-			if (!isset($logger)) {
-//				$logger = LoggerFactory::getFileLogger($self->_basePath . '/' . $config->process->name . '.log');
-				$logger = LoggerFactory::getStreamLogger();
-			}
-			return $logger;
-		});
 	}
 
 	/**
@@ -112,5 +103,5 @@ abstract class DiAbstract
 	/**
 	 * Run application.
 	 */
-	abstract public function run(): void;
+	abstract public function run(array $args): string;
 }

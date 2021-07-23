@@ -6,6 +6,7 @@
  * Time: 7:26 PM
  */
 
+use MongoDB\BSON\UTCDateTime;
 use Service\StdIo;
 
 class AdminTask extends TaskMaster
@@ -16,10 +17,10 @@ class AdminTask extends TaskMaster
 	public function rateAction()
 	{
 		$t = $this->mongodb->tweets->count([
-			'created_at' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime('20 seconds ago') * 1000)],
+			'created_at' => ['$gt' => new UTCDateTime(strtotime('10 seconds ago') * 1000)],
 		]);
 
-		StdIo::outln('Tweets are being received at a rate of ' . $t / 20 . ' per second.');
+		StdIo::outln('Tweets are being received at a rate of ' . $t / 10 . ' per second.');
 	}
 
 	/**

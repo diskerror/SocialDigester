@@ -38,7 +38,7 @@ return [
 		'database'    => 'digester',
 
 		/**
-		 * The list of active collections. Listing the names here prevents typos from
+		 * The list of active collections. Listing the names here prevents typos in modified code from
 		 *   creating new and mysterious collections.
 		 * The keys are the collection names and the values are a list of the index definitions.
 		 * The collections "tweets" and "snapshots" structure are defined by the structure
@@ -46,17 +46,19 @@ return [
 		 */
 		'collections' => [
 			'tweets'    => [
-				['keys' => ['created_at' => 1], 'options' => ['expireAfterSeconds' => 60 * 20]],
+				['keys' => ['created_at' => 1], 'options' => ['expireAfterSeconds' => 600]],
 				['keys' => ['entities.hashtags.0.text' => 1]],
 				['keys' => ['text' => 1]],
 			],
+			'tallies'   => [
+				['keys' => ['created' => 1], 'options' => ['expireAfterSeconds' => 600]],
+			],
 			'messages'  => [
-				['keys' => ['created' => 1], 'options' => ['expireAfterSeconds' => 60 * 60 * 24]],
+				['keys' => ['created' => 1], 'options' => ['expireAfterSeconds' => 86400]],
 			],
 			'snapshots' => [
 				//	_id is automatically indexed
 			],
-
 		],
 	],
 

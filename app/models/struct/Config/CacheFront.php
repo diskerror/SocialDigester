@@ -9,11 +9,11 @@
 namespace Structure\Config;
 
 
-use Diskerror\Typed\SAIntegerUnsigned;
+use Diskerror\Typed\Scalar\TIntegerUnsigned;
 use Diskerror\Typed\TypedClass;
 
 class CacheFront extends TypedClass
 {
-	protected $lifetime = [SAIntegerUnsigned::class];
+	protected $lifetime = [TIntegerUnsigned::class];
 	protected $adapter  = '';
 }
