@@ -4,7 +4,6 @@ namespace Resource;
 
 use Service\OAuth;
 use Structure\Config\Twitter;
-use function var_export;
 
 /**
  * Class TwitterStream
@@ -49,10 +48,8 @@ class TwitterStream
 	 */
 	public function __construct(Twitter $config)
 	{
-		var_export($config->toArray());
-		exit;
-		$this->_oauth   = new OAuth($config->twitter->auth);
-		$this->_baseURL = $config->twitter->url . 'statuses/';
+		$this->_oauth   = new OAuth($config->auth);
+		$this->_baseURL = $config->url;
 	}
 
 	public static function isMessage(array $packet)

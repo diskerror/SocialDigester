@@ -15,5 +15,5 @@ use Diskerror\Typed\TypedClass;
 class CacheFront extends TypedClass
 {
 	protected $lifetime = [TIntegerUnsigned::class];
-	protected $adapter  = '';
+	protected $adapter  = 'data';
 }

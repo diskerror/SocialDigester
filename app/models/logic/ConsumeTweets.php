@@ -28,9 +28,9 @@ final class ConsumeTweets
 		TwitterStream $stream,
 		array $track,
 		PidHandler $pidHandler,
-		LoggerFactory $logger,
-		Collection $tweetsClient,
-		Collection $messagesClient
+		LoggerFactory $logger = null,
+		Collection $tweetsClient = null,
+		Collection $messagesClient = null
 	)
 	{
 		ini_set('memory_limit', 268435456);
@@ -62,7 +62,7 @@ final class ConsumeTweets
 					$packet = $stream->read();
 				}
 				catch (\Exception $e) {
-					$logger->info((string)$e);
+					$logger->info((string) $e);
 					continue;
 				}
 
@@ -124,7 +124,7 @@ final class ConsumeTweets
 			$logger->info('Stopped capturing tweets.');
 		}
 		catch (\Exception $e) {
-			$logger->emergency((string)$e);
+			$logger->emergency((string) $e);
 		}
 
 		$pidHandler->removeIfExists();

@@ -8,7 +8,6 @@ use Phalcon\Events\Manager;
 use Resource\LoggerFactory;
 use Resource\MongoCollectionManager;
 use Structure\Config;
-use Laminas\Stdlib\ArrayUtils;
 
 /**
  * Class DiAbstract
@@ -35,7 +34,7 @@ abstract class DiAbstract
 	final public function __construct(string $basePath)
 	{
 		if (!is_dir($basePath)) {
-			throw new OutOfRangeException('"$_basePath" should be the directory containing this project.');
+			throw new OutOfRangeException('"$_basePath" base path does not exist.');
 		}
 
 		$this->_basePath = $basePath;
@@ -58,10 +57,10 @@ abstract class DiAbstract
 				$devName    = $self->_basePath . '/app/config/development.config.php';
 
 				//	File must exist.
-				$config = require $configName;
+				$config = new Config(require $configName);
 
 				if (file_exists($devName)) {
-					$config = ArrayUtils::merge($config, require $devName);
+					$config->replace(require $devName);
 				}
 
 				$config = new Config($config);
@@ -73,9 +72,23 @@ abstract class DiAbstract
 						$config->replace(require $g);
 					}
 				}
+
+				$userConfigName = getenv('HOME') . '/' . $config->userConfigName;
+				if (file_exists($userConfigName)) {
+					$config->replace(require $userConfigName);
+				}
 			}
 
 			return $config;
+		});
+
+		$di->setShared('logger', function() use ($self) {
+			static $logger;
+			if (!isset($logger)) {
+//				$logger = LoggerFactory::getFileLogger($self->_basePath . '/' . $config->process->name . '.log');
+				$logger = LoggerFactory::getStreamLogger();
+			}
+			return $logger;
 		});
 
 		$di->setShared('mongodb', function() use ($di) {

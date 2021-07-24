@@ -29,12 +29,12 @@ class OAuth
 	public function __construct(sOAuth $auth)
 	{
 		$this->_secret =
-			rawurldecode($auth->consumer_secret) . '&' . rawurldecode($auth->oauth_token_secret);
+			rawurldecode($auth->consumerSecret) . '&' . rawurldecode($auth->oauthTokenSecret);
 
 		$this->_baseOauth = [
-			'oauth_consumer_key'     => $auth->consumer_key,
+			'oauth_consumer_key'     => $auth->consumerKey,
 			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_token'            => $auth->oauth_token,
+			'oauth_token'            => $auth->oauthToken,
 			'oauth_version'          => '1.0',
 		];
 	}

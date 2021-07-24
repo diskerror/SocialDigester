@@ -13,8 +13,8 @@ use Diskerror\Typed\TypedClass;
 
 class OAuth extends TypedClass
 {
-    protected $consumerKey       = 'wwww';
-    protected $consumerSecret    = 'xxxx';
-    protected $accessToken       = 'yyyy';
-    protected $accessTokenSecret = 'zzzz';
+	protected $consumerKey      = 'wwww';
+	protected $consumerSecret   = 'xxxx';
+	protected $oauthToken       = 'yyyy';
+	protected $oauthTokenSecret = 'zzzz';
 }

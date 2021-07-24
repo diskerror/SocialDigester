@@ -7,16 +7,15 @@
  * @see https://docs.zendframework.com/tutorials/advanced-config/#environment-specific-application-configuration
  */
 return [
+	'appName'        => 'Twitter_Digester',
+
 	//	Name of the user's configuration file.
-	'userConfigName' => '.politicator.php',
+	'userConfigName' => '.digester.php',
 
 	// Whether or not to enable a configuration cache.
 	// If enabled, the merged configuration will be cached and used in
 	// subsequent requests.
 	//	'configCacheEnabled' => true,
-
-	// The key used to create the configuration cache file name.
-	//    'configEacheKey' => 'application.config.cache',
 
 	// Whether or not to enable a module class map cache.
 	// If enabled, creates a module class map cache which will be used
@@ -66,110 +65,20 @@ return [
 		'quantity'  => 100,    //	return the top X items
 		'window'    => 300,    //	summarize the last X seconds
 		'stopWords' => [
-			'about',
-			'after',
-			'all',
-			'and',
-			'are',
-			'back',
-			'been',
-			'before',
-			'being',
-			'but',
-			'can',
-			'could',
-			'did',
-			'even',
-			'field',
-			'for',
-			'from',
-			'get',
-			'going',
-			'had',
-			'has',
-			'have',
-			'her',
-			'him',
-			'his',
-			'how',
-			'http',
-			'https',
-			'into',
-			'it\'s',
-			'its',
-			'just',
-			'let',
-			'make',
-			'man',
-			'many',
-			'more',
-			'most',
-			'much',
-			'not',
-			'now',
-			'only',
-			'other',
-			'over',
-			'really',
-			'see',
-			'she',
-			'since',
-			'still',
-			'than',
-			'that',
-			'the',
-			'their',
-			'them',
-			'they',
-			'this',
-			'those',
-			'very',
-			'via',
-			'was',
-			'what',
-			'when',
-			'who',
-			'will',
-			'with',
-			'would',
-			'you',
-			'your',
-		],     //	stop words
+		],
 	],
 
 	'track' => [
-		'chuckschumer',
-		'constitution',
-		'democrat',
-		'donald',
-		'donaldtrump',
-		'green',
-		'kevinmccarthy',
-		'libertarian',
-		'mccarthy',
-		'mcconnell',
-		'mikepence',
-		'mitch',
-		'mitchmcconnell',
-		'nancypelosi',
-		'pelosi',
-		'pence',
-		'potus',
-		'republican',
-		'schumer',
-		'scotus',
-		'socialdemocrat',
-		'trump',
 	],
 
 	'twitter' => [
-		'url' => 'https://stream.twitter.com/1.1/',
+		'url' => 'https://stream.twitter.com/1.1/statuses/',
 
 		'auth' => [
-			'consumer_key'       => '',
-			'consumer_secret'    => '',
-			'oauth_token'        => '',
-			'oauth_token_secret' => '',
+			'consumerKey'      => 'wwww',
+			'consumerSecret'   => 'xxxx',
+			'oauthToken'       => 'yyyy',
+			'oauthTokenSecret' => 'zzzz',
 		],
 	],
 
@@ -183,10 +92,8 @@ return [
 		'index' => [
 			'front' => [
 				'lifetime' => 600,    //	ten minutes
-				'adapter'  => 'data',
 			],
 			'back'  => [
-				'cacheDir' => '/dev/shm/politicator/',
 				'prefix'   => 'index',
 				'frontend' => null,
 				'adapter'  => 'file',
@@ -196,10 +103,8 @@ return [
 		'tag_cloud' => [
 			'front' => [
 				'lifetime' => 2,    //	two seconds
-				'adapter'  => 'data',
 			],
 			'back'  => [
-				'cacheDir' => '/dev/shm/politicator/',
 				'prefix'   => 'tag_cloud',
 				'frontend' => null,
 				'adapter'  => 'file',
@@ -209,10 +114,8 @@ return [
 		'summary' => [
 			'front' => [
 				'lifetime' => 6,    //	six seconds
-				'adapter'  => 'data',
 			],
 			'back'  => [
-				'cacheDir' => '/dev/shm/politicator/',
 				'prefix'   => 'summary',
 				'frontend' => null,
 				'adapter'  => 'file',

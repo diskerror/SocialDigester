@@ -13,7 +13,7 @@ use Diskerror\Typed\TypedClass;
 
 class CacheBack extends TypedClass
 {
-	protected $cacheDir = '';
+	protected $cacheDir = '/dev/shm/twitter_digester/';
 	protected $prefix   = '';
 	protected $frontend = null;
 	protected $adapter  = 'file';

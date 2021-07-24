@@ -1,6 +1,7 @@
 <?php
 
 use MongoDB\BSON\UTCDateTime;
+use Resource\TwitterStream;
 use Service\StdIo;
 
 class TweetsTask extends TaskMaster
@@ -8,7 +9,7 @@ class TweetsTask extends TaskMaster
 	public function getAction()
 	{
 		Logic\ConsumeTweets::exec(
-			$this->stream,
+			new TwitterStream($this->config->twitter),
 			$this->config->track->toArray(),
 			$this->pidHandler,
 			$this->logger,
