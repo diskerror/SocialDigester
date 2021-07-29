@@ -30,6 +30,7 @@ final class ConsumeTweets
 	 */
 	public static function exec(Config $config)
 	{
+		mb_internal_encoding('UTF-8');
 		ini_set('memory_limit', self::MEMORY_LIMIT);
 
 		$pidHandler = new PidHandler($config->process);
@@ -103,6 +104,14 @@ final class ConsumeTweets
 					if ($tweet->lang !== 'en') {
 						$logger->info('packet lang not en');
 						continue;
+					}
+
+					//	Skip tweet if it has a hashtag with non-latin scripts.
+					foreach ($tweet->entities->hashtags as $hashtag) {
+						if (mb_ord(mb_substr($hashtag->text, 0, 1)) > 592) {
+							$logger->info('hashtag script not latin');
+							continue 2;
+						}
 					}
 
 					// Check for and use extended tweet if it exists.
