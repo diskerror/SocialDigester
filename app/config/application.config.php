@@ -45,12 +45,12 @@ return [
 		 */
 		'collections' => [
 			'tweets'    => [
-				['keys' => ['created_at' => 1], 'options' => ['expireAfterSeconds' => 600]],
+				['keys' => ['created_at' => 1], 'options' => ['expireAfterSeconds' => 300]],
 				['keys' => ['entities.hashtags.0.text' => 1]],
 				['keys' => ['text' => 1]],
 			],
 			'tallies'   => [
-				['keys' => ['created' => 1], 'options' => ['expireAfterSeconds' => 600]],
+				['keys' => ['created' => 1], 'options' => ['expireAfterSeconds' => 300]],
 			],
 			'messages'  => [
 				['keys' => ['created' => 1], 'options' => ['expireAfterSeconds' => 86400]],

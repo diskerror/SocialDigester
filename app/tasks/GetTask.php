@@ -57,6 +57,6 @@ class GetTask extends TaskMaster
 	 */
 	public function snapshotAction()
 	{
-		StdIo::outln(Logic\Snapshots::make($this->mongodb, $this->config));
+//		StdIo::outln(Logic\Snapshots::make($this->mongodb, $this->config));
 	}
 }

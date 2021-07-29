@@ -1,47 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Politicator</title>
-	<link rel="stylesheet" type="text/css" href="/css/jqcloud.min.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery.qtip.min.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.structure.min.css" />
-	<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="/js/jqcloud.min.js"></script>
-	<script type="text/javascript" src="/js/jquery.qtip.min.js"></script>
-	<script type="text/javascript" src="/js/imagesloaded.pkg.min.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/jqcloud.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/jquery.qtip.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.structure.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/index.css"/>
+	<script src="/js/jquery-3.6.0.min.js"></script>
+	<script src="/js/jqcloud.min.js"></script>
+	<script src="/js/jquery.qtip.min.js"></script>
+	<script src="/js/imagesloaded.pkg.min.js"></script>
+	<script src="/js/jquery-ui.min.js"></script>
 	<?php $this->assets->outputJs() ?>
-	<style>
-		body {
-			font-family: Helvetica, Arial, sans-serif;
-			color: #08E;
-			padding: 0.5em;
-		}
-		svg.defs-only {
-			display: block;
-			position: absolute;
-			height: 0;
-			width: 0;
-			margin: 0;
-			padding: 0;
-			border: none;
-			overflow: hidden;
-		}
-	</style>
-	<?php if(isset($tagCloud)): ?>
-	<script type="text/javascript">
-		var tagCloud = <?= Zend\Json\Json::encode($tagCloud, false, ['enableJsonExprFinder' => true]); ?>;
-	</script>
+	<?php if (isset($tagCloud)): ?>
+		<script>
+			tagCloud = <?= Laminas\Json\Json::encode($tagCloud, false, ['enableJsonExprFinder' => true]) ?>;
+		</script>
 	<?php endif; ?>
 </head>
 <body>
 <svg class="defs-only" xmlns="http://www.w3.org/2000/svg">
-	<symbol id="consume">
+	<symbol id="consumer">
 		<path d="M11.717,23.593c2.705-0.015,5.565-0.674,7.789-2.369c0.903,0.431,1.911,0.686,2.982,0.686
 		c1.037,0,2.018-0.232,2.898-0.639l1.362,1.49l0.489-2.738c1.294-1.223,2.103-2.938,2.103-4.84c0-3.716-3.067-6.728-6.854-6.728
 		c-1.481,0-2.865,0.388-3.996,1.117c-5.128,1.422-12.938,2.141-14.581-8.285C2.308,3.682,0,8.11,0,11.209
@@ -49,57 +33,85 @@
 		l2.135-2.431c0.828,0.139,1.716,0.211,2.652,0.229l0.223,2.89l-1.686,0.271l0.076,0.473l1.912-0.309l1.493,1.055l0.275-0.391
 		l-1.524-1.078L11.717,23.593z M25.695,14.446c0.846,0,1.531,0.673,1.531,1.503c0,0.831-0.687,1.503-1.531,1.503
 		c-0.846,0-1.531-0.673-1.531-1.503S24.852,14.446,25.695,14.446z M5.521,14.866c0,0,7.373-2.773,9.383-1.902
-		c2.013,0.872,2.936,3.208,2.064,5.221c-0.87,2.01-3.208,2.935-5.22,2.063C9.737,19.375,5.521,14.866,5.521,14.866z"/>
-		<ellipse cx="23.332" cy="27.025" rx="0.844" ry="0.349"/>
-		<ellipse cx="26.75" cy="28.036" rx="0.846" ry="0.35"/>
-		<ellipse cx="28.992" cy="26.566" rx="0.68" ry="0.281"/>
-		<ellipse cx="25.801" cy="26.578" rx="0.647" ry="0.269"/>
-		<ellipse cx="27.555" cy="25.971" rx="0.377" ry="0.155"/>
+		c2.013,0.872,2.936,3.208,2.064,5.221c-0.87,2.01-3.208,2.935-5.22,2.063C9.737,19.375,5.521,14.866,5.521,14.866z"></path>
+		<ellipse cx="23.332" cy="27.025" rx="0.844" ry="0.349"></ellipse>
+		<ellipse cx="26.75" cy="28.036" rx="0.846" ry="0.35"></ellipse>
+		<ellipse cx="28.992" cy="26.566" rx="0.68" ry="0.281"></ellipse>
+		<ellipse cx="25.801" cy="26.578" rx="0.647" ry="0.269"></ellipse>
+		<ellipse cx="27.555" cy="25.971" rx="0.377" ry="0.155"></ellipse>
 		<path d="M25.693,16.62c0.445,0,0.808-0.359,0.808-0.807c0-0.137-0.044-0.26-0.104-0.373c-0.1,0.111-0.239,0.184-0.4,0.184
 		c-0.301,0-0.542-0.243-0.542-0.542c0-0.009,0.004-0.018,0.005-0.027c-0.328,0.103-0.568,0.397-0.568,0.758
-		C24.889,16.261,25.248,16.62,25.693,16.62z"/>
+		C24.889,16.261,25.248,16.62,25.693,16.62z"></path>
 	</symbol>
 </svg>
 
-<header style="width:100%;border-bottom:1px solid #AAC">
-	<div style="float:left;padding:0 1em 1em">
+<header>
+	<div style="float:left;padding:0 1em">
 		<svg viewBox="0 0 30 30" width="60" height="60" style="fill:#09F">
-			<use xlink:href="#consume"/>
+			<use xlink:href="#consumer"></use>
 		</svg>
 	</div>
 	<div style=";height:60px">
-		<p style="vertical-align:middle"><b>Hashtags found with: </b><?= isset($track) ? implode(', ', $track) : '' ?></p>
+		<p style="vertical-align:middle"><b>Tweets found with: </b><?= isset($track) ? implode(', ', $track) : '' ?>
+		</p>
 	</div>
 </header>
 
-<div style="width:100%;text-align:center;vertical-align:middle">
-	<div id="cloud1" style="height:620px;width:100%;margin:0 auto">
-		<svg viewBox="0 0 30 30" width="600" height="600" style="vertical-align:middle;fill:#F8FBFF">
-			<use xlink:href="#consume"/>
-		</svg>
-	</div>
-</div>
 
-<div style="width:100%;height:152px;text-align:center;vertical-align:middle;border-top:1px solid #AAC;font-size:15px">
+<!-- I know, I know... I'm going to let someone else do this with divs. -->
+<table id="clouds">
+	<tr>
+		<td id="cloud1">
+			<p>Count of hashtags per minute<br>averaged from the last 3 minutes<br>counted once per tweet.</p>
+			<svg viewBox="0 0 30 30" class="bg">
+				<use xlink:href="#consumer"></use>
+			</svg>
+		</td>
+		<td id="cloud2">
+			<p>Count of all hashtags per minute<br>for the last 3 minutes.</p>
+			<svg viewBox="0 0 30 30" class="bg">
+				<use xlink:href="#consumer"></use>
+			</svg>
+		</td>
+	</tr>
+	<tr>
+		<td id="text_words">
+			<p>Word count in the tweet’s text.</p>
+			<svg viewBox="0 0 30 30" class="bg">
+				<use xlink:href="#consumer"></use>
+			</svg>
+		</td>
+		<td id="user_mentions">
+			<p>Count of user mentions.</p>
+			<svg viewBox="0 0 30 30" class="bg">
+				<use xlink:href="#consumer"></use>
+			</svg>
+		</td>
+	</tr>
+</table>
+
+
+<div class="summary">
 	<div id="text1" style="width:100%;">
-		<?= isset($summary) ? '<p>'.implode("</p>\n\t\t<p>", $summary).'</p>' : '' ?>
+		<?= isset($summary) ? '<p>' . implode("</p>\n\t\t<p>", $summary) . '</p>' : '' ?>
 	</div>
 </div>
 
-<footer style="width:100%;border-top:1px solid #AAC;padding:1em 0">
-	<div style="text-align:center;margin:auto;width:420px;height:50px">
+
+<footer>
+	<div style="text-align:center;margin:auto;width:460px;height:50px">
 		<div style="width:50px;height:100%;float:left">
 			<a href="http://www.twitter.com" target="_blank"><img src="img/twitter.png" alt="Twitter logo"
 						style="width:46px;height:42px"></a>
 		</div>
 		<div style="height:100%;float:right;vertical-align:middle">
-			Consumes Twitter tweets, counts the hashtags,<br>and displays a summary.
+			Consumes Twitter tweets, counts the hashtags and words,<br>and displays a summary.
 		</div>
 	</div>
-	<?php if(isset($created)): ?>
-	<div style="text-align:center;margin:auto;width:420px;height:50px">
-		<p>Snapshot taken on <?= (string)$created ?></p>
-	</div>
+	<?php if (isset($created)): ?>
+		<div style="text-align:center;margin:auto;width:420px;height:50px">
+			<p>Snapshot taken on <?= (string) $created ?></p>
+		</div>
 	<?php endif; ?>
 </footer>
 
