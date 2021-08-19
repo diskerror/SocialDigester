@@ -3,8 +3,9 @@
 composer.lock
 *.log
 
-app/config
-!app/config/config.php
+/app/config
+!/app/config/application.config.php
+!/app/config/development.config.php.dist
 
 .idea
 .DS_Store
