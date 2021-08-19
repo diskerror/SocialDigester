@@ -8,7 +8,6 @@ use Resource\Tallies;
 use Resource\Tweets;
 use Structure\Config;
 use Structure\TallyWords;
-use function var_export;
 
 final class TopList extends AbstractTally
 {

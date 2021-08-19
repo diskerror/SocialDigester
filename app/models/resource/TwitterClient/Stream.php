@@ -6,7 +6,6 @@ use BadMethodCallException;
 use Exception;
 use MongoDB\Driver\Exception\AuthenticationException;
 use Structure\Config\OAuth;
-use function strstr;
 
 class Stream extends ClientAbstract
 {

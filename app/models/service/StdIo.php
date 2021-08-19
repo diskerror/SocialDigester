@@ -3,7 +3,6 @@
 namespace Service;
 
 use Service\Exception\RuntimeException;
-use function implode;
 
 class StdIo
 {

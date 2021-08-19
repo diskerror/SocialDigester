@@ -6,10 +6,9 @@ namespace Service\Application;
 use Phalcon\Cli\Console;
 use Phalcon\Cli\Dispatcher\Exception;
 use Phalcon\Di\FactoryDefault\Cli as FdCli;
-use Resource\PidHandler;
+use Logic\PidHandler;
 use Resource\TwitterStream;
 use Service\StdIo;
-use const PHP_EOL;
 
 class Cli extends DiAbstract
 {

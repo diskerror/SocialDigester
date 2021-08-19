@@ -5,9 +5,6 @@ namespace Logic;
 use Phalcon\Logger;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Formatter\Line;
-use function fwrite;
-use const PHP_EOL;
-use const STDERR;
 
 /**
  * This logger class writes to both a named file and to STDERR.
