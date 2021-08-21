@@ -22,11 +22,6 @@ abstract class DiAbstract
 	protected $_basePath;
 
 	/**
-	 * @var (application)
-	 */
-	protected $_application;
-
-	/**
 	 * DiAbstract constructor.
 	 *
 	 * @param string $basePath
@@ -107,11 +102,6 @@ abstract class DiAbstract
 			return $eventsManager;
 		});
 	}
-
-	/**
-	 * @param $di
-	 */
-	abstract public function init();
 
 	/**
 	 * Run application.

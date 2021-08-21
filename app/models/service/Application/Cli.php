@@ -13,9 +13,11 @@ use Service\StdIo;
 class Cli extends DiAbstract
 {
 	/**
-	 * @return Cli
+	 * @param array $argv
+	 *
+	 * @throws Exception
 	 */
-	public function init(): self
+	public function run(array $argv): string
 	{
 		$di = new FdCli();
 
@@ -38,18 +40,8 @@ class Cli extends DiAbstract
 		});
 
 
-		$this->_application = new Console($di);
+		$application = new Console($di);
 
-		return $this;
-	}
-
-	/**
-	 * @param array $argv
-	 *
-	 * @throws Exception
-	 */
-	public function run(array $argv): string
-	{
 		try {
 			// Parse CLI arguments.
 			//	CLI options will be parsed into $config later.
@@ -66,7 +58,7 @@ class Cli extends DiAbstract
 				}
 			}
 
-			$this->_application->handle($args);
+			$application->handle($args);
 		}
 		catch (Exception $e) {
 			$message = $e->getMessage();

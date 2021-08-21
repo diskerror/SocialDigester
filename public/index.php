@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 define('BASE_PATH', dirname(__DIR__));
 
-require BASE_PATH . '/vendor/autoload.php';
+require '../vendor/autoload.php';
 
 try {
 	$app = new Service\Application\Http(BASE_PATH);

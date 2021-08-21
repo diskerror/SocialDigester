@@ -18,7 +18,10 @@ use Service\View;
  */
 class Http extends DiAbstract
 {
-	public function init(): self
+	/**
+	 * Run application.
+	 */
+	public function run(array $argv): string
 	{
 		$di = new FactoryDefault();
 
@@ -102,18 +105,10 @@ class Http extends DiAbstract
 //			return $dispatcher;
 //		});
 
-		$this->_application = new Application($di);
-		$this->_application->useImplicitView(false);
+		$application = new Application($di);
+		$application->useImplicitView(false);
 
-		return $this;
-	}
-
-	/**
-	 * Run application.
-	 */
-	public function run(array $argv): string
-	{
-		$uri = $this->_application->handle($argv['REQUEST_URI']);
+		$uri = $application->handle($argv['REQUEST_URI']);
 		return $uri->getContent();
 	}
 }

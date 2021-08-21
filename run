@@ -10,7 +10,6 @@ require 'vendor/autoload.php';
 
 try {
 	$cli = new Service\Application\Cli(__DIR__);
-	$cli->init();
 	$cli->run($argv);
 }
 catch (Phalcon\Cli\Dispatcher\Exception $e) {
