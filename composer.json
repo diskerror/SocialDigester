@@ -21,6 +21,7 @@
 		"ext-mbstring": "*",
 		"ext-mongodb": "1.9.*",
 		"ext-phalcon": "^4.1",
+		"diskerror/autoload": "dev-main",
 		"diskerror/typedbson": "dev-master",
 		"laminas/laminas-json": "^3.2",
 		"laminas/laminas-server": "^2.10",
