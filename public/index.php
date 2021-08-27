@@ -5,11 +5,10 @@ error_reporting(E_ALL);
 
 define('BASE_PATH', dirname(__DIR__));
 
-require '../vendor/autoload.php';
-
 try {
+	require '../diskerror_autoloader.php';
+
 	$app = new Service\Application\Http(BASE_PATH);
-	$app->init();
 	echo $app->run($_SERVER);
 }
 catch (Throwable $t) {

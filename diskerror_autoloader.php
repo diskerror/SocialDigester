@@ -30,26 +30,41 @@ final class Autoloader
 
 	public static function loader($class)
 	{
+		//	Classes mapped directly to files.
 		if (self::$classmap->hasKey($class)) {
 			require self::$classmap->offsetGet($class);
 			return true;
 		}
 
-		if (self::$namespaces->hasKey($class)) {
-			require self::$namespaces->offsetGet($class);
-			return true;
+		$classV     = new Vector(explode('\\', $class));
+		$classDepth = $classV->count();
+
+		//	TODO: Need sample data to test.
+		$requestedClass = '';
+		for ($cd = 0; $cd < $classDepth; ++$cd) {
+			$requestedClass .= $classV->get($cd) . '\\';
+			if (self::$namespaces->hasKey($requestedClass)) {
+				$workingClassFile =
+					self::$namespaces->get($requestedClass) . '/' .
+					implode('/', $classV->slice($cd + 1)->toArray()) . '.php';
+
+				if (file_exists($workingClassFile)) {
+					require $workingClassFile;
+					return true;
+				}
+			}
 		}
 
-		$classV         = new Vector(explode('\\', $class));
 		$requestedClass = '';
-		for ($p = 0; $p < $classV->count(); ++$p) {
-			$requestedClass .= $classV->get($p) . '\\';
+		for ($cd = 0; $cd < $classDepth; ++$cd) {
+			$requestedClass .= $classV->get($cd) . '\\';
 			if (self::$psr4->hasKey($requestedClass)) {
 				$workingClassPaths = self::$psr4->get($requestedClass);
-				for ($wc = 0; $wc < count($workingClassPaths); ++$wc) {
+				$pathCount         = count($workingClassPaths);
+				for ($wc = 0; $wc < $pathCount; ++$wc) {
 					$workingClassFile =
-						self::$psr4->get($requestedClass)[$wc] . '/' .
-						implode('/', $classV->slice($p + 1)->toArray()) . '.php';
+						$workingClassPaths[$wc] . '/' .
+						implode('/', $classV->slice($cd + 1)->toArray()) . '.php';
 
 					if (file_exists($workingClassFile)) {
 						require $workingClassFile;
