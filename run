@@ -6,7 +6,7 @@
 
 define('BASE_PATH', __DIR__);
 
-require 'vendor/autoload.php';
+require 'diskerror_autoloader.php';
 
 try {
 	$cli = new Service\Application\Cli(__DIR__);
