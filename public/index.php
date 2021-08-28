@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 define('BASE_PATH', dirname(__DIR__));
 
 try {
-	require '../diskerror_autoloader.php';
+	require BASE_PATH . '/vendor/diskerror/autoload/autoload.php';
 
 	$app = new Service\Application\Http(BASE_PATH);
 	echo $app->run($_SERVER);
