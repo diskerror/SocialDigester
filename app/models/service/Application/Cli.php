@@ -39,25 +39,23 @@ class Cli extends DiAbstract
 			return $pidHandler;
 		});
 
+		// Parse CLI arguments.
+		//	CLI options will be parsed into $config later.
+		$args = [];
+		if (array_key_exists(1, $argv)) {
+			$args['task'] = $argv[1];
 
-		$application = new Console($di);
+			if (array_key_exists(2, $argv)) {
+				$args['action'] = $argv[2];
 
-		try {
-			// Parse CLI arguments.
-			//	CLI options will be parsed into $config later.
-			$args = [];
-			if (array_key_exists(1, $argv)) {
-				$args['task'] = $argv[1];
-
-				if (array_key_exists(2, $argv)) {
-					$args['action'] = $argv[2];
-
-					if (array_key_exists(3, $argv)) {
-						$args['params'][] = $argv[3];
-					}
+				if (array_key_exists(3, $argv)) {
+					$args['params'][] = $argv[3];
 				}
 			}
+		}
 
+		try {
+			$application = new Console($di);
 			$application->handle($args);
 		}
 		catch (Exception $e) {

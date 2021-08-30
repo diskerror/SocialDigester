@@ -27,25 +27,25 @@ class Http extends DiAbstract
 
 		parent::_commonDi($di);
 
-		$self = $this;
+		$basePath = $this->_basePath;
 
-//		$di->setShared('view', function() use ($self) {
+//		$di->setShared('view', function() use ($basePath) {
 //			static $view;
 //			if (!isset($view)) {
 //				$view = new View();
-//				$view->setViewsDir($self->_basePath . '/app/views/');
-//				$view->setLayoutsDir($self->_basePath . '/app/views/layouts/');
+//				$view->setViewsDir($basePath . '/app/views/');
+//				$view->setLayoutsDir($basePath . '/app/views/layouts/');
 //				$view->setTemplateAfter('default');
 //				$view->start();
 //			}
 //			return $view;
 //		});
 
-		$di->setShared('view', function() use ($self) {
+		$di->setShared('view', function() use ($basePath) {
 			static $view;
 			if (!isset($view)) {
 				$view = new Simple();
-				$view->setViewsDir($self->_basePath . '/app/views/');
+				$view->setViewsDir($basePath . '/app/views/');
 				$view->registerEngines(['.phtml' => Php::class]);
 			}
 			return $view;

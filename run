@@ -12,9 +12,6 @@ try {
 	$cli = new Service\Application\Cli(__DIR__);
 	$cli->run($argv);
 }
-catch (Phalcon\Cli\Dispatcher\Exception $e) {
-	fwrite(STDERR, $e->getMessage() . PHP_EOL);
-}
 catch (Throwable $t) {
 	fwrite(STDERR, $t . PHP_EOL);
 }
