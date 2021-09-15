@@ -59,8 +59,8 @@ class TweetsTask extends TaskMaster
 	 */
 	public function runningAction()
 	{
-		$t = (new Tweets($this->config->mongo_db))->count([
-			'created_at' => ['$gt' => new UTCDateTime(strtotime('4 seconds ago') * 1000)],
+		$t = (new Resource\Tweets($this->config->mongo_db))->count([
+			'created_at' => ['$gt' => new UTCDateTime(strtotime('6 seconds ago') * 1000)],
 		]);
 
 		StdIo::outln(($t === 0 ? 0 : 1));
