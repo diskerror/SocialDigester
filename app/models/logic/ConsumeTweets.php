@@ -19,7 +19,7 @@ final class ConsumeTweets
 {
 	//	512 meg memory limit
 	const MEMORY_LIMIT = 512 * 1024 * 1024;
-	const INSERT_COUNT = 16;
+	const INSERT_COUNT = 16;    //	best values are powers of 2
 
 	private final function __construct() { }
 
