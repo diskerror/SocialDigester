@@ -2,9 +2,9 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-RUNNING=$(${DIR}/run tweets running);
+RUNNING=$("${DIR}/run" tweets running);
 
-if [ "$RUNNING" -eq 0 ]
+if [ $RUNNING -eq 0 ]
 then
-    ${DIR}/restart_tweets.sh
+    "${DIR}/restart_tweets.sh"
 fi
