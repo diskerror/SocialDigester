@@ -32,7 +32,6 @@ class Config extends TypedClass
 	protected $userConfigName = [TString::class];
 	protected $version        = [TString::class];
 	protected $mongo_db       = [Mongo::class];
-	protected $tweets_expire  = 600;
 	protected $word_stats     = [WordStats::class];
 	protected $twitter        = [Twitter::class];
 	protected $process        = [Process::class];

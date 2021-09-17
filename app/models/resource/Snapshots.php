@@ -14,13 +14,8 @@ class Snapshots extends MongoCollection
 {
 	protected $_collectionName = 'snapshots';
 	protected $_class          = Snapshot::class;
+	protected $_indexes        = [
+		['key' => ['created' => 1]],
+	];
 
-	public function doIndex(int $expire=0)
-	{
-		$this->_collection->insertOne([]);
-		$this->_collection->dropIndexes();
-		$this->_collection->createIndex(
-			['created' => 1]
-		);
-	}
 }

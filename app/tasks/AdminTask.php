@@ -30,11 +30,10 @@ class AdminTask extends TaskMaster
 	 */
 	public function indexDbAction()
 	{
-		//	These only needs to be run on a new collection.
-		(new Resource\Tweets($this->config->mongo_db))->doIndex($this->config->tweets_expire);
-		(new Resource\Tallies($this->config->mongo_db))->doIndex($this->config->tweets_expire);
-		(new Resource\Snapshots($this->config->mongo_db))->doIndex();        //	snapshots don't expire
-		(new Resource\Messages($this->config->mongo_db))->doIndex(36000);    //	ten hours
+		(new Resource\Tweets($this->config->mongo_db))->doIndex();
+		(new Resource\Tallies($this->config->mongo_db))->doIndex();
+		(new Resource\Snapshots($this->config->mongo_db))->doIndex();
+		(new Resource\Messages($this->config->mongo_db))->doIndex();
 	}
 
 	public function handleRunningAction()

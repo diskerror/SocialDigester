@@ -8,6 +8,7 @@ use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Database;
 use Structure\Config\Mongo;
+use function key_exists;
 
 /**
  * Class MongoCollection
@@ -37,6 +38,13 @@ abstract class MongoCollection
 	 */
 	protected $_class;
 
+	/**
+	 * An array of index definitions and index options.
+	 *
+	 * @var array
+	 */
+	protected $_indexes = [];
+
 
 	/**
 	 * MongoCollection constructor.
@@ -57,7 +65,22 @@ abstract class MongoCollection
 	}
 
 
-	abstract public function doIndex(int $expire = 0);
+	/**
+	 * Apply collection index definition.
+	 */
+	public function doIndex()
+	{
+		foreach ($this->_indexes as $index) {
+			$this->_collection->insertOne([]);    //	Creates collection if it doesn't exist.
+			$this->_collection->dropIndexes();    //	Start clean if collection existed.
+			if (key_exists('options', $index)) {
+				$this->_collection->createIndex($index['key'], $index['options']);
+			}
+			else {
+				$this->_collection->createIndex($index['key']);
+			}
+		}
+	}
 
 	/**
 	 * @return Collection
