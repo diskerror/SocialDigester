@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<title>Politicator</title>
 	<link rel="stylesheet" type="text/css" href="/css/jqcloud.min.css"/>
@@ -46,63 +46,66 @@
 </svg>
 
 <header>
-	<div style="float:left;padding:0 1em">
-		<svg viewBox="0 0 30 30" width="60" height="60" style="fill:#09F">
+	<div style="width:60px;float:left;padding-left:1em;padding-right: 1em">
+		<svg viewBox="0 0 30 30" style="fill:#09F">
 			<use xlink:href="#consumer"></use>
 		</svg>
 	</div>
-	<div style=";height:60px">
-		<p style="vertical-align:middle"><b>Tweets found with: </b><?= isset($track) ? implode(', ', $track) : '' ?>
+	<div style="width: 100%">
+		<p><b>Tweets found with: </b><?= isset($track) ? implode(', ', $track) : '' ?>
 		</p>
 	</div>
 </header>
 
 
-<!-- I know, I know... I'm going to let someone else do this with divs. -->
-<table id="clouds">
-	<tr>
-		<td id="cloud1">
-			<p>Count of hashtags per minute<br>averaged from the last 3 minutes<br>counted once per tweet.</p>
-			<svg viewBox="0 0 30 30" class="bg"><use xlink:href="#consumer"></use></svg>
-		</td>
-		<td id="cloud2">
-			<p>Count of all hashtags per minute<br>for the last 3 minutes.</p>
-			<svg viewBox="0 0 30 30" class="bg"><use xlink:href="#consumer"></use></svg>
-		</td>
-	</tr>
-	<tr>
-		<td id="text_words">
-			<p>Word count in the tweet’s text.</p>
-			<svg viewBox="0 0 30 30" class="bg"><use xlink:href="#consumer"></use></svg>
-		</td>
-		<td id="user_mentions">
-			<p>Count of user mentions.</p>
-			<svg viewBox="0 0 30 30" class="bg"><use xlink:href="#consumer"></use></svg>
-		</td>
-	</tr>
-</table>
+<section id="clouds">
+	<article id="cloud1">
+		<p>Count of hashtags per minute<br>for the last 3 minutes<br>counted once per tweet.</p>
+		<svg viewBox="0 0 30 30" class="bg">
+			<use xlink:href="#consumer"></use>
+		</svg>
+	</article>
+	<article id="cloud2">
+		<p>Count of all hashtags per minute<br>for the last 3 minutes.</p>
+		<svg viewBox="0 0 30 30" class="bg">
+			<use xlink:href="#consumer"></use>
+		</svg>
+	</article>
+	<article id="text_words">
+		<p>Word count in the tweet’s text.</p>
+		<svg viewBox="0 0 30 30" class="bg">
+			<use xlink:href="#consumer"></use>
+		</svg>
+	</article>
+	<article id="user_mentions">
+		<p>Count of user mentions.</p>
+		<svg viewBox="0 0 30 30" class="bg">
+			<use xlink:href="#consumer"></use>
+		</svg>
+	</article>
+</section>
 
 
-<div class="summary">
+<aside class="summary">
 	<div id="text1" style="width:100%;">
-		<?= isset($summary) ? '<p>' . implode("</p>\n\t\t<p>", $summary) . '</p>' : '' ?>
+		<?= isset($summary) ? '<p>' . implode("</p><p>", $summary) . '</p>' : '' ?>
 	</div>
-</div>
+</aside>
 
 
 <footer>
-	<div style="text-align:center;margin:auto;width:460px;height:50px">
+	<div style="text-align:center;margin:auto;width:260px;height:50px">
 		<div style="width:50px;height:100%;float:left">
 			<a href="http://www.twitter.com" target="_blank"><img src="img/twitter.png" alt="Twitter logo"
 						style="width:46px;height:42px"></a>
 		</div>
 		<div style="height:100%;float:right;vertical-align:middle">
-			Consumes Twitter tweets, counts the hashtags and words,<br>and displays a summary.
+			Consumes Twitter tweets,<br>does some counting,<br>and displays a summary.
 		</div>
 	</div>
 	<?php if (isset($created)): ?>
 		<div style="text-align:center;margin:auto;width:420px;height:50px">
-			<p>Snapshot taken on <?= (string)$created ?></p>
+			<p>Snapshot taken on <?= (string) $created ?></p>
 		</div>
 	<?php endif; ?>
 </footer>
