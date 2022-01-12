@@ -107,5 +107,5 @@ abstract class DiAbstract
 	/**
 	 * Run application.
 	 */
-	abstract public function run(array $args): string;
+	abstract public function run(array $argv): void;
 }

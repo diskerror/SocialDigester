@@ -57,7 +57,7 @@ class StdIo
 		if (is_object($o)) {
 			$o = (method_exists($o, 'toArray')) ?
 				$o->toArray() :
-				(array)$o;
+				(array) $o;
 		}
 
 		$out = var_export($o, true);

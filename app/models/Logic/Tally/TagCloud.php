@@ -53,8 +53,11 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getHashtagsFromTallies(Config $config): TypedArray
 	{
+//		$tallies = (new Tallies($config->mongo_db))->find([
+//			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
+//		]);
 		$tallies = (new Tallies($config->mongo_db))->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
+			'created' => ['$gte' => new UTCDateTime((time() - 60) * 1000)],
 		]);
 
 		$totals = new TallyWords();

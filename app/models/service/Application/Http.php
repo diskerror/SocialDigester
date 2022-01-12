@@ -111,9 +111,8 @@ class Http extends DiAbstract
 	/**
 	 * Run application.
 	 */
-	public function run(array $argv): string
+	public function run(array $argv): void
 	{
-		$uri = $this->_application->handle($argv['REQUEST_URI']);
-		return $uri->getContent();
+		echo $this->_application->handle($argv['REQUEST_URI'])->getContent();
 	}
 }
