@@ -4,6 +4,7 @@ use Logic\PidHandler;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollection;
 use Resource\Tweets;
+use Service\StaticTimer;
 use Service\StdIo;
 
 class TweetsTask extends TaskMaster
@@ -24,8 +25,7 @@ class TweetsTask extends TaskMaster
 		$pidHandler = new PidHandler($this->config->process);
 		if ($pidHandler->removeIfExists()) {
 			StdIo::outln('Running process was stopped.');
-		}
-		else {
+		} else {
 			StdIo::outln('Process was not running.');
 		}
 	}
@@ -35,9 +35,17 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		$tallies = (new Tallies($this->config->mongo_db))->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $this->config->word_stats->window) * 1000)],
-		]);
+		StaticTimer::start('test');
+		for ($i = 0; $i < 10000; ++$i) {
+			$tmp = time() - 60;
+//			$tmp = strtotime('60 seconds ago');
+			unset($tmp);
+		}
+		StdIo::outln(StaticTimer::elapsed('test'));
+
+//		$tallies = (new Tallies($this->config->mongo_db))->find([
+//			'created' => ['$gte' => new UTCDateTime((time() - $this->config->word_stats->window) * 1000)],
+//		]);
 
 //		$tweets = (new Tweets($this->config->mongo_db))->find([
 //			'entities.hashtags.0.text' => ['$gt' => ''],
@@ -59,10 +67,6 @@ class TweetsTask extends TaskMaster
 	 */
 	public function runningAction()
 	{
-		$t = (new Resource\Tweets($this->config->mongo_db))->count([
-			'created_at' => ['$gt' => new UTCDateTime(strtotime('6 seconds ago') * 1000)],
-		]);
-
-		StdIo::outln(($t === 0 ? 0 : 1));
+		StdIo::outln(StaticTimer::elapsed('consume') < 6 ? 1 : 0);
 	}
 }

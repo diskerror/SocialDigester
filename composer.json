@@ -20,7 +20,7 @@
 		"ext-intl": "*",
 		"ext-json": "*",
 		"ext-mbstring": "*",
-		"ext-mongodb": "1.9.*",
+		"ext-mongodb": "1.12.*",
 		"diskerror/autoload": "dev-main",
 		"diskerror/typedbson": "dev-master",
 		"laminas/laminas-json": "^3.0",

@@ -9,21 +9,21 @@ use Diskerror\Typed\Scalar\TStringNormalize;
  *
  * @package Structure\Tweet
  *
- * @property $created_at
+ * @property Created $created_at
  * @property $contributors
- * @property $entities
+ * @property Entities $entities
  * @property $favorite_count
  * @property $filter_level
  * @property $in_reply_to_screen_name
  * @property $in_reply_to_status_id_str
  * @property $in_reply_to_user_id_str
  * @property $is_quote_status
- * @property $lang
+ * @property string $lang
  * @property $place
  * @property $possibly_sensitive
  * @property $retweet_count
  * @property $source
- * @property $text
+ * @property string $text
  * @property $truncated
  * @property $user
  */

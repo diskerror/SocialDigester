@@ -5,6 +5,28 @@ namespace Structure\Tweet;
 use Diskerror\Typed\Scalar\TStringNormalize;
 use Diskerror\TypedBSON\TypedClass;
 
+/**
+ * @property $id
+ * @property $name
+ * @property $screen_name
+ * @property $location
+ * @property $contributors_enabled
+ * @property Created $created_at
+ * @property string $description
+ * @property int $favoriates_count
+ * @property $followers_count
+ * @property $friends_count
+ * @property $geo_enabled
+ * @property $is_translator
+ * @property $lang
+ * @property $listed_count
+ * @property $protected
+ * @property $statuses_count
+ * @property $time_zone
+ * @property $url
+ * @property $verified
+ *
+ */
 class User extends TypedClass
 {
 	protected $id                   = '';

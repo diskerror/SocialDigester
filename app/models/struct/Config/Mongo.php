@@ -9,10 +9,9 @@ use Diskerror\Typed\TypedClass;
 /**
  * Class Mongo
  *
- * @package Structure\Config
+ * @property string $host
+ * @property string $database
  *
- * @param $host
- * @param $database
  */
 class Mongo extends TypedClass
 {

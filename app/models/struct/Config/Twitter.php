@@ -9,9 +9,9 @@ use Diskerror\Typed\TypedClass;
 /**
  * Class Twitter
  *
- * @param $url
- * @param $auth
- * @param $track
+ * @property string $url
+ * @property OAuth $auth
+ * @property WordList $track
  *
  * @package Structure\Config
  */

@@ -84,12 +84,7 @@ final class TagCloud extends AbstractTally
 		$totals = new TallyWords();
 		foreach ($tallies as $tally) {
 			foreach ($tally->allHashtags as $k => $v) {
-				if ($totals->offsetExists($k)) {
-					$totals[$k] += (int)$v;
-				}
-				else {
-					$totals[$k] = $v;
-				}
+				$totals->doTally($k, $v);
 			}
 		}
 

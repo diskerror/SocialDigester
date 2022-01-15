@@ -8,9 +8,9 @@ use Diskerror\Typed\TypedClass;
 /**
  * Class Process
  *
- * @param $name
- * @param $path
- * @param $procDir
+ * @property string $name
+ * @property string $path
+ * @property string $procDir
  *
  * @package Structure\Config
  *

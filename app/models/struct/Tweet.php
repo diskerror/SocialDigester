@@ -3,6 +3,8 @@
 namespace Structure;
 
 use Diskerror\TypedBSON\TypedClass;
+use Structure\Tweet\Created;
+use Structure\Tweet\Entities;
 use Structure\Tweet\ExtendedTweet;
 use Structure\Tweet\TweetTrait;
 
@@ -11,26 +13,24 @@ use Structure\Tweet\TweetTrait;
  *
  * @package Structure
  *
- * @property $_id
- * @property $created_at
+ * @property Created $created_at
  * @property $contributors
- * @property $entities
+ * @property Entities $entities
  * @property $favorite_count
  * @property $filter_level
  * @property $in_reply_to_screen_name
  * @property $in_reply_to_status_id_str
  * @property $in_reply_to_user_id_str
  * @property $is_quote_status
- * @property $lang
+ * @property string $lang
  * @property $place
  * @property $possibly_sensitive
  * @property $retweet_count
  * @property $source
- * @property $text
+ * @property string $text
  * @property $truncated
  * @property $user
- * @property $retweeted_status
- * @property $extended_tweet
+ * @property ExtendedTweet $extended_tweet
  */
 class Tweet extends TypedClass
 {

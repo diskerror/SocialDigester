@@ -4,6 +4,15 @@ namespace Structure\Tweet;
 
 use Diskerror\TypedBSON\TypedClass;
 
+/**
+ * @property $id
+ * @property $url
+ * @property $place_type
+ * @property $name
+ * @property $full_name
+ * @property $country_code
+ * @property $country
+ */
 class Place extends TypedClass
 {
 	protected $id           = '';

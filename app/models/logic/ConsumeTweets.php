@@ -11,6 +11,8 @@ use Resource\Messages;
 use Resource\Tallies;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
+use Service\StaticTimer;
+use Service\StdIo;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
@@ -19,7 +21,7 @@ final class ConsumeTweets
 {
 	//	512 meg memory limit
 	const MEMORY_LIMIT = 512 * 1024 * 1024;
-	const INSERT_COUNT = 16;    //	best values are powers of 2
+	const INSERT_COUNT = 64;    //	best values are powers of 2
 
 	private final function __construct() { }
 
@@ -74,6 +76,8 @@ final class ConsumeTweets
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets->clear();
 				$tally->assign(null);
+//				StdIo::outf("\r%.5f ", StaticTimer::elapsed('consume'));
+				StaticTimer::start('consume');
 
 				for ($i = 0; $i < self::INSERT_COUNT; ++$i) {
 					//	get tweet
@@ -179,8 +183,7 @@ final class ConsumeTweets
 
 					if (preg_match('/Authentication/i', $m)) {
 						$logger->emergency('Mongo ' . $m);
-					}
-					else {
+					} else {
 						//	ignore duplicates
 						if (!preg_match('/duplicate.*key/i', $m)) {
 							$logger->warning('Mongo ' . $m);

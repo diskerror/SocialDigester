@@ -23,8 +23,7 @@ class TallyWords extends TypedArray
 	{
 		if ($this->offsetExists($word)) {
 			$this[$word] += $q;
-		}
-		else {
+		} else {
 			$this[$word] = $q;
 		}
 	}
@@ -37,7 +36,7 @@ class TallyWords extends TypedArray
 		arsort($this->_container);
 	}
 
-	public function scaleTally(float $div)
+	public function scaleTally(float $div): void
 	{
 		foreach ($this as &$v) {
 			$v = round($v / $div, 2);

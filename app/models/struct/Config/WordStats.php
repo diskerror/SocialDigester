@@ -10,9 +10,9 @@ use Diskerror\Typed\TypedClass;
 /**
  * Class WordStats
  *
- * @param $quantity
- * @param $window
- * @param $stop
+ * @property int $quantity
+ * @property int $window
+ * @property WordList $stop
  *
  * @package Structure\Config
  */

@@ -1,5 +1,6 @@
 <?php
 
+use Logic\PidHandler;
 use MongoDB\BSON\UTCDateTime;
 use Service\StdIo;
 
@@ -11,7 +12,7 @@ class AdminTask extends TaskMaster
 	public function rateAction()
 	{
 		$cnt = (new Resource\Tweets($this->config->mongo_db))->count([
-			'created_at' => ['$gt' => new UTCDateTime(strtotime('20 seconds ago') * 1000)],
+			'created_at' => ['$gt' => new UTCDateTime((time() - 20) * 1000)],
 		]);
 
 		StdIo::outln($cnt / 20);
@@ -34,6 +35,23 @@ class AdminTask extends TaskMaster
 		(new Resource\Tallies($this->config->mongo_db))->doIndex();
 		(new Resource\Snapshots($this->config->mongo_db))->doIndex();
 		(new Resource\Messages($this->config->mongo_db))->doIndex();
+	}
+
+	/**
+	 * Clear tweets and tallies collections.
+	 */
+	public function clearTweetsAction()
+	{
+		(new Resource\Tweets($this->config->mongo_db))->drop();
+		(new Resource\Tallies($this->config->mongo_db))->drop();
+	}
+
+	/**
+	 * Returns 1 if PID exists, 0 if not.
+	 */
+	public function pidExistsAction()
+	{
+		echo (new PidHandler($this->config->process))->exists() ? 1 : 0;
 	}
 
 	public function handleRunningAction()

@@ -67,9 +67,11 @@ class PidHandler
 	public function removeIfExists(): bool
 	{
 		if ($this->exists()) {
-			$running = file_exists($this->_procDir . file_get_contents($this->_fullProcessFileName));
+//			$running = file_exists($this->_procDir . file_get_contents($this->_fullProcessFileName));
+//			unlink($this->_fullProcessFileName);
+//			return $running;
 			unlink($this->_fullProcessFileName);
-			return $running;
+			return true;
 		}
 
 		return false;

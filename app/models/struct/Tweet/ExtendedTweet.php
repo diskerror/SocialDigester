@@ -14,9 +14,9 @@ use Diskerror\TypedBSON\TypedArray;
  *
  * @package Structure\Tweet
  *
- * @property $full_text
- * @property $display_text_range
- * @property $entities
+ * @property $full_text string
+ * @property $display_text_range array
+ * @property $entities Entities
  */
 class ExtendedTweet extends TypedClass
 {
