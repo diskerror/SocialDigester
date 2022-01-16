@@ -1,7 +1,7 @@
 <?php
 
 use Logic\PidHandler;
-use MongoDB\BSON\UTCDateTime;
+use Service\Shmem;
 use Service\StdIo;
 
 class AdminTask extends TaskMaster
@@ -11,11 +11,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function rateAction()
 	{
-		$cnt = (new Resource\Tweets($this->config->mongo_db))->count([
-			'created_at' => ['$gt' => new UTCDateTime((time() - 20) * 1000)],
-		]);
-
-		StdIo::outln($cnt / 20);
+		StdIo::outf('%.2f tweets per second', (new Shmem('r'))());
 	}
 
 	/**

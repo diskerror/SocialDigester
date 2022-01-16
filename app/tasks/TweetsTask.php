@@ -4,7 +4,7 @@ use Logic\PidHandler;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollection;
 use Resource\Tweets;
-use Service\StaticTimer;
+use Service\SharedTimer;
 use Service\StdIo;
 
 class TweetsTask extends TaskMaster
@@ -35,13 +35,14 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		StaticTimer::start('test');
+		$timer = new SharedTimer('x');
+		$timer->start();
 		for ($i = 0; $i < 10000; ++$i) {
 			$tmp = time() - 60;
 //			$tmp = strtotime('60 seconds ago');
 			unset($tmp);
 		}
-		StdIo::outln(StaticTimer::elapsed('test'));
+		StdIo::outln($timer->elapsed());
 
 //		$tallies = (new Tallies($this->config->mongo_db))->find([
 //			'created' => ['$gte' => new UTCDateTime((time() - $this->config->word_stats->window) * 1000)],
@@ -67,6 +68,6 @@ class TweetsTask extends TaskMaster
 	 */
 	public function runningAction()
 	{
-		StdIo::outln(StaticTimer::elapsed('consume') < 6 ? 1 : 0);
+		StdIo::outln((new SharedTimer('c'))->elapsed() < 6 ? 1 : 0);
 	}
 }

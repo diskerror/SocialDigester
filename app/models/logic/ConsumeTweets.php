@@ -11,17 +11,19 @@ use Resource\Messages;
 use Resource\Tallies;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
-use Service\StaticTimer;
+use Service\SharedTimer;
+use Service\Shmem;
 use Service\StdIo;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
+use function microtime;
 
 final class ConsumeTweets
 {
 	//	512 meg memory limit
 	const MEMORY_LIMIT = 512 * 1024 * 1024;
-	const INSERT_COUNT = 64;    //	best values are powers of 2
+	const INSERT_COUNT = 32;    //	best values are powers of 2
 
 	private final function __construct() { }
 
@@ -42,12 +44,16 @@ final class ConsumeTweets
 
 //		$sh = new StemHandler();
 
-		try {
-			$stream         = new Stream($config->twitter->auth);
-			$tweetsClient   = new Tweets($config->mongo_db);
-			$talliesClient  = new Tallies($config->mongo_db);
-			$messagesClient = new Messages($config->mongo_db);
+		$stream         = new Stream($config->twitter->auth);
+		$tweetsClient   = new Tweets($config->mongo_db);
+		$talliesClient  = new Tallies($config->mongo_db);
+		$messagesClient = new Messages($config->mongo_db);
 
+		$timer    = new SharedTimer('c');
+		$rateMem  = new Shmem('r');
+		$rateTime = microtime(true);
+
+		try {
 			//	Send request to start a filtered stream.
 			$stream->filter([
 				'track'          => implode(',', $config->twitter->track->toArray()),
@@ -76,8 +82,10 @@ final class ConsumeTweets
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets->clear();
 				$tally->assign(null);
-//				StdIo::outf("\r%.5f ", StaticTimer::elapsed('consume'));
-				StaticTimer::start('consume');
+//				StdIo::outf("\r%.5f ", $timer->elapsed());
+				$timer->start();
+				$rateMem->write(self::INSERT_COUNT / (microtime(true) - $rateTime));
+				$rateTime = microtime(true);
 
 				for ($i = 0; $i < self::INSERT_COUNT; ++$i) {
 					//	get tweet
@@ -193,6 +201,8 @@ final class ConsumeTweets
 			}
 
 			$logger->info('Stopped capturing tweets.');
+			$timer->delete();
+			$rateMem->delete();
 		}
 		catch (Exception $e) {
 			$logger->emergency((string) $e);

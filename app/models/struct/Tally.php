@@ -11,7 +11,7 @@ use Diskerror\TypedBSON\TypedClass;
  *
  * @package Structure
  *
- * @property DateTime   $created
+ * @property DateTime $created
  * @property TallyWords $uniqueHashtags
  * @property TallyWords $allHashtags
  * @property TallyWords $textWords

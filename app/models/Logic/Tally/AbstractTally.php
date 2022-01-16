@@ -66,7 +66,7 @@ abstract class AbstractTally
 		return $normalizedGroups;
 	}
 
-	private static function _sortCountSumDesc($a, $b)
+	private static function _sortCountSumDesc($a, $b): int
 	{
 		if ($a['_sum_'] === $b['_sum_']) {
 			return 0;
