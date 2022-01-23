@@ -5,6 +5,7 @@ use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollection;
 use Resource\Tweets;
 use Service\SharedTimer;
+use Service\Shmem;
 use Service\StdIo;
 
 class TweetsTask extends TaskMaster
@@ -18,13 +19,45 @@ class TweetsTask extends TaskMaster
 	}
 
 	/**
+	 * @return void
+	 */
+	public function startBgAction(): void
+	{
+		$this->stopAction();
+		switch (pcntl_fork()) {
+			case -1:
+				throw new RuntimeException('could not fork');
+				break;
+
+			case 0:
+				sleep(1);
+				Logic\ConsumeTweets::exec($this->config);
+				break;
+
+			default:
+				;
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function checkRunningAction(): void
+	{
+//		$ct = (new SharedTimer('c'))->elapsed();
+		if ((new Shmem('r'))() < 5) {
+			$this->startBgAction();
+		}
+	}
+
+	/**
 	 * Stop tweet consumption.
 	 */
 	public function stopAction()
 	{
 		$pidHandler = new PidHandler($this->config->process);
 		if ($pidHandler->removeIfExists()) {
-			StdIo::outln('Running process was stopped.');
+			StdIo::outln('Running process was halted.');
 		} else {
 			StdIo::outln('Process was not running.');
 		}

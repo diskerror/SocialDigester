@@ -3,9 +3,6 @@
 namespace Service;
 
 use Service\Exception\RuntimeException;
-use function count;
-use function ftok;
-use function readdir;
 
 class Shmem
 {

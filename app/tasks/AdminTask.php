@@ -15,6 +15,14 @@ class AdminTask extends TaskMaster
 	}
 
 	/**
+	 * Displays the wait time between writes to MongoDB.
+	 */
+	public function waitAction()
+	{
+		StdIo::outf('%.2f', (new Shmem('w'))());
+	}
+
+	/**
 	 * Display the current aggregate configuration.
 	 */
 	public function showConfigAction()
@@ -50,37 +58,4 @@ class AdminTask extends TaskMaster
 		echo (new PidHandler($this->config->process))->exists() ? 1 : 0;
 	}
 
-	public function handleRunningAction()
-	{
-//DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-//
-//RUNNING=$(${DIR}/run admin rate);
-//
-//if [ "$RUNNING" -eq 0 ]
-//then
-//    ${DIR}/restart_tweets.sh
-//fi
-	}
-
-	public function restartTweetsAction()
-	{
-//DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-//
-//${DIR}/cli.php tweets stop
-//
-//PID_PATH=$(${DIR}/cli.php get pidPath);
-//if [ ! -e "$PID_PATH" ]
-//then
-//    mkdir -pm 777 "$PID_PATH"
-//fi
-//
-//CACHE_PATH=$(${DIR}/cli.php get cachePath);
-//if [ ! -e "$CACHE_PATH" ]
-//then
-//    mkdir -pm 777 "$CACHE_PATH"
-//fi
-//
-//sleep 1
-//${DIR}/cli.php tweets get &
-	}
 }

@@ -17,7 +17,6 @@ use Service\StdIo;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
-use function microtime;
 
 final class ConsumeTweets
 {
@@ -50,7 +49,8 @@ final class ConsumeTweets
 		$messagesClient = new Messages($config->mongo_db);
 
 		$timer    = new SharedTimer('c');
-		$rateMem  = new Shmem('r');
+		$waitMem  = new Shmem('w');            //	wait between saves
+		$rateMem  = new Shmem('r');            //	rate which good tweets are received
 		$rateTime = microtime(true);
 
 		try {
@@ -82,10 +82,13 @@ final class ConsumeTweets
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets->clear();
 				$tally->assign(null);
+
 //				StdIo::outf("\r%.5f ", $timer->elapsed());
-				$timer->start();
-				$rateMem->write(self::INSERT_COUNT / (microtime(true) - $rateTime));
+				$rtDiff = microtime(true) - $rateTime;
+				$waitMem->write($rtDiff);
+				$rateMem->write(self::INSERT_COUNT / $rtDiff);
 				$rateTime = microtime(true);
+				$timer->start();
 
 				for ($i = 0; $i < self::INSERT_COUNT; ++$i) {
 					//	get tweet

@@ -21,6 +21,7 @@
 		"ext-json": "*",
 		"ext-mbstring": "*",
 		"ext-mongodb": "1.12.*",
+		"ext-pcntl": "*",
 		"ext-shmop": "*",
 		"diskerror/autoload": "dev-main",
 		"diskerror/typedbson": "dev-master",
