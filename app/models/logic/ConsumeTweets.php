@@ -13,12 +13,11 @@ use Resource\Tweets;
 use Resource\TwitterClient\Stream;
 use RuntimeException;
 use Service\SharedTimer;
-use Service\Shmem;
+use Service\ShmemMaster;
 use Service\StdIo;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
-use function var_dump;
 
 final class ConsumeTweets
 {
@@ -54,8 +53,8 @@ final class ConsumeTweets
 		$messagesClient = new Messages($config->mongo_db);
 
 //		$timer    = new SharedTimer('c');
-		$waitMem  = new Shmem('w');            //	wait between saves
-		$rateMem  = new Shmem('r');            //	rate which good tweets are received
+		$waitMem  = new ShmemMaster('w');    //	wait between saves
+		$rateMem  = new ShmemMaster('r');    //	rate which good tweets are received
 		$rateTime = microtime(true);
 
 		try {
@@ -69,6 +68,8 @@ final class ConsumeTweets
 			//	Set PID file to indicate whether we should keep running.
 			if ($pidHandler->setFile() === false) {
 				$logger->error('Process "' . $config->process->path . $config->process->name . '" is already running or not stopped properly');
+
+//				$timer->delete();
 				return;
 			}
 
@@ -212,7 +213,6 @@ final class ConsumeTweets
 
 			$logger->info('Stopped capturing tweets.');
 //			$timer->delete();
-			$rateMem->delete();
 		}
 		catch (Exception $e) {
 			$logger->emergency((string) $e);

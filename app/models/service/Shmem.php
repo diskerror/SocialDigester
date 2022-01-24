@@ -6,7 +6,7 @@ use Service\Exception\RuntimeException;
 
 class Shmem
 {
-	private $_shmop;
+	protected $_shmop;
 
 	/**
 	 * @param string $id
@@ -14,7 +14,7 @@ class Shmem
 	 * @param int $permissions
 	 * @param int $size
 	 */
-	public function __construct(string $id, string $mode = 'c', int $permissions = 0666, int $size = 1024)
+	public function __construct(string $id, string $mode = 'a', int $permissions = 0, int $size = 0)
 	{
 		$this->_shmop = shmop_open(ftok(__FILE__, $id), $mode, $permissions, $size);
 

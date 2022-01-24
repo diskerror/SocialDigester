@@ -24,8 +24,11 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getHashtags(Config $config): TypedArray
 	{
+		$window   = 180;
+		$quantity = 32;
+
 		$tweets = (new Tweets($config->mongo_db))->find([
-			'created_at'               => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
+			'created_at'               => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
 			'entities.hashtags.0.text' => ['$gt' => ''],
 		]);
 
@@ -43,7 +46,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($tally, $config->word_stats->window, $config->word_stats->quantity);
+		return self::_buildTagCloud($tally, $window, $quantity);
 	}
 
 	/**
@@ -53,11 +56,14 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getHashtagsFromTallies(Config $config): TypedArray
 	{
+		$window   = 60;
+		$quantity = 32;
+
 //		$tallies = (new Tallies($config->mongo_db))->find([
 //			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
 //		]);
 		$tallies = (new Tallies($config->mongo_db))->find([
-			'created' => ['$gte' => new UTCDateTime((time() - 60) * 1000)],
+			'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
 		]);
 
 		$totals = new TallyWords();
@@ -67,7 +73,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config->word_stats->window, $config->word_stats->quantity);
+		return self::_buildTagCloud($totals, $window, $quantity);
 	}
 
 	/**
@@ -77,8 +83,11 @@ final class TagCloud extends AbstractTally
 	 */
 	public static function getAllHashtagsFromTallies(Config $config): TypedArray
 	{
+		$window   = 180;
+		$quantity = 32;
+
 		$tallies = (new Tallies($config->mongo_db))->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $config->word_stats->window) * 1000)],
+			'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
 		]);
 
 		$totals = new TallyWords();
@@ -88,7 +97,7 @@ final class TagCloud extends AbstractTally
 			}
 		}
 
-		return self::_buildTagCloud($totals, $config->word_stats->window, $config->word_stats->quantity);
+		return self::_buildTagCloud($totals, $window, $quantity);
 	}
 
 	/**
