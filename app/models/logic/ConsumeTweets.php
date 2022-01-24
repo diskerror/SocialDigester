@@ -11,18 +11,23 @@ use Resource\Messages;
 use Resource\Tallies;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
+use RuntimeException;
 use Service\SharedTimer;
 use Service\Shmem;
 use Service\StdIo;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
+use function var_dump;
 
 final class ConsumeTweets
 {
 	//	512 meg memory limit
 	const MEMORY_LIMIT = 512 * 1024 * 1024;
 	const INSERT_COUNT = 32;    //	best values are powers of 2
+
+	private static $_insertOptions;
+	private static $_mongo_db;
 
 	private final function __construct() { }
 
@@ -48,7 +53,7 @@ final class ConsumeTweets
 		$talliesClient  = new Tallies($config->mongo_db);
 		$messagesClient = new Messages($config->mongo_db);
 
-		$timer    = new SharedTimer('c');
+//		$timer    = new SharedTimer('c');
 		$waitMem  = new Shmem('w');            //	wait between saves
 		$rateMem  = new Shmem('r');            //	rate which good tweets are received
 		$rateTime = microtime(true);
@@ -77,20 +82,20 @@ final class ConsumeTweets
 			$tweet  = new Tweet();
 			$tweets = new Vector();
 			$tweets->allocate(self::INSERT_COUNT);
-			$tally = new Tally();
 
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets->clear();
-				$tally->assign(null);
+				$tally = new Tally();
 
 //				StdIo::outf("\r%.5f ", $timer->elapsed());
 				$rtDiff = microtime(true) - $rateTime;
 				$waitMem->write($rtDiff);
 				$rateMem->write(self::INSERT_COUNT / $rtDiff);
 				$rateTime = microtime(true);
-				$timer->start();
+//				$timer->start();
 
-				for ($i = 0; $i < self::INSERT_COUNT; ++$i) {
+				$i = 0;
+				while ($i < self::INSERT_COUNT) {
 					//	get tweet
 					$packet = $stream->read();
 
@@ -124,10 +129,12 @@ final class ConsumeTweets
 					//	Skip tweet if it has a hashtag with non-latin scripts.
 					foreach ($tweet->entities->hashtags as $hashtag) {
 						if (mb_ord(mb_substr($hashtag->text, 0, 1)) > 592) {
-							$logger->info('hashtag script not latin');
+//							$logger->info('hashtag script not latin');
 							continue 2;
 						}
 					}
+
+					++$i;    //	increment only for tweets to be saved
 
 					// Check for and use extended tweet if it exists.
 					if (strlen($tweet->extended_tweet->full_text) > strlen($tweet->text)) {
@@ -204,7 +211,7 @@ final class ConsumeTweets
 			}
 
 			$logger->info('Stopped capturing tweets.');
-			$timer->delete();
+//			$timer->delete();
 			$rateMem->delete();
 		}
 		catch (Exception $e) {

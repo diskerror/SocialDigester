@@ -11,7 +11,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function rateAction()
 	{
-		StdIo::outf('%.2f tweets per second', (new Shmem('r'))());
+		StdIo::outf('%.2f tweets per second' . PHP_EOL, (new Shmem('r'))());
 	}
 
 	/**
@@ -19,7 +19,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function waitAction()
 	{
-		StdIo::outf('%.2f', (new Shmem('w'))());
+		StdIo::outf('%.2f' . PHP_EOL, (new Shmem('w'))());
 	}
 
 	/**

@@ -13,12 +13,14 @@ class TweetsTask extends TaskMaster
 	/**
 	 * Start process of receiving tweets.
 	 */
-	public function getAction()
+	public function getAction(): void
 	{
 		Logic\ConsumeTweets::exec($this->config);
 	}
 
 	/**
+	 * Start consuming tweets in the background.
+	 *
 	 * @return void
 	 */
 	public function startBgAction(): void
@@ -40,12 +42,13 @@ class TweetsTask extends TaskMaster
 	}
 
 	/**
+	 *
 	 * @return void
 	 */
 	public function checkRunningAction(): void
 	{
 //		$ct = (new SharedTimer('c'))->elapsed();
-		if ((new Shmem('r'))() < 5) {
+		if ((new Shmem('w'))() >= 4) {
 			$this->startBgAction();
 		}
 	}
