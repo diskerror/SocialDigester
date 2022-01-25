@@ -1,13 +1,13 @@
 <?php
 
-namespace Logic\Tally;
+namespace Logic;
 
 use InvalidArgumentException;
 use Structure\TallyWords;
 
 abstract class AbstractTally
 {
-	protected static function _normalizeText($s, $technique = 'metaphone')
+	protected static function _normalizeText($s, $technique = 'metaphone'): string
 	{
 		//	remove trailing digits
 		if (0 === preg_match('/^\d+$/', $s)) {

@@ -4,6 +4,7 @@ namespace Logic\Tally;
 
 use Diskerror\Typed\TypedArray;
 use Ds\Set;
+use Logic\AbstractTally;
 use MongoDB\BSON\UTCDateTime;
 use Resource\Tallies;
 use Resource\Tweets;

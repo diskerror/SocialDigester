@@ -1,6 +1,8 @@
 <?php
 
 
+use Logic\Cloud\Hashtags;
+use Logic\Cloud\HashtagsAll;
 use Phalcon\Cache\Backend\Factory as BFactory;
 use Phalcon\Cache\Frontend\Factory as FFactory;
 use Phalcon\Mvc\Controller;
@@ -34,7 +36,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-		$obj = Logic\Tally\TagCloud::getHashtagsFromTallies($this->config);
+		$obj = Logic\Cloud\Hashtags::get($this->config);
 		$this->view->setVar('obj', $obj->toArray());
 		$output = $this->view->render('js');
 //			$cache->save('', $output);
@@ -52,7 +54,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-		$obj = Logic\Tally\TagCloud::getAllHashtagsFromTallies($this->config);
+		$obj = Logic\Cloud\HashtagsAll::get($this->config);
 		$this->view->setVar('obj', $obj->toArray());
 		$output = $this->view->render('js');
 //			$cache->save('', $output);

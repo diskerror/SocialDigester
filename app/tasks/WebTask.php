@@ -14,7 +14,7 @@ class WebTask extends TaskMaster
 {
 	public function tagCloudAction()
 	{
-		StdIo::phpOut(TagCloud::getHashtagsFromTallies($this->config)->toArray());
+		StdIo::phpOut(Logic\Cloud\Hashtags::get($this->config)->toArray());
 	}
 
 	public function tagCloudAllAction()
