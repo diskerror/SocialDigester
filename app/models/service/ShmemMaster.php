@@ -12,7 +12,7 @@ class ShmemMaster extends Shmem
 	 * @param int $permissions
 	 * @param int $size
 	 */
-	public function __construct(string $id, string $mode = 'w', int $permissions = 0666, int $size = 1024)
+	public function __construct(string $id, string $mode = 'c', int $permissions = 0666, int $size = 1024)
 	{
 		parent::__construct($id, $mode, $permissions, $size);
 	}
