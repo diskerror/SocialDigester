@@ -6,7 +6,7 @@ namespace Service\Application;
 use Phalcon\Cli\Console;
 use Phalcon\Cli\Dispatcher\Exception;
 use Phalcon\Di\FactoryDefault\Cli as FdCli;
-use Logic\PidHandler;
+use Resource\PidHandler;
 use Resource\TwitterStream;
 use Service\StdIo;
 

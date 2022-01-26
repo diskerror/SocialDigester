@@ -14,7 +14,6 @@ use Structure\Config\Mongo;
 
 final class Summary
 {
-	private const HISTORY_WINDOW = '90';
 	private const RETURN_COUNT   = 3;
 
 	private function __construct() { }
@@ -22,18 +21,20 @@ final class Summary
 	/**
 	 * Generate summary of tweet texts.
 	 *
-	 * @param Mongo $mongoConfig
+	 * @param Mongo $mongo_db
+	 * @param int $window
+	 * @param int $quantity
 	 *
 	 * @return array
 	 */
-	public static function get(Mongo $mongoConfig): array
+	public static function get(Mongo $mongo_db, int $window, int $quantity): array
 	{
 		ini_set('memory_limit', 512 * 1024 * 1024);
 
-		$tweets = (new Tweets($mongoConfig))->find(
+		$tweets = (new Tweets($mongo_db))->find(
 			[
 				'created_at' =>
-					['$gt' => new UTCDateTime((time() - self::HISTORY_WINDOW) * 1000)],
+					['$gt' => new UTCDateTime((time() - $window) * 1000)],
 			],
 			[
 				'sort'       => [
@@ -56,7 +57,7 @@ final class Summary
 		}
 
 		$parser = new Parser();
-		$parser->setMinimumWordLength(3);
+		$parser->setMinimumWordLength(4);
 		$parser->setRawText($text);
 		$parser->setStopWords(new English());
 
@@ -73,8 +74,8 @@ final class Summary
 			$scores,
 			$graph,
 			$text,
-			16,    //	how many words to test
-			64,    //	size of array to return
+			24,    //	how many words to test
+			32,    //	size of array to return
 			Summarize::GET_ALL_IMPORTANT
 		));
 
@@ -93,7 +94,7 @@ final class Summary
 			$subSummaries[] = $sub;
 			$outputArr[]    = $summary;
 
-			if (++$summaryCount >= self::RETURN_COUNT) {
+			if (++$summaryCount >= $quantity) {
 				break;
 			}
 		}

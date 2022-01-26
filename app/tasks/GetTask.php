@@ -1,5 +1,6 @@
 <?php
 
+use Logic\TextGroup;
 use Service\StdIo;
 
 class GetTask extends TaskMaster
@@ -33,7 +34,8 @@ class GetTask extends TaskMaster
 	 */
 	public function hashtagsAction()
 	{
-		StdIo::phpOut(array_slice(Logic\Tally\TopList::getHashtags($this->config), 0, 25));
+		$totals = Logic\Tally\Hashtags::get($this->config->mongo_db, 60);
+		StdIo::phpOut(array_slice(TextGroup::normalize($totals), 0, 20));
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 
-use Logic\PidHandler;
+use Resource\PidHandler;
 use Service\Shmem;
 use Service\StdIo;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Logic;
+namespace Resource;
 
 use Exception;
 use Structure\Config\Process;

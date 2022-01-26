@@ -8,10 +8,10 @@ use Exception;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
 use Resource\Messages;
+use Resource\PidHandler;
 use Resource\Tallies;
 use Resource\Tweets;
 use Resource\TwitterClient\Stream;
-use RuntimeException;
 use Service\SharedTimer;
 use Service\ShmemMaster;
 use Service\StdIo;
@@ -80,7 +80,6 @@ final class ConsumeTweets
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
-			$tweet  = new Tweet();
 			$tweets = new Vector();
 			$tweets->allocate(self::INSERT_COUNT);
 
@@ -119,7 +118,7 @@ final class ConsumeTweets
 					}
 
 					//	Filter. Tweet structure accepts only part of the packet.
-					$tweet->assign($packet);
+					$tweet = new Tweet($packet);
 
 					//	If tweet is not in english then skip it.
 					if ($tweet->lang !== 'en') {

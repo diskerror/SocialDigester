@@ -5,9 +5,31 @@ namespace Logic;
 use InvalidArgumentException;
 use Structure\TallyWords;
 
-abstract class AbstractTally
+final class TextGroup
 {
-	protected static function _normalizeText($s, $technique = 'metaphone'): string
+	private function __construct() { }
+
+	public static function normalize(TallyWords $tally, $technique = 'soundex'): array
+	{
+		//	Group words by normalized value.
+		$normalizedGroups = [];
+		foreach ($tally as $k => $v) {
+			$normalizedGroups[self::_normalizeString($k, $technique)][$k] = $v;
+		}
+
+		//	Organize the group's properties.
+		foreach ($normalizedGroups as &$group) {
+			arsort($group);
+			$group['_sum_'] = array_sum($group);
+		}
+
+		//	Sort on size, decending.
+		uasort($normalizedGroups, 'self::_sortCountSumDesc');
+
+		return $normalizedGroups;
+	}
+
+	protected static function _normalizeString($s, $technique): string
 	{
 		//	remove trailing digits
 		if (0 === preg_match('/^\d+$/', $s)) {
@@ -22,8 +44,9 @@ abstract class AbstractTally
 //			$s = preg_replace('/s+$/i', '', $s);
 //		}
 
-		switch ($technique) {
+		switch (strtolower($technique)) {
 			case 'none':
+			case '':
 				return $s;
 
 			case 'strtolower':
@@ -41,29 +64,6 @@ abstract class AbstractTally
 			default:
 				throw new InvalidArgumentException('bad normalize technique');
 		}
-	}
-
-	protected static function _normalizeGroupsFromTally(TallyWords $tally, int $quantity, $technique = 'metaphone'): array
-	{
-		//	Group words by normalized value.
-		$normalizedGroups = [];
-		foreach ($tally as $k => $v) {
-			$normalizedGroups[self::_normalizeText($k, $technique)][$k] = $v;
-		}
-
-		//	Organize the group's properties.
-		foreach ($normalizedGroups as &$group) {
-			arsort($group);
-			$group['_sum_'] = array_sum($group);
-		}
-
-		//	Sort on size, decending.
-		uasort($normalizedGroups, 'self::_sortCountSumDesc');
-
-		//	Get the first X number of members.
-		$normalizedGroups = array_slice($normalizedGroups, 0, $quantity);
-
-		return $normalizedGroups;
 	}
 
 	private static function _sortCountSumDesc($a, $b): int

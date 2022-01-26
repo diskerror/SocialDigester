@@ -1,6 +1,6 @@
 <?php
 
-use Logic\PidHandler;
+use Resource\PidHandler;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollection;
 use Resource\Tweets;
