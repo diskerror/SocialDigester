@@ -13,7 +13,7 @@ use Zend\Server\Reflection;
 /**
  * Class Reflector
  *
- * This is used to to build help and about descriptions from the DocBlocks
+ * This is used to build help and about descriptions from the DocBlocks
  * of the Tasks for the CLI.
  *
  * @package Service

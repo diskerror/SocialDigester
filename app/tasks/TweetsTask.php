@@ -1,9 +1,6 @@
 <?php
 
 use Resource\PidHandler;
-use MongoDB\BSON\UTCDateTime;
-use Resource\MongoCollection;
-use Resource\Tweets;
 use Service\SharedTimer;
 use Service\Shmem;
 use Service\StdIo;
@@ -29,7 +26,6 @@ class TweetsTask extends TaskMaster
 		switch (pcntl_fork()) {
 			case -1:
 				throw new RuntimeException('could not fork');
-				break;
 
 			case 0:
 				sleep(1);
@@ -37,7 +33,6 @@ class TweetsTask extends TaskMaster
 				break;
 
 			default:
-				;
 		}
 	}
 

@@ -7,6 +7,7 @@ use Ds\Vector;
 use Exception;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
+use Resource\LoggerFactory;
 use Resource\Messages;
 use Resource\PidHandler;
 use Resource\Tallies;
@@ -24,9 +25,6 @@ final class ConsumeTweets
 	//	512 meg memory limit
 	const MEMORY_LIMIT = 512 * 1024 * 1024;
 	const INSERT_COUNT = 32;    //	best values are powers of 2
-
-	private static $_insertOptions;
-	private static $_mongo_db;
 
 	private final function __construct() { }
 

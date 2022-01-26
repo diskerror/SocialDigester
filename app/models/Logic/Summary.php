@@ -33,17 +33,12 @@ final class Summary
 
 		$tweets = (new Tweets($mongo_db))->find(
 			[
-				'created_at' =>
-					['$gt' => new UTCDateTime((time() - $window) * 1000)],
+				'created_at' => ['$gt' => new UTCDateTime((time() - $window) * 1000)],
 			],
 			[
-				'sort'       => [
-					'created_at' => -1,
-				],
-				'limit'      => 10000,
-				'projection' => [
-					'text' => 1,
-				],
+				'sort'       => ['created_at' => -1],
+				'limit'      => 5000,
+				'projection' => ['text' => 1],
 			]
 		);
 

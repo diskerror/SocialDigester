@@ -4,10 +4,8 @@
 namespace Structure\Tweet;
 
 
-use Diskerror\Typed\Scalar\TIntegerUnsigned;
 use Diskerror\Typed\Scalar\TStringNormalize;
 use Diskerror\Typed\TypedClass;
-use Diskerror\TypedBSON\TypedArray;
 
 /**
  * Class ExtendedTweet

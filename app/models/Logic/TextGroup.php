@@ -5,7 +5,7 @@ namespace Logic;
 use InvalidArgumentException;
 use Structure\TallyWords;
 
-final class TextGroup
+class TextGroup
 {
 	private function __construct() { }
 
@@ -14,7 +14,7 @@ final class TextGroup
 		//	Group words by normalized value.
 		$normalizedGroups = [];
 		foreach ($tally as $k => $v) {
-			$normalizedGroups[self::_normalizeString($k, $technique)][$k] = $v;
+			$normalizedGroups[static::_normalizeString($k, $technique)][$k] = $v;
 		}
 
 		//	Organize the group's properties.
@@ -24,7 +24,7 @@ final class TextGroup
 		}
 
 		//	Sort on size, decending.
-		uasort($normalizedGroups, 'self::_sortCountSumDesc');
+		uasort($normalizedGroups, 'static::_sortCountSumDesc');
 
 		return $normalizedGroups;
 	}

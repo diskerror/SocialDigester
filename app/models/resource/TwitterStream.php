@@ -2,6 +2,7 @@
 
 namespace Resource;
 
+use BadMethodCallException;
 use Service\OAuth;
 use Structure\Config\Twitter;
 
@@ -101,7 +102,7 @@ class TwitterStream
 	 * https://dev.twitter.com/streaming/overview
 	 *
 	 * @return bool
-	 * @throws \BadMethodCallException
+	 * @throws BadMethodCallException
 	 */
 	public function __call($function, array $params = []): bool
 	{
@@ -111,7 +112,7 @@ class TwitterStream
 				break;
 
 			default:
-				throw new \BadMethodCallException();
+				throw new BadMethodCallException();
 		}
 
 		$this->_closeProcIfOpen();

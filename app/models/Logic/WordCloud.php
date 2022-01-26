@@ -32,7 +32,7 @@ final class WordCloud
 				$twitterLookup->add(strtolower($thisName));
 
 				if (count($group) > 1) {
-					$htmlTitle .= '<br>' . $thisName . ': ' . (string) $thisTally;
+					$htmlTitle .= '<br>' . $thisName . ': ' . $thisTally;
 				}
 			}
 

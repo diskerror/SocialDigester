@@ -1,7 +1,6 @@
 <?php
 
 
-use Logic\Tally\UserMentions;
 use Logic\TextGroup;
 use Logic\WordCloud;
 use Phalcon\Cache\Backend\Factory as BFactory;
@@ -109,10 +108,10 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-		$um    = UserMentions::get($this->config->mongo_db, 180);
-		$um    = TextGroup::normalize($um, 'strtolower');
+		$um    = Logic\Tally\UserMentions::get($this->config->mongo_db, 180);
+		$um    = Logic\UserNameGroup::normalize($um);
 		$cloud = WordCloud::build($um);
-		UserMentions::changeLink($cloud);
+		Logic\Tally\UserMentions::changeLink($cloud);
 
 		$obj = array_slice($cloud->toArray(), 0, 48);
 		ksort($obj, SORT_NATURAL | SORT_FLAG_CASE);

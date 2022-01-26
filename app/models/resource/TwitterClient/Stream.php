@@ -4,7 +4,6 @@ namespace Resource\TwitterClient;
 
 use BadMethodCallException;
 use Exception;
-use MongoDB\Driver\Exception\AuthenticationException;
 use Structure\Config\OAuth;
 
 class Stream extends ClientAbstract

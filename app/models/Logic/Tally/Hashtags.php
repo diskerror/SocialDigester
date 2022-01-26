@@ -19,9 +19,14 @@ final class Hashtags
 	 */
 	public static function get(Mongo $mongo_db, int $window): TallyWords
 	{
-		$tallies = (new Tallies($mongo_db))->find([
-			'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
-		]);
+		$tallies = (new Tallies($mongo_db))->find(
+			[
+				'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
+			],
+			[
+				'projection' => ['uniqueHashtags' => 1,],
+			]
+		);
 
 		$totals = new TallyWords();
 		foreach ($tallies as $tally) {

@@ -34,9 +34,7 @@ class StdIo
 
 	public static function outf($s, ...$values)
 	{
-		if (vfprintf(STDOUT, $s, $values) === false) {
-			throw new RuntimeException('fwrite to STDOUT returned false');
-		}
+		vfprintf(STDOUT, $s, $values);
 	}
 
 	public static function err($s)

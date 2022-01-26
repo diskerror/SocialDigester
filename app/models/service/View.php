@@ -8,11 +8,11 @@ class View extends \Phalcon\Mvc\View
 	/**
 	 * @param string $first
 	 * @param string $second
-	 * @param array  $params
+	 * @param array $params
 	 *
 	 * @return void
 	 */
-	public function render($first = '', $second = '', $params = null)
+	public function render(string $first = '', string $second = '', array $params = null)
 	{
 		$dispatcher = $this->getDI()->getShared('dispatcher');
 

@@ -5,7 +5,6 @@ namespace Service\Application;
 use OutOfRangeException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager;
-use Resource\LoggerFactory;
 use Resource\MongoCollectionManager;
 use Structure\Config;
 use Zend\Stdlib\ArrayUtils;
@@ -74,7 +73,7 @@ abstract class DiAbstract
 //					}
 //				}
 
-				//	Always open this configuration file with it's default values.
+				//	Always open this configuration file with its default values.
 				$configFile = BASE_PATH . '/app/config/config.php';
 				$config     = new Config(require $configFile);
 

@@ -43,7 +43,8 @@ class GetTask extends TaskMaster
 	 */
 	public function hashtagsAllAction()
 	{
-		StdIo::phpOut(Logic\Tally\TopList::getHashtagsFromTallies($this->config));
+		$totals = Logic\Tally\HashtagsAll::get($this->config->mongo_db, 180);
+		StdIo::phpOut(array_slice(TextGroup::normalize($totals), 0, 20));
 	}
 
 	/**
@@ -51,7 +52,17 @@ class GetTask extends TaskMaster
 	 */
 	public function textwordsAction()
 	{
-		StdIo::phpOut(array_slice(Logic\Tally\TopList::getText($this->config)->toArray(), 0, 32));
+		$totals = Logic\Tally\TextWords::get($this->config->mongo_db, 180);
+		StdIo::phpOut(array_slice(TextGroup::normalize($totals, 'strtolower'), 0, 32));
+	}
+
+	/**
+	 * Display PHP array of Twitter tweet word count statistics.
+	 */
+	public function userMentionsAction()
+	{
+		$um = Logic\Tally\UserMentions::get($this->config->mongo_db, 180);
+		StdIo::phpOut(array_slice(Logic\UserNameGroup::normalize($um, 'strtolower'), 0, 32));
 	}
 
 	/**
@@ -59,9 +70,9 @@ class GetTask extends TaskMaster
 	 */
 	public function summaryAction()
 	{
-		StdIo::outln('');
+		StdIo::outln();
 		StdIo::outln(implode("\n\n", Logic\Summary::get($this->config->mongo_db)));
-		StdIo::outln('');
+		StdIo::outln();
 	}
 
 	/**

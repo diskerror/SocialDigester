@@ -1,6 +1,6 @@
 <?php
 
-namespace Logic;
+namespace Resource;
 
 use Phalcon\Logger;
 use Phalcon\Logger\Adapter\Stream;
@@ -38,9 +38,9 @@ class LoggerFactory
 	 * The function name becomes the log level
 	 *
 	 * @param string $level
-	 * @param array  $params
+	 * @param array $params
 	 */
-	function __call($level, $params)
+	function __call(string $level, array $params)
 	{
 		switch ($level) {
 			case 'critical':
@@ -51,5 +51,4 @@ class LoggerFactory
 		}
 		$this->_logger->$level($params[0]);
 	}
-
 }

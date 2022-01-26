@@ -2,8 +2,6 @@
 
 namespace Service;
 
-use Service\Exception\RuntimeException;
-
 class ShmemMaster extends Shmem
 {
 	/**

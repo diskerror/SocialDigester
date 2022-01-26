@@ -3,8 +3,6 @@
 namespace Structure;
 
 use Diskerror\TypedBSON\TypedClass;
-use Structure\Tweet\Created;
-use Structure\Tweet\Entities;
 use Structure\Tweet\ExtendedTweet;
 use Structure\Tweet\TweetTrait;
 
