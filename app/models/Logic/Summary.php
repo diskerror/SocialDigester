@@ -14,8 +14,6 @@ use Structure\Config\Mongo;
 
 final class Summary
 {
-	private const RETURN_COUNT   = 3;
-
 	private function __construct() { }
 
 	/**
@@ -74,7 +72,6 @@ final class Summary
 			Summarize::GET_ALL_IMPORTANT
 		));
 
-		$summary      = '';
 		$subSummaries = [];
 		$summaryCount = 0;
 		$outputArr    = [];
