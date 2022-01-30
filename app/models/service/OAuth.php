@@ -29,24 +29,24 @@ class OAuth
 	public function __construct(sOAuth $config)
 	{
 		$this->_secret =
-			rawurldecode($config->consumer_secret) . '&' . rawurldecode($config->oauth_token_secret);
+			rawurldecode($config->consumer_secret) . '&' . rawurldecode($config->token_secret);
 
 		$this->_baseOauth = [
 			'oauth_consumer_key'     => $config->consumer_key,
 			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_token'            => $config->oauth_token,
+			'token'                  => $config->token,
 			'oauth_version'          => '1.0',
 		];
 	}
 
 	/**
-	 * @param string $url
 	 * @param string $method
-	 * @param array  $params
+	 * @param string $url
+	 * @param array $params
 	 *
 	 * @return string
 	 */
-	public function getHeader(string $url, string $method, array $params)
+	public function getHeader(string $method, string $url, array $params)
 	{
 		$oauth = $this->_baseOauth;
 
@@ -67,8 +67,9 @@ class OAuth
 			true
 		));
 
-		$quoted = [];
 		uksort($oauth, function($a, $b) { return strcasecmp($a, $b); });
+
+		$quoted = [];
 		foreach ($oauth as $k => $v) {
 			$quoted[] = rawurlencode($k) . '="' . rawurlencode($v) . '"';
 		}

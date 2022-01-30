@@ -6,8 +6,6 @@ namespace Service\Application;
 use Phalcon\Cli\Console;
 use Phalcon\Cli\Dispatcher\Exception;
 use Phalcon\Di\FactoryDefault\Cli as FdCli;
-use Resource\PidHandler;
-use Resource\TwitterStream;
 use Service\StdIo;
 
 class Cli extends DiAbstract
@@ -20,23 +18,6 @@ class Cli extends DiAbstract
 		$di = new FdCli();
 
 		parent::_commonDi($di);
-
-		$di->setShared('stream', function() use ($di) {
-			static $stream;
-			if (!isset($stream)) {
-				$stream = new TwitterStream($di->getShared('config')->twitter);
-			}
-			return $stream;
-		});
-
-		$di->setShared('pidHandler', function() use ($di) {
-			static $pidHandler;
-			if (!isset($pidHandler)) {
-				$pidHandler = new PidHandler($di->getShared('config')->process);
-			}
-			return $pidHandler;
-		});
-
 
 		$this->_application = new Console($di);
 

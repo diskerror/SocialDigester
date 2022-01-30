@@ -131,7 +131,7 @@ $(function() {
 
 
 	function getSummary() {
-		setTimeout(getSummary, 11000);
+		setTimeout(getSummary, 14000);
 
 		$.ajax({
 			url: '/index/summary',

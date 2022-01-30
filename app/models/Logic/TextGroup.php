@@ -9,7 +9,7 @@ class TextGroup
 {
 	private function __construct() { }
 
-	public static function normalize(TallyWords $tally, $technique = 'soundex'): array
+	public static function normalize(TallyWords $tally, $technique = 'metaphone'): array
 	{
 		//	Group words by normalized value.
 		$normalizedGroups = [];

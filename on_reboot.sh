@@ -30,4 +30,4 @@ echo "index collections"
 "${DIR}/run" admin indexDb
 
 echo "starting consumtion"
-"${DIR}/run" tweets get > /dev/null 2>&1 &
+"${DIR}/run" tweets startBg > /dev/null 2>&1

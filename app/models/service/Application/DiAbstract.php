@@ -5,7 +5,7 @@ namespace Service\Application;
 use OutOfRangeException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager;
-use Resource\MongoCollectionManager;
+use Resource\MongoCollections\MongoCollectionManager;
 use Structure\Config;
 use Zend\Stdlib\ArrayUtils;
 

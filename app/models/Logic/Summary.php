@@ -9,7 +9,7 @@ use PhpScience\TextRank\Tool\Parser;
 use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
-use Resource\Tweets;
+use Resource\MongoCollections\Tweets;
 use Structure\Config\Mongo;
 
 final class Summary
@@ -67,7 +67,7 @@ final class Summary
 			$scores,
 			$graph,
 			$text,
-			24,    //	how many words to test
+			12,    //	how many words to test
 			32,    //	size of array to return
 			Summarize::GET_ALL_IMPORTANT
 		));

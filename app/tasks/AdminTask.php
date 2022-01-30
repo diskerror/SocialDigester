@@ -1,6 +1,6 @@
 <?php
 
-use Resource\PidHandler;
+use MongoDB\BSON\UTCDateTime;
 use Service\Shmem;
 use Service\StdIo;
 
@@ -35,10 +35,10 @@ class AdminTask extends TaskMaster
 	 */
 	public function indexDbAction()
 	{
-		(new Resource\Tweets($this->config->mongo_db))->doIndex();
-		(new Resource\Tallies($this->config->mongo_db))->doIndex();
-		(new Resource\Snapshots($this->config->mongo_db))->doIndex();
-		(new Resource\Messages($this->config->mongo_db))->doIndex();
+		(new Resource\MongoCollections\Tweets($this->config->mongo_db))->doIndex();
+		(new Resource\MongoCollections\Tallies($this->config->mongo_db))->doIndex();
+		(new Resource\MongoCollections\Snapshots($this->config->mongo_db))->doIndex();
+		(new Resource\MongoCollections\Messages($this->config->mongo_db))->doIndex();
 	}
 
 	/**
@@ -46,8 +46,8 @@ class AdminTask extends TaskMaster
 	 */
 	public function clearTweetsAction()
 	{
-		(new Resource\Tweets($this->config->mongo_db))->drop();
-		(new Resource\Tallies($this->config->mongo_db))->drop();
+		(new Resource\MongoCollections\Tweets($this->config->mongo_db))->drop();
+		(new Resource\MongoCollections\Tallies($this->config->mongo_db))->drop();
 	}
 
 	/**
@@ -55,7 +55,16 @@ class AdminTask extends TaskMaster
 	 */
 	public function pidExistsAction()
 	{
-		echo (new PidHandler($this->config->process))->exists() ? 1 : 0;
+		echo (new Resource\PidHandler($this->config->process))->exists() ? 1 : 0;
+	}
+
+	public function messagesAction()
+	{
+		StdIo::jsonOut(
+			(new Resource\MongoCollections\Messages($this->config->mongo_db))->find([
+				'created' => ['$gt' => new UTCDateTime((time() - 3600) * 1000)],
+			])
+		);
 	}
 
 }

@@ -8,11 +8,11 @@ use Exception;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
 use Resource\LoggerFactory;
-use Resource\Messages;
+use Resource\MongoCollections\Messages;
+use Resource\MongoCollections\Tallies;
+use Resource\MongoCollections\Tweets;
 use Resource\PidHandler;
-use Resource\Tallies;
-use Resource\Tweets;
-use Resource\TwitterClient\Stream;
+use Resource\TwitterV1;
 use Service\SharedTimer;
 use Service\ShmemMaster;
 use Service\StdIo;
@@ -45,10 +45,10 @@ final class ConsumeTweets
 
 //		$sh = new StemHandler();
 
-		$stream         = new Stream($config->twitter->auth);
-		$tweetsClient   = new Tweets($config->mongo_db);
-		$talliesClient  = new Tallies($config->mongo_db);
-		$messagesClient = new Messages($config->mongo_db);
+		$twitter       = new TwitterV1($config->twitter->auth);
+		$tweetsMongo   = new Tweets($config->mongo_db);
+		$talliesMongo  = new Tallies($config->mongo_db);
+		$messagesMongo = new Messages($config->mongo_db);
 
 //		$timer    = new SharedTimer('c');
 		$waitMem  = new ShmemMaster('w');    //	wait between saves
@@ -57,7 +57,7 @@ final class ConsumeTweets
 
 		try {
 			//	Send request to start a filtered stream.
-			$stream->filter([
+			$stream = $twitter->stream([
 				'track'          => implode(',', $config->twitter->track->toArray()),
 				'language'       => 'en',
 				'stall_warnings' => true,
@@ -95,11 +95,31 @@ final class ConsumeTweets
 				$i = 0;
 				while ($i < self::INSERT_COUNT) {
 					//	get tweet
-					$packet = $stream->read();
+					$raw = $stream->read();
 
-					//	Ignore nulls.
-					if (null === $packet) {
-						continue;
+					switch ($raw) {
+						case '':
+						case false:
+						case null:
+							continue 2;
+					}
+
+					if (strstr($raw, 'connection limit') != '') {
+						$logger->warning($raw);
+						$pidHandler->removeIfExists();
+						return;
+					}
+
+					$raw = trim($raw, "\x00..\x20\x7F");
+
+					$packet = json_decode($raw, true);
+
+					//	Ignore nulls and falses and empties.
+					switch ($packet) {
+						case false:
+						case null:
+						case '':
+							continue 2;
 					}
 
 					//	Log bad data.
@@ -109,9 +129,9 @@ final class ConsumeTweets
 					}
 
 					//	Save Twitter messages.
-					if ($stream::isMessage($packet)) {
+					if ($twitter::isMessage($packet)) {
 						$packet['created'] = new UTCDateTime(time() * 1000);
-						$messagesClient->insertOne($packet);
+						$messagesMongo->insertOne($packet);
 						continue;
 					}
 
@@ -191,15 +211,16 @@ final class ConsumeTweets
 
 				try {
 					//	convert to Mongo compatible object and insert
-					$tweetsClient->insertMany($tweets->toArray(), $insertOptions);
-					$talliesClient->insertOne($tally->bsonSerialize(), $insertOptions);
+					$tweetsMongo->insertMany($tweets->toArray(), $insertOptions);
+					$talliesMongo->insertOne($tally->bsonSerialize(), $insertOptions);
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();
 
 					if (preg_match('/Authentication/i', $m)) {
 						$logger->emergency('Mongo ' . $m);
-					} else {
+					}
+					else {
 						//	ignore duplicates
 						if (!preg_match('/duplicate.*key/i', $m)) {
 							$logger->warning('Mongo ' . $m);

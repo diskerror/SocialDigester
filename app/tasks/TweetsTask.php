@@ -1,6 +1,7 @@
 <?php
 
-use Resource\PidHandler;
+use MongoDB\BSON\UTCDateTime;
+use Resource\LoggerFactory;
 use Service\SharedTimer;
 use Service\Shmem;
 use Service\StdIo;
@@ -22,13 +23,12 @@ class TweetsTask extends TaskMaster
 	 */
 	public function startBgAction(): void
 	{
-		$this->stopAction();
 		switch (pcntl_fork()) {
 			case -1:
 				throw new RuntimeException('could not fork');
 
 			case 0:
-				sleep(1);
+				sleep(3);
 				Logic\ConsumeTweets::exec($this->config);
 				break;
 
@@ -43,7 +43,20 @@ class TweetsTask extends TaskMaster
 	public function checkRunningAction(): void
 	{
 //		$ct = (new SharedTimer('c'))->elapsed();
-		if ((new Shmem('w'))() >= 4) {
+//		if ((new Shmem('w'))() >= 4) {
+//			$this->startBgAction();
+//		}
+
+		$t = (new Resource\MongoCollections\Tweets($this->config->mongo_db))->count([
+			'created_at' => ['$gt' => new UTCDateTime((time() - 6) * 1000)],
+		]);
+
+		if ($t === 0) {
+			$this->stopAction();
+			$logger = new LoggerFactory(BASE_PATH . '/consume.log');
+			$logger->info('Wait time at restart: ' . (new Shmem('w'))());
+			$logger->info('Capture rate at restart: ' . (new Shmem('r'))());
+			sleep(3);
 			$this->startBgAction();
 		}
 	}
@@ -53,10 +66,11 @@ class TweetsTask extends TaskMaster
 	 */
 	public function stopAction()
 	{
-		$pidHandler = new PidHandler($this->config->process);
+		$pidHandler = new Resource\PidHandler($this->config->process);
 		if ($pidHandler->removeIfExists()) {
 			StdIo::outln('Running process was halted.');
-		} else {
+		}
+		else {
 			StdIo::outln('Process was not running.');
 		}
 	}
@@ -66,14 +80,30 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		$timer = new SharedTimer('x');
-		$timer->start();
-		for ($i = 0; $i < 10000; ++$i) {
-			$tmp = time() - 60;
-//			$tmp = strtotime('60 seconds ago');
-			unset($tmp);
-		}
-		StdIo::outln($timer->elapsed());
+		StdIo::jsonOut(
+			(new Resource\MongoCollections\Tweets($this->config->mongo_db))->count([
+				'created_at' => ['$gt' => new UTCDateTime((time() - 6) * 1000)],
+			])
+		);
+
+
+//		$t    = new TwitterV1($this->config->twitter->auth);
+//		$json = $t->exec('GET', 'statuses/lookup', ['id' => '20,1050118621198921728']);
+//		$obj  = json_decode($json);
+//		StdIo::jsonOut($obj);
+
+//		while ($output = $buffer->read()) {
+//			StdIo::outln($output.PHP_EOL.PHP_EOL);
+//		}
+
+//		$timer = new SharedTimer('x');
+//		$timer->start();
+//		for ($i = 0; $i < 10000; ++$i) {
+//			$tmp = time() - 60;
+////			$tmp = strtotime('60 seconds ago');
+//			unset($tmp);
+//		}
+//		StdIo::outln($timer->elapsed());
 
 //		$tallies = (new Tallies($this->config->mongo_db))->find([
 //			'created' => ['$gte' => new UTCDateTime((time() - $this->config->word_stats->window) * 1000)],
@@ -97,8 +127,14 @@ class TweetsTask extends TaskMaster
 	/**
 	 * Returns 1 if consume process is running, zero if not.
 	 */
-	public function runningAction()
+	public function isRunningAction()
 	{
-		StdIo::outln((new SharedTimer('c'))->elapsed() < 6 ? 1 : 0);
+//		StdIo::outln((new SharedTimer('c'))->elapsed() < 6 ? 1 : 0);
+
+		$t = (new Resource\MongoCollections\Tweets($this->config->mongo_db))->count([
+			'created_at' => ['$gt' => new UTCDateTime((time() - 6) * 1000)],
+		]);
+
+		StdIo::outln($t === 0 ? 0 : 1);
 	}
 }

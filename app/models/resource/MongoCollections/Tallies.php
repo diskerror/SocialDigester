@@ -1,7 +1,8 @@
 <?php
 
-namespace Resource;
+namespace Resource\MongoCollections;
 
+use Resource\MongoCollection;
 use Structure\Tally;
 
 class Tallies extends MongoCollection

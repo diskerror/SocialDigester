@@ -68,7 +68,7 @@ abstract class MongoCollection
 	/**
 	 * Apply collection index definition.
 	 */
-	public function doIndex()
+	public function doIndex(): void
 	{
 		foreach ($this->_indexes as $index) {
 			$this->_collection->insertOne([]);    //	Creates collection if it doesn't exist.
@@ -95,7 +95,7 @@ abstract class MongoCollection
 		return $this->_collection->{$name}(...$args);
 	}
 
-	public function find($filter = [], array $options = [])
+	public function find($filter = [], array $options = []): TypedArray
 	{
 		return new TypedArray($this->_class, $this->_collection->find($filter, $options));
 	}

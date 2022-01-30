@@ -12,8 +12,8 @@
  *            'auth' => [
  *                'consumer_key'       => 'wwww',
  *                'consumer_secret'    => 'xxxx',
- *                'oauth_token'        => 'yyyy',
- *                'oauth_token_secret' => 'zzzz',
+ *                'token'        => 'yyyy',
+ *                'token_secret' => 'zzzz',
  *            ],
  *        ],
  *    ];
@@ -41,10 +41,10 @@ return [
 		'url' => 'https://stream.twitter.com/1.1/',
 
 		'auth' => [
-			'consumer_key'       => '',
-			'consumer_secret'    => '',
-			'oauth_token'        => '',
-			'oauth_token_secret' => '',
+			'consumer_key'    => '',
+			'consumer_secret' => '',
+			'token'           => '',
+			'token_secret'    => '',
 		],
 
 		'track' => [

@@ -6,8 +6,9 @@
  * Time: 12:49 PM
  */
 
-namespace Resource;
+namespace Resource\MongoCollections;
 
+use Resource\MongoCollection;
 use Structure\Snapshot;
 
 class Snapshots extends MongoCollection

@@ -3,7 +3,7 @@
 namespace Logic\Tally;
 
 use MongoDB\BSON\UTCDateTime;
-use Resource\Tallies;
+use Resource\MongoCollections\Tallies;
 use Structure\Config\Mongo;
 use Structure\TallyWords;
 

@@ -1,7 +1,7 @@
 <?php
 
 use Phalcon\Mvc\Controller;
-use Resource\Snapshots;
+use Resource\MongoCollections\Snapshots;
 
 class SnapshotController extends Controller
 {
