@@ -80,11 +80,7 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		StdIo::jsonOut(
-			(new Resource\MongoCollections\Tweets($this->config->mongo_db))->count([
-				'created_at' => ['$gt' => new UTCDateTime((time() - 6) * 1000)],
-			])
-		);
+		StdIo::jsonOut(new stdClass());
 
 
 //		$t    = new TwitterV1($this->config->twitter->auth);

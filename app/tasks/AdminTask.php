@@ -19,7 +19,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function waitAction()
 	{
-		StdIo::outf('%.2f' . PHP_EOL, (new Shmem('w'))());
+		StdIo::outf('%.2fms' . PHP_EOL, (float) (new Shmem('w'))() * 1000);
 	}
 
 	/**

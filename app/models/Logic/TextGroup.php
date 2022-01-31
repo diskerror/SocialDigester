@@ -44,7 +44,8 @@ class TextGroup
 //			$s = preg_replace('/s+$/i', '', $s);
 //		}
 
-		switch (strtolower($technique)) {
+		//	could use "match" in PHP8
+		switch ($technique) {
 			case 'none':
 			case '':
 				return $s;

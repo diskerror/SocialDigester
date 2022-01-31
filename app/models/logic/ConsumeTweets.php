@@ -19,6 +19,7 @@ use Service\StdIo;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
+use function microtime;
 
 final class ConsumeTweets
 {
@@ -51,9 +52,10 @@ final class ConsumeTweets
 		$messagesMongo = new Messages($config->mongo_db);
 
 //		$timer    = new SharedTimer('c');
-		$waitMem  = new ShmemMaster('w');    //	wait between saves
-		$rateMem  = new ShmemMaster('r');    //	rate which good tweets are received
-		$rateTime = microtime(true);
+		$waitMem   = new ShmemMaster('w');    //	wait between saves
+		$rateMem   = new ShmemMaster('r');    //	rate which good tweets are received
+		$rateTime  = microtime(true);
+		$waitTotal = 0;
 
 		try {
 			//	Send request to start a filtered stream.
@@ -85,41 +87,33 @@ final class ConsumeTweets
 				$tweets->clear();
 				$tally = new Tally();
 
-//				StdIo::outf("\r%.5f ", $timer->elapsed());
-				$rtDiff = microtime(true) - $rateTime;
-				$waitMem->write($rtDiff);
-				$rateMem->write(self::INSERT_COUNT / $rtDiff);
-				$rateTime = microtime(true);
-//				$timer->start();
-
 				$i = 0;
-				while ($i < self::INSERT_COUNT) {
+				while ($i < self::INSERT_COUNT && $pidHandler->exists() && !$stream->isEOF()) {
 					//	get tweet
-					$raw = $stream->read();
+					$startWait = microtime(true);
+					$raw       = $stream->read();
 
-					switch ($raw) {
-						case '':
-						case false:
-						case null:
-							continue 2;
+					//	Check for any data at all.
+					//	use "match" in PHP8
+					if ($raw === '' || $raw === false || $raw === null) {
+						continue;
 					}
 
-					if (strstr($raw, 'connection limit') != '') {
+					$raw = trim($raw, "\x00..\x20\x7F");
+
+					//	If we don't receive an object in JSON then this must be plain text.
+					if ($raw[0] !== '{') {
 						$logger->warning($raw);
 						$pidHandler->removeIfExists();
 						return;
 					}
 
-					$raw = trim($raw, "\x00..\x20\x7F");
-
 					$packet = json_decode($raw, true);
 
 					//	Ignore nulls and falses and empties.
-					switch ($packet) {
-						case false:
-						case null:
-						case '':
-							continue 2;
+					//	use "match" in PHP8
+					if ($packet === false || $packet === null || $packet === '' || count($packet) === 0) {
+						continue;
 					}
 
 					//	Log bad data.
@@ -129,13 +123,13 @@ final class ConsumeTweets
 					}
 
 					//	Save Twitter messages.
+					//	Packet _id is time in ms.
 					if ($twitter::isMessage($packet)) {
-						$packet['created'] = new UTCDateTime(time() * 1000);
 						$messagesMongo->insertOne($packet);
 						continue;
 					}
 
-					//	Filter. Tweet structure accepts only part of the packet.
+					//	Prune. Our Tweet structure accepts only part of the packet.
 					$tweet = new Tweet($packet);
 
 					//	If tweet is not in english then skip it.
@@ -153,6 +147,8 @@ final class ConsumeTweets
 					}
 
 					++$i;    //	increment only for tweets to be saved
+
+					$waitTotal += (microtime(true) - $startWait);
 
 					// Check for and use extended tweet if it exists.
 					if (strlen($tweet->extended_tweet->full_text) > strlen($tweet->text)) {
@@ -227,6 +223,16 @@ final class ConsumeTweets
 						}
 					}
 				}
+
+//				StdIo::outf("\r%.5f ", $timer->elapsed());
+				$now = microtime(true);
+				$rateMem->write(self::INSERT_COUNT / ($now - $rateTime));
+				$rateTime = $now;
+//				$timer->start();
+
+				//	average wait to read pack per inner loop
+				$waitMem->write($waitTotal / self::INSERT_COUNT);
+				$waitTotal = 0;
 			}
 
 			$logger->info('Stopped capturing tweets.');
