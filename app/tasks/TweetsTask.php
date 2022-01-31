@@ -80,17 +80,14 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		StdIo::jsonOut(new stdClass());
-
-
-//		$t    = new TwitterV1($this->config->twitter->auth);
-//		$json = $t->exec('GET', 'statuses/lookup', ['id' => '20,1050118621198921728']);
-//		$obj  = json_decode($json);
-//		StdIo::jsonOut($obj);
-
-//		while ($output = $buffer->read()) {
-//			StdIo::outln($output.PHP_EOL.PHP_EOL);
-//		}
+		StdIo::jsonOut((new Resource\MongoCollections\Tallies($this->config->mongo_db))->find(
+			[
+				'created' => ['$gte' => new UTCDateTime((time() - 600) * 1000)],
+			],
+			[
+				'projection' => ['users' => 1,],
+			]
+		));
 
 //		$timer = new SharedTimer('x');
 //		$timer->start();

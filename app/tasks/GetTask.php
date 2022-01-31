@@ -1,6 +1,6 @@
 <?php
 
-use Logic\TextGroup;
+use Logic\UserNameGroup;
 use Service\StdIo;
 
 class GetTask extends TaskMaster
@@ -73,6 +73,18 @@ class GetTask extends TaskMaster
 		StdIo::outln();
 		StdIo::outln(implode("\n\n", Logic\Summary::get($this->config->mongo_db)));
 		StdIo::outln();
+	}
+
+	public function usersAction()
+	{
+		$totals = Logic\Tally\Users::get($this->config->mongo_db, 600);
+		StdIo::phpOut(array_slice(UserNameGroup::normalize($totals), 0, 10));
+	}
+
+	public function retweetsAction()
+	{
+		$totals = Logic\Tally\Retweets::get($this->config->mongo_db, 600);
+		StdIo::phpOut(array_slice(UserNameGroup::normalize($totals), 0, 10));
 	}
 
 	/**

@@ -16,6 +16,8 @@ use Diskerror\TypedBSON\TypedClass;
  * @property TallyWords $allHashtags
  * @property TallyWords $textWords
  * @property TallyWords $userMentions
+ * @property TallyWords $users
+ * @property TallyWords $retweets
  */
 class Tally extends TypedClass
 {
@@ -31,4 +33,8 @@ class Tally extends TypedClass
 	protected $textWords = [TallyWords::class];
 
 	protected $userMentions = [TallyWords::class];
+
+	protected $users = [TallyWords::class];
+
+	protected $retweets = [TallyWords::class];
 }

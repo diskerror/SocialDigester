@@ -9,8 +9,7 @@ class Tallies extends MongoCollection
 {
 	protected $_collectionName = 'tallies';
 	protected $_class          = Tally::class;
-	protected $_indexes        = [
-		['key' => ['created' => 1], 'options' => ['expireAfterSeconds' => 600]],
+	protected $_indexKeys      = [
+		['key' => ['created' => 1], 'expireAfterSeconds' => 1800],
 	];
-
 }

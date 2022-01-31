@@ -7,6 +7,7 @@ use LogicException;
 use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Database;
+use Service\StdIo;
 use Structure\Config\Mongo;
 use function key_exists;
 
@@ -39,12 +40,18 @@ abstract class MongoCollection
 	protected $_class;
 
 	/**
-	 * An array of index definitions and index options.
+	 * An array of index definitions.
 	 *
 	 * @var array
 	 */
-	protected $_indexes = [];
+	protected $_indexKeys = [];
 
+	/**
+	 * An array of index options to be applied to all indexes.
+	 *
+	 * @var array
+	 */
+	protected $_indexOptions = [];
 
 	/**
 	 * MongoCollection constructor.
@@ -70,16 +77,23 @@ abstract class MongoCollection
 	 */
 	public function doIndex(): void
 	{
-		foreach ($this->_indexes as $index) {
-			$this->_collection->insertOne([]);    //	Creates collection if it doesn't exist.
-			$this->_collection->dropIndexes();    //	Start clean if collection existed.
-			if (key_exists('options', $index)) {
-				$this->_collection->createIndex($index['key'], $index['options']);
-			}
-			else {
-				$this->_collection->createIndex($index['key']);
-			}
-		}
+//		foreach ($this->_indexes as $index) {
+//			StdIo::outln($this->_collectionName);
+//			StdIo::jsonOut($index);
+//			$this->_collection->insertOne([]);    //	Creates collection if it doesn't exist.
+//			$this->_collection->dropIndexes();    //	Start clean if collection existed.
+//			if (key_exists('options', $index)) {
+//				$this->_collection->createIndex($index['key'], $index['options']);
+//			}
+//			else {
+//				$this->_collection->createIndex($index['key']);
+//			}
+//		}
+
+		$this->_collection->insertOne([]);    //	Creates collection if it doesn't exist.
+		$this->_collection->dropIndexes();    //	Start clean if collection existed.
+		$this->_collection->deleteMany([]);
+		$this->_collection->createIndexes($this->_indexKeys);
 	}
 
 	/**

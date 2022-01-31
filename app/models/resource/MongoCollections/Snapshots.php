@@ -15,8 +15,7 @@ class Snapshots extends MongoCollection
 {
 	protected $_collectionName = 'snapshots';
 	protected $_class          = Snapshot::class;
-	protected $_indexes        = [
-		['key' => ['created' => 1]],
+	protected $_indexKeys      = [
+		['key' => ['created' => -1]],
 	];
-
 }

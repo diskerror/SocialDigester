@@ -2,6 +2,7 @@
 
 namespace Logic;
 
+use Diskerror\TypedBSON\DateTime;
 use Ds\Set as DsSet;
 use Ds\Vector;
 use Exception;
@@ -19,7 +20,10 @@ use Service\StdIo;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
+use function json_encode;
 use function microtime;
+use const JSON_PRETTY_PRINT;
+use const PHP_EOL;
 
 final class ConsumeTweets
 {
@@ -67,7 +71,7 @@ final class ConsumeTweets
 
 			//	Set PID file to indicate whether we should keep running.
 			if ($pidHandler->setFile() === false) {
-				$logger->error('Process "' . $config->process->path . $config->process->name . '" is already running or not stopped properly');
+				$logger->error('Process "' . $config->process->path . '/' . $config->process->name . '" is already running or not stopped properly');
 
 //				$timer->delete();
 				return;
@@ -85,7 +89,8 @@ final class ConsumeTweets
 
 			while ($pidHandler->exists() && !$stream->isEOF()) {
 				$tweets->clear();
-				$tally = new Tally();
+				$tally          = new Tally();
+				$tally->created = new DateTime();
 
 				$i = 0;
 				while ($i < self::INSERT_COUNT && $pidHandler->exists() && !$stream->isEOF()) {
@@ -125,7 +130,16 @@ final class ConsumeTweets
 					//	Save Twitter messages.
 					//	Packet _id is time in ms.
 					if ($twitter::isMessage($packet)) {
-						$messagesMongo->insertOne($packet);
+						$packet['created'] = new UTCDateTime((microtime(true) * 1000));
+						try {
+							$messagesMongo->insertOne($packet);
+						}
+						catch (Exception $e) {
+							$logger->emergency(
+								'Mongo insert into messages: ' . $e->getMessage() . PHP_EOL .
+								json_encode($packet, JSON_PRETTY_PRINT)
+							);
+						}
 						continue;
 					}
 
@@ -186,6 +200,15 @@ final class ConsumeTweets
 						$tally->userMentions->doTally($userMention->screen_name);
 					}
 
+					//	Tally users.
+					$tally->users->doTally($tweet->user->screen_name);
+
+					//	Tally retweeted users.
+					$rtName = $tweet->retweeted_status->user->screen_name;
+					if ($rtName !== '') {
+						$tally->retweets->doTally($rtName);
+					}
+
 //					$words = [];
 //
 //					//	build the two stem lists
@@ -207,7 +230,9 @@ final class ConsumeTweets
 
 				try {
 					//	convert to Mongo compatible object and insert
+					$forException = $tweets->toArray();
 					$tweetsMongo->insertMany($tweets->toArray(), $insertOptions);
+					$forException = $tally->bsonSerialize();
 					$talliesMongo->insertOne($tally->bsonSerialize(), $insertOptions);
 				}
 				catch (Exception $e) {
@@ -217,11 +242,13 @@ final class ConsumeTweets
 						$logger->emergency('Mongo ' . $m);
 					}
 					else {
-						//	ignore duplicates
-						if (!preg_match('/duplicate.*key/i', $m)) {
-							$logger->warning('Mongo ' . $m);
-						}
+						//	ignore duplicates but log everything else
+//						if (!preg_match('/duplicate.*key/i', $m)) {
+						$logger->warning(
+							'Mongo: ' . $m . PHP_EOL . json_encode($forException, JSON_PRETTY_PRINT));
+//						}
 					}
+					exit;
 				}
 
 //				StdIo::outf("\r%.5f ", $timer->elapsed());

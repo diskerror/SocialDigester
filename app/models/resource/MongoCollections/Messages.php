@@ -14,7 +14,7 @@ class Messages extends MongoCollection
 {
 	protected $_collectionName = 'messages';
 	protected $_class          = '';
-	protected $_indexes        = [
-		['key' => ['created' => 1], 'options' => ['expireAfterSeconds' => 36000]],    //	10 hours
+	protected $_indexKeys      = [
+		['key' => ['created' => 1], 'expireAfterSeconds' => 3600 * 24],
 	];
 }

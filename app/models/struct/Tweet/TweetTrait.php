@@ -12,20 +12,21 @@ use Diskerror\Typed\Scalar\TStringNormalize;
  * @property Created $created_at
  * @property $contributors
  * @property Entities $entities
- * @property $favorite_count
- * @property $filter_level
- * @property $in_reply_to_screen_name
- * @property $in_reply_to_status_id_str
- * @property $in_reply_to_user_id_str
- * @property $is_quote_status
+ * @property ExtendedEntities $extended_entities
+ * @property int $favorite_count
+ * @property string $filter_level
+ * @property string $in_reply_to_screen_name
+ * @property string $in_reply_to_status_id_str
+ * @property string $in_reply_to_user_id_str
+ * @property bool $is_quote_status
  * @property string $lang
- * @property $place
- * @property $possibly_sensitive
- * @property $retweet_count
- * @property $source
+ * @property Place $place
+ * @property bool $possibly_sensitive
+ * @property int $retweet_count
+ * @property string $source
  * @property string $text
- * @property $truncated
- * @property $user
+ * @property bool $truncated
+ * @property User $user
  */
 trait TweetTrait
 {
@@ -63,6 +64,6 @@ trait TweetTrait
 
 //	protected $truncated                 = false;
 
-//	protected $user                      = [User::class];
+	protected $user = [User::class];
 
 }
