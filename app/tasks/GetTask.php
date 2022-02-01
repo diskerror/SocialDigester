@@ -1,5 +1,6 @@
 <?php
 
+use Logic\TextGroup;
 use Logic\UserNameGroup;
 use Service\StdIo;
 

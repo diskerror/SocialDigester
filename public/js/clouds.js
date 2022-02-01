@@ -5,12 +5,6 @@ $(function() {
 		delay: 0
 	};
 
-	setTimeout(getHashtags, 1400);
-	setTimeout(getAllHashtags, 1600);
-	setTimeout(getTextWords, 1800);
-	setTimeout(getUserMentions, 2000);
-	setTimeout(getSummary, 2600);
-
 	$('#cloud1').jQCloud(
 		[
 			{text: 'Politicator.com', weight: 10},
@@ -29,6 +23,7 @@ $(function() {
 		],
 		cloudOptions);
 
+	setTimeout(getHashtags, 1400);
 	function getHashtags() {
 		setTimeout(getHashtags, 3400);	//	milliseconds between cloud updates
 
@@ -65,6 +60,7 @@ $(function() {
 	};
 
 
+	setTimeout(getAllHashtags, 1600);
 	function getAllHashtags() {
 		setTimeout(getAllHashtags, 3500);	//	milliseconds between cloud updates
 
@@ -87,6 +83,7 @@ $(function() {
 	};
 
 
+	setTimeout(getTextWords, 1800);
 	function getTextWords() {
 		setTimeout(getTextWords, 2300);	//	milliseconds between cloud updates
 		$.ajax({
@@ -108,6 +105,7 @@ $(function() {
 	};
 
 
+	setTimeout(getUserMentions, 2000);
 	function getUserMentions() {
 		setTimeout(getUserMentions, 4300);	//	milliseconds between cloud updates
 
@@ -129,6 +127,57 @@ $(function() {
 		});
 	};
 
+
+	setTimeout(getRetweets, 2800);
+
+	function getRetweets() {
+		setTimeout(getRetweets, 8300);	//	milliseconds between cloud updates
+
+		$.ajax({
+			url: '/index/retweets',
+			dataType: 'json',
+			success: function(data) {
+				if (data.length !== 0) {
+					console.log(data);
+					$('#retweets').jQCloud('update', data);
+				} else {
+					$('#retweets').jQCloud('update', [
+						{text: 'I’m sleeping...', weight: 10},
+						{text: ' « snore » ', weight: 6},
+						{text: ' ', weight: 1}
+					]);
+				}
+				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
+			}
+		});
+	};
+
+
+	setTimeout(getUsers, 3100);
+
+	function getUsers() {
+		setTimeout(getUsers, 9400);	//	milliseconds between cloud updates
+
+		$.ajax({
+			url: '/index/users',
+			dataType: 'json',
+			success: function(data) {
+				if (data.length !== 0) {
+					$('#users').jQCloud('update', data);
+				} else {
+					$('#users').jQCloud('update', [
+						{text: 'I’m sleeping...', weight: 10},
+						{text: ' « snore » ', weight: 6},
+						{text: ' ', weight: 1}
+					]);
+				}
+				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
+			}
+		});
+	};
+
+
+	setTimeout(getSummary, 900);
 
 	function getSummary() {
 		setTimeout(getSummary, 14000);

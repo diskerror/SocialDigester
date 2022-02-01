@@ -2,10 +2,13 @@
 
 
 use Logic\TextGroup;
+use Logic\UserNameGroup;
 use Logic\WordCloud;
 use Phalcon\Cache\Backend\Factory as BFactory;
 use Phalcon\Cache\Frontend\Factory as FFactory;
 use Phalcon\Mvc\Controller;
+use Service\StdIo;
+use Structure\SearchTerms;
 
 class IndexController extends Controller
 {
@@ -19,7 +22,7 @@ class IndexController extends Controller
 //
 //		if ($output === null) {
 		$this->assets->addJs('js/clouds.js');
-		$this->view->setVar('track', $this->config->twitter->track->toArray());
+		$this->view->setVar('track', SearchTerms::get());
 		$output = $this->view->render('index');
 //			$cache->save('', $output);
 //		}
@@ -122,6 +125,34 @@ class IndexController extends Controller
 //		}
 
 		return $output;
+	}
+
+	public function retweetsAction()
+	{
+		$totals = Logic\Tally\Retweets::get($this->config->mongo_db, 1800);
+		$totals = UserNameGroup::normalize($totals);
+		$cloud  = WordCloud::build($totals);
+		Logic\Tally\UserMentions::changeLink($cloud);
+
+		$obj = array_slice($cloud->toArray(), 0, 18);
+		ksort($obj, SORT_NATURAL | SORT_FLAG_CASE);
+
+		$this->view->setVar('obj', $obj);
+		return $this->view->render('js');
+	}
+
+	public function usersAction()
+	{
+		$totals = Logic\Tally\Users::get($this->config->mongo_db, 1800);
+		$totals = UserNameGroup::normalize($totals);
+		$cloud  = WordCloud::build($totals);
+		Logic\Tally\UserMentions::changeLink($cloud);
+
+		$obj = array_slice($cloud->toArray(), 0, 18);
+		ksort($obj, SORT_NATURAL | SORT_FLAG_CASE);
+
+		$this->view->setVar('obj', $obj);
+		return $this->view->render('js');
 	}
 
 	public function summaryAction()

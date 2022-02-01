@@ -31,12 +31,6 @@ return [
 		'database' => 'digester',
 	],
 
-	'word_stats' => [
-		'quantity' => 32,     //	return the top X items
-		'window'   => 180,    //	summarize the last X seconds
-		'stop'     => [],     //	stop words
-	],
-
 	'twitter' => [
 		'url' => 'https://stream.twitter.com/1.1/',
 
@@ -45,47 +39,6 @@ return [
 			'consumer_secret' => '',
 			'token'           => '',
 			'token_secret'    => '',
-		],
-
-		'track' => [
-			'atf',
-			'attorney',
-			'cia',
-			'congress',
-			'constitution',
-			'constitutionparty',
-			'court',
-			'democracy',
-			'democrat',
-			'democratic',
-			'democraticparty',
-			'democratparty',
-			'diplomacy',
-			'diplomatic',
-			'doj',
-			'fbi',
-			'gop',
-			'government',
-			'green',
-			'greenparty',
-			'ice',
-			'justice',
-			'libertarian',
-			'libertarianparty',
-			'potus',
-			'presidency',
-			'president',
-			'representative',
-			'republic',
-			'republican',
-			'republicanparty',
-			'scotus',
-			'senate',
-			'senator',
-			'socialdemocrat',
-			'socialdemocraticparty',
-			'supreme',
-			'supremecourt',
 		],
 	],
 

@@ -6,6 +6,11 @@ use Diskerror\TypedBSON\DateTime;
 use Ds\Set as DsSet;
 use Ds\Vector;
 use Exception;
+use Logic\Tally\Hashtags;
+use Logic\Tally\Retweets;
+use Logic\Tally\TextWords;
+use Logic\Tally\UserMentions;
+use Logic\Tally\Users;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
 use Resource\LoggerFactory;
@@ -18,8 +23,11 @@ use Service\SharedTimer;
 use Service\ShmemMaster;
 use Service\StdIo;
 use Structure\Config;
+use Structure\SearchTerms;
+use Structure\StopWords;
 use Structure\Tally;
 use Structure\Tweet;
+use function count;
 use function json_encode;
 use function microtime;
 use const JSON_PRETTY_PRINT;
@@ -48,8 +56,6 @@ final class ConsumeTweets
 		$logger = new LoggerFactory(BASE_PATH . '/consume.log');
 //		$logger = new LoggerFactory('php://stderr');
 
-//		$sh = new StemHandler();
-
 		$twitter       = new TwitterV1($config->twitter->auth);
 		$tweetsMongo   = new Tweets($config->mongo_db);
 		$talliesMongo  = new Tallies($config->mongo_db);
@@ -63,8 +69,8 @@ final class ConsumeTweets
 
 		try {
 			//	Send request to start a filtered stream.
-			$stream = $twitter->stream([
-				'track'          => implode(',', $config->twitter->track->toArray()),
+			$sBuffer = $twitter->stream([
+				'track'          => SearchTerms::implode(),
 				'language'       => 'en',
 				'stall_warnings' => true,
 			]);
@@ -79,24 +85,22 @@ final class ConsumeTweets
 
 			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
-			$stopWords = new Vector($config->word_stats->stop->toArray());
-
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
 			$tweets = new Vector();
 			$tweets->allocate(self::INSERT_COUNT);
 
-			while ($pidHandler->exists() && !$stream->isEOF()) {
+			while ($pidHandler->exists() && !$sBuffer->isEOF()) {
 				$tweets->clear();
 				$tally          = new Tally();
 				$tally->created = new DateTime();
 
 				$i = 0;
-				while ($i < self::INSERT_COUNT && $pidHandler->exists() && !$stream->isEOF()) {
+				while ($i < self::INSERT_COUNT && $pidHandler->exists() && !$sBuffer->isEOF()) {
 					//	get tweet
 					$startWait = microtime(true);
-					$raw       = $stream->read();
+					$raw       = $sBuffer->read();
 
 					//	Check for any data at all.
 					//	use "match" in PHP8
@@ -108,6 +112,7 @@ final class ConsumeTweets
 
 					//	If we don't receive an object in JSON then this must be plain text.
 					if ($raw[0] !== '{') {
+						$logger->emergency($raw);
 						$logger->warning($raw);
 						$pidHandler->removeIfExists();
 						return;
@@ -152,14 +157,6 @@ final class ConsumeTweets
 						continue;
 					}
 
-					//	Skip tweet if it has a hashtag with non-latin scripts.
-					foreach ($tweet->entities->hashtags as $hashtag) {
-						if (mb_ord(mb_substr($hashtag->text, 0, 1)) > 592) {
-//							$logger->info('hashtag script not latin');
-							continue 2;
-						}
-					}
-
 					++$i;    //	increment only for tweets to be saved
 
 					$waitTotal += (microtime(true) - $startWait);
@@ -173,66 +170,21 @@ final class ConsumeTweets
 						unset($tweet->extended_tweet->entities);
 					}
 
-					//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
-					$uniqueHashtags = new DsSet();
-					foreach ($tweet->entities->hashtags as $hashtag) {
-						if ($hashtag->text != '') {
-							$uniqueHashtags->add($hashtag->text);
-							$tally->allHashtags->doTally($hashtag->text);
-						}
-					}
+					//	Do pre-tallies.
+					Hashtags::pre($tweet, $tally);
+					//	HashtagsAll::pre() is handled in Hashtags::pre().
+					TextWords::pre($tweet, $tally);
+					UserMentions::pre($tweet, $tally);
+					Users::pre($tweet, $tally);
+					Retweets::pre($tweet, $tally);
 
-					//	Count unique hashtags for this tweet.
-					foreach ($uniqueHashtags as $uniqueHashtag) {
-						$tally->uniqueHashtags->doTally($uniqueHashtag);
-					}
-
-					//	Tally the words in the text.
-					$split = preg_split('/[^a-zA-Z0-9_\']/', $tweet->text, null, PREG_SPLIT_NO_EMPTY);
-					foreach ($split as $s) {
-						if (strlen($s) > 2 && !$stopWords->contains(strtolower($s))) {
-							$tally->textWords->doTally($s);
-						}
-					}
-
-					//	Tally user mentions.
-					foreach ($tweet->entities->user_mentions as $userMention) {
-						$tally->userMentions->doTally($userMention->screen_name);
-					}
-
-					//	Tally users.
-					$tally->users->doTally($tweet->user->screen_name);
-
-					//	Tally retweeted users.
-					$rtName = $tweet->retweeted_status->user->screen_name;
-					if ($rtName !== '') {
-						$tally->retweets->doTally($rtName);
-					}
-
-//					$words = [];
-//
-//					//	build the two stem lists
-//					$split = preg_split('/[^a-zA-Z0-9]/', $text, null, PREG_SPLIT_NO_EMPTY);
-//					foreach ($split as $s) {
-//						$words[] = $sh->get($s);
-//					}
-//
-//					//	build stem pairs
-//					$last = '';
-//					foreach ($tweet->words as $w) {
-//						$tweet->pairs[] = $last . $w;
-//						$last           = $w;
-//					}
-//					$tweet->pairs[] = $last;
-
+					//	Save tweet for full-text analysis.
 					$tweets->push($tweet->bsonSerialize());
 				}
 
 				try {
 					//	convert to Mongo compatible object and insert
-					$forException = $tweets->toArray();
 					$tweetsMongo->insertMany($tweets->toArray(), $insertOptions);
-					$forException = $tally->bsonSerialize();
 					$talliesMongo->insertOne($tally->bsonSerialize(), $insertOptions);
 				}
 				catch (Exception $e) {
@@ -244,8 +196,7 @@ final class ConsumeTweets
 					else {
 						//	ignore duplicates but log everything else
 //						if (!preg_match('/duplicate.*key/i', $m)) {
-						$logger->warning(
-							'Mongo: ' . $m . PHP_EOL . json_encode($forException, JSON_PRETTY_PRINT));
+						$logger->warning('Mongo: ' . $m);
 //						}
 					}
 					exit;

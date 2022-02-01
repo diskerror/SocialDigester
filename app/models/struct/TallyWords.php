@@ -21,9 +21,14 @@ class TallyWords extends TypedArray
 	 */
 	public function doTally($word, float $q = 1): void
 	{
+		if ($word === '') {
+			return;
+		}
+
 		if ($this->offsetExists($word)) {
 			$this[$word] += $q;
-		} else {
+		}
+		else {
 			$this[$word] = $q;
 		}
 	}
