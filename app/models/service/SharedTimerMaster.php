@@ -2,7 +2,7 @@
 
 namespace Service;
 
-class ShmemMaster extends Shmem
+class SharedTimerMaster extends SharedTimer
 {
 	/**
 	 * @param string $id
@@ -12,16 +12,6 @@ class ShmemMaster extends Shmem
 	 */
 	public function __construct(string $id, string $mode = 'c', int $permissions = 0666, int $size = 1024)
 	{
-		parent::__construct($id, $mode, $permissions, $size);
+		$this->_shmem = new ShmemMaster($id, $mode, $permissions, $size);
 	}
-
-	/**
-	 *
-	 */
-	public function __destruct()
-	{
-		$this->delete();
-		parent::__destruct();
-	}
-
 }

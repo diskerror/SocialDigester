@@ -2,14 +2,23 @@
 
 namespace Logic\Tally;
 
+use Logic\TallyInterface;
+use LogicException;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollections\Tallies;
 use Structure\Config\Mongo;
+use Structure\Tally;
 use Structure\TallyWords;
+use Structure\Tweet;
 
-final class HashtagsAll
+final class HashtagsAll implements TallyInterface
 {
 	private function __construct() { }
+
+	public static function pre(Tweet $tweet, Tally &$tally)
+	{
+		throw new LogicException('This data set is built in the Hashtags class.');
+	}
 
 	/**
 	 * @param Mongo $mongo_db

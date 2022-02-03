@@ -1,5 +1,6 @@
 <?php
 
+use Logic\ConsumeTweets;
 use MongoDB\BSON\UTCDateTime;
 use Resource\LoggerFactory;
 use Service\SharedTimer;
@@ -42,16 +43,7 @@ class TweetsTask extends TaskMaster
 	 */
 	public function checkRunningAction(): void
 	{
-//		$ct = (new SharedTimer('c'))->elapsed();
-//		if ((new Shmem('w'))() >= 4) {
-//			$this->startBgAction();
-//		}
-
-		$t = (new Resource\MongoCollections\Tweets($this->config->mongo_db))->count([
-			'created_at' => ['$gt' => new UTCDateTime((time() - 6) * 1000)],
-		]);
-
-		if ($t === 0) {
+		if (!ConsumeTweets::isRunning(6)) {
 			$this->stopAction();
 			$logger = new LoggerFactory(BASE_PATH . '/consume.log');
 			$logger->info('Wait time at restart: ' . (new Shmem('w'))());
@@ -122,12 +114,12 @@ class TweetsTask extends TaskMaster
 	 */
 	public function isRunningAction()
 	{
-//		StdIo::outln((new SharedTimer('c'))->elapsed() < 6 ? 1 : 0);
+		StdIo::outln(ConsumeTweets::isRunning(6));
 
-		$t = (new Resource\MongoCollections\Tweets($this->config->mongo_db))->count([
-			'created_at' => ['$gt' => new UTCDateTime((time() - 6) * 1000)],
-		]);
-
-		StdIo::outln($t === 0 ? 0 : 1);
+//		$t = (new Resource\MongoCollections\Tallies($this->config->mongo_db))->count([
+//			'created_at' => ['$gte' => new UTCDateTime((time() - 6) * 1000), '$lte' => new UTCDateTime()],
+//		]);
+//
+//		StdIo::outln($t /*=== 0 ? 0 : 1*/);
 	}
 }

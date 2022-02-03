@@ -4,25 +4,34 @@ namespace Service;
 
 class SharedTimer
 {
-	private $_id = '';
+	/**
+	 * @var Shmem
+	 */
+	protected $_shmem;
 
-	public function __construct(string $id = '')
+	/**
+	 * @param string $id
+	 * @param string $mode
+	 * @param int $permissions
+	 * @param int $size
+	 */
+	public function __construct(string $id, string $mode = 'a', int $permissions = 0666, int $size = 0)
 	{
-		$this->_id = $id;
+		$this->_shmem = new Shmem($id, $mode, $permissions, $size);
 	}
 
 	public function start(): void
 	{
-		(new Shmem($this->_id))->write(microtime(true));
+		$this->_shmem->write(microtime(true));
 	}
 
 	public function elapsed(): float
 	{
-		return (microtime(true) - (float) (new Shmem($this->_id))->read());
+		return (microtime(true) - (float) $this->_shmem->read());
 	}
 
 	public function delete()
 	{
-		(new Shmem($this->_id))->delete();
+		$this->_shmem->delete();
 	}
 }

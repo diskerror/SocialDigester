@@ -14,9 +14,9 @@ class Shmem
 	 * @param int $permissions
 	 * @param int $size
 	 */
-	public function __construct(string $id, string $mode = 'a', int $permissions = 0, int $size = 0)
+	public function __construct(string $id, string $mode = 'a', int $permissions = 0666, int $size = 0)
 	{
-		$this->_shmop = shmop_open(ftok(__FILE__, $id), $mode, $permissions, $size);
+		$this->_shmop = @shmop_open(ftok(__FILE__, $id), $mode, $permissions, $size);
 
 		if ($this->_shmop === false) {
 			throw new RuntimeException('could not open or create shared memory');
@@ -64,7 +64,10 @@ class Shmem
 	 */
 	public function read(int $offset = 0, int $size = 0): string
 	{
-		if ($size <= 0) {
+		if ($size < 0) {
+			throw new RuntimeException('offset cannot be less than zero');
+		}
+		elseif ($size === 0) {
 			$size = $this->size();
 		}
 

@@ -3,7 +3,6 @@
 namespace Logic;
 
 use Diskerror\TypedBSON\DateTime;
-use Ds\Set as DsSet;
 use Ds\Vector;
 use Exception;
 use Logic\Tally\Hashtags;
@@ -19,19 +18,13 @@ use Resource\MongoCollections\Tallies;
 use Resource\MongoCollections\Tweets;
 use Resource\PidHandler;
 use Resource\TwitterV1;
-use Service\SharedTimer;
+use Service\Shmem;
 use Service\ShmemMaster;
 use Service\StdIo;
 use Structure\Config;
 use Structure\SearchTerms;
-use Structure\StopWords;
 use Structure\Tally;
 use Structure\Tweet;
-use function count;
-use function json_encode;
-use function microtime;
-use const JSON_PRETTY_PRINT;
-use const PHP_EOL;
 
 final class ConsumeTweets
 {
@@ -61,7 +54,6 @@ final class ConsumeTweets
 		$talliesMongo  = new Tallies($config->mongo_db);
 		$messagesMongo = new Messages($config->mongo_db);
 
-//		$timer    = new SharedTimer('c');
 		$waitMem   = new ShmemMaster('w');    //	wait between saves
 		$rateMem   = new ShmemMaster('r');    //	rate which good tweets are received
 		$rateTime  = microtime(true);
@@ -78,8 +70,6 @@ final class ConsumeTweets
 			//	Set PID file to indicate whether we should keep running.
 			if ($pidHandler->setFile() === false) {
 				$logger->error('Process "' . $config->process->path . '/' . $config->process->name . '" is already running or not stopped properly');
-
-//				$timer->delete();
 				return;
 			}
 
@@ -202,11 +192,9 @@ final class ConsumeTweets
 					exit;
 				}
 
-//				StdIo::outf("\r%.5f ", $timer->elapsed());
 				$now = microtime(true);
 				$rateMem->write(self::INSERT_COUNT / ($now - $rateTime));
 				$rateTime = $now;
-//				$timer->start();
 
 				//	average wait to read pack per inner loop
 				$waitMem->write($waitTotal / self::INSERT_COUNT);
@@ -214,10 +202,25 @@ final class ConsumeTweets
 			}
 
 			$logger->info('Stopped capturing tweets.');
-//			$timer->delete();
 		}
 		catch (Exception $e) {
 			$logger->emergency((string) $e);
+		}
+	}
+
+	public static function isRunning(int $maxSecs)
+	{
+		try {
+			return (new Shmem('w'))() < 6 ? 1 : 0;
+		}
+		catch (Service\Exception\RuntimeException $e) {
+			//	If not open then process isn't running.
+			if (strstr($e->getMessage(), 'could not open or create shared memory')) {
+				return 0;
+			}
+			else {
+				throw $e;
+			}
 		}
 	}
 

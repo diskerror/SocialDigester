@@ -2,14 +2,29 @@
 
 namespace Logic\Tally;
 
+use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollections\Tallies;
 use Structure\Config\Mongo;
+use Structure\StopWords;
+use Structure\Tally;
 use Structure\TallyWords;
+use Structure\Tweet;
 
-class TextWords
+class TextWords implements TallyInterface
 {
 	private function __construct() { }
+
+	public static function pre(Tweet $tweet, Tally &$tally)
+	{
+		//	Tally the words in the text.
+		$split = preg_split('/[^a-zA-Z0-9_\']/', $tweet->text, null, PREG_SPLIT_NO_EMPTY);
+		foreach ($split as $s) {
+			if (strlen($s) > 2 && !StopWords::contains(strtolower($s))) {
+				$tally->textWords->doTally($s);
+			}
+		}
+	}
 
 	/**
 	 * @param Mongo $mongo_db

@@ -2,14 +2,29 @@
 
 namespace Logic\Tally;
 
+use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollections\Tallies;
 use Structure\Config\Mongo;
+use Structure\Tally;
 use Structure\TallyWords;
+use Structure\Tweet;
 
-class UserMentions
+class UserMentions implements TallyInterface
 {
 	private function __construct() { }
+
+	public static function pre(Tweet $tweet, Tally &$tally)
+	{
+		//	Tally user mentions.
+		//	Make sure they are not referring to themselves.
+		foreach ($tweet->entities->user_mentions as $userMention) {
+			$sn = $userMention->screen_name;
+			if ($sn !== $tweet->user->screen_name) {
+				$tally->userMentions->doTally($userMention->screen_name);
+			}
+		}
+	}
 
 	/**
 	 * @param Mongo $mongo_db

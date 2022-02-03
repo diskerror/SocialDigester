@@ -2,14 +2,26 @@
 
 namespace Logic\Tally;
 
+use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollections\Tallies;
 use Structure\Config\Mongo;
+use Structure\Tally;
 use Structure\TallyWords;
+use Structure\Tweet;
 
-class Retweets
+class Retweets implements TallyInterface
 {
 	private function __construct() { }
+
+	public static function pre(Tweet $tweet, Tally &$tally)
+	{
+		//	Tally retweeted users but not if they retweet themselves.
+		$rtName = $tweet->retweeted_status->user->screen_name;
+		if ($rtName !== $tweet->user->screen_name) {
+			$tally->retweets->doTally($rtName);
+		}
+	}
 
 	/**
 	 * @param Mongo $mongo_db
@@ -34,8 +46,6 @@ class Retweets
 				$totals->doTally($k, $v);
 			}
 		}
-
-		$totals->scaleTally($window / 60.0); // changes value to count per minute
 
 		return $totals;
 	}

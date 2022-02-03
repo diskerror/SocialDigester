@@ -2,14 +2,49 @@
 
 namespace Logic\Tally;
 
+use Ds\Set;
+use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollections\Tallies;
 use Structure\Config\Mongo;
+use Structure\Tally;
 use Structure\TallyWords;
+use Structure\Tweet;
 
-final class Hashtags
+/**
+ *
+ */
+final class Hashtags implements TallyInterface
 {
+	/**
+	 *
+	 */
 	private function __construct() { }
+
+	/**
+	 * @param Tweet $tweet
+	 * @param Tally $tally
+	 * @return mixed|void
+	 */
+	public static function pre(Tweet $tweet, Tally &$tally)
+	{
+		//	Skip hashtag with non-latin scripts.
+		$uniqueHashtags = new Set();
+		foreach ($tweet->entities->hashtags as $hashtag) {
+			if (mb_ord(mb_substr($hashtag->text, 0, 1)) > 592 || $hashtag->text === '') {
+				continue;
+			}
+
+			//	Make sure we have only one of a hashtag per tweet for uniqueHashtags.
+			$uniqueHashtags->add($hashtag->text);
+			$tally->allHashtags->doTally($hashtag->text);
+		}
+
+		//	Count unique hashtags for this tweet.
+		foreach ($uniqueHashtags as $uniqueHashtag) {
+			$tally->uniqueHashtags->doTally($uniqueHashtag);
+		}
+	}
 
 	/**
 	 * @param Mongo $mongo_db

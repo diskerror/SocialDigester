@@ -2,14 +2,23 @@
 
 namespace Logic\Tally;
 
+use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollections\Tallies;
 use Structure\Config\Mongo;
+use Structure\Tally;
 use Structure\TallyWords;
+use Structure\Tweet;
 
-class Users
+class Users implements TallyInterface
 {
 	private function __construct() { }
+
+	public static function pre(Tweet $tweet, Tally &$tally)
+	{
+		//	Tally users.
+		$tally->users->doTally($tweet->user->screen_name);
+	}
 
 	/**
 	 * @param Mongo $mongo_db
@@ -34,8 +43,6 @@ class Users
 				$totals->doTally($k, $v);
 			}
 		}
-
-		$totals->scaleTally($window / 60.0); // changes value to count per minute
 
 		return $totals;
 	}
