@@ -30,7 +30,7 @@ final class ConsumeTweets
 {
 	//	512 meg memory limit
 	const MEMORY_LIMIT = 512 * 1024 * 1024;
-	const INSERT_COUNT = 32;    //	best values are powers of 2
+	const INSERT_COUNT = 64;    //	best values are powers of 2
 
 	private final function __construct() { }
 
@@ -213,7 +213,7 @@ final class ConsumeTweets
 		try {
 			return (new Shmem('w'))() < 6 ? 1 : 0;
 		}
-		catch (Service\Exception\RuntimeException $e) {
+		catch (Exception $e) {
 			//	If not open then process isn't running.
 			if (strstr($e->getMessage(), 'could not open or create shared memory')) {
 				return 0;

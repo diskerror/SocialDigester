@@ -16,20 +16,35 @@ class TallyWords extends TypedArray
 	/**
 	 * Add word to array.
 	 *
-	 * @param     $word
+	 * @param string $word
 	 * @param int $q
 	 */
-	public function doTally($word, float $q = 1): void
+	public function doTally(string $word, float $q = 1): void
 	{
-		if ($word === '') {
-			return;
-		}
+		$this->_doTally($q, $word);
+	}
 
-		if ($this->offsetExists($word)) {
-			$this[$word] += $q;
-		}
-		else {
-			$this[$word] = $q;
+	/**
+	 * Add list of words to array.
+	 *
+	 * @param string $word
+	 * @param int $q
+	 */
+	public function countArrayValues(array $in): void
+	{
+		$counted = array_count_values($in);
+		array_walk($counted, [$this, '_doTally']);
+	}
+
+	protected function _doTally(float $q, string $word): void
+	{
+		if ($word !== '') {
+			if ($this->offsetExists($word)) {
+				$this[$word] += $q;
+			}
+			else {
+				$this[$word] = $q;
+			}
 		}
 	}
 

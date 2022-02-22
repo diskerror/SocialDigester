@@ -41,9 +41,7 @@ final class Hashtags implements TallyInterface
 		}
 
 		//	Count unique hashtags for this tweet.
-		foreach ($uniqueHashtags as $uniqueHashtag) {
-			$tally->uniqueHashtags->doTally($uniqueHashtag);
-		}
+		$tally->uniqueHashtags->countArrayValues($uniqueHashtags->toArray());
 	}
 
 	/**

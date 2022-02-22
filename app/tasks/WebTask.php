@@ -1,7 +1,7 @@
 <?php
 
-use Logic\Tally\TagCloud;
 use Logic\TextGroup;
+use Logic\UserNameGroup;
 use Logic\WordCloud;
 use Service\StdIo;
 
@@ -57,6 +57,32 @@ class WebTask extends TaskMaster
 		Logic\Tally\UserMentions::changeLink($cloud);
 
 		$obj = array_slice($cloud->toArray(), 0, 48);
+		ksort($obj, SORT_NATURAL | SORT_FLAG_CASE);
+
+		StdIo::phpOut($obj);
+	}
+
+	public function retweetsAction()
+	{
+		$totals = Logic\Tally\Retweets::get($this->config->mongo_db, 1800);
+		$totals = UserNameGroup::normalize($totals);
+		$cloud  = WordCloud::build($totals);
+		Logic\Tally\UserMentions::changeLink($cloud);
+
+		$obj = array_slice($cloud->toArray(), 0, 18);
+		ksort($obj, SORT_NATURAL | SORT_FLAG_CASE);
+
+		StdIo::phpOut($obj);
+	}
+
+	public function usersAction()
+	{
+		$totals = Logic\Tally\Users::get($this->config->mongo_db, 1800);
+		$totals = UserNameGroup::normalize($totals);
+		$cloud  = WordCloud::build($totals);
+		Logic\Tally\UserMentions::changeLink($cloud);
+
+		$obj = array_slice($cloud->toArray(), 0, 18);
 		ksort($obj, SORT_NATURAL | SORT_FLAG_CASE);
 
 		StdIo::phpOut($obj);

@@ -72,14 +72,16 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		StdIo::jsonOut((new Resource\MongoCollections\Tallies($this->config->mongo_db))->find(
-			[
-				'created' => ['$gte' => new UTCDateTime((time() - 600) * 1000)],
-			],
-			[
-				'projection' => ['users' => 1,],
-			]
-		));
+		StdIo::phpOut(new \Structure\Tweet());
+
+//		StdIo::jsonOut((new Resource\MongoCollections\Tallies($this->config->mongo_db))->find(
+//			[
+//				'created' => ['$gte' => new UTCDateTime((time() - 600) * 1000)],
+//			],
+//			[
+//				'projection' => ['users' => 1,],
+//			]
+//		));
 
 //		$timer = new SharedTimer('x');
 //		$timer->start();

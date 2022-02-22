@@ -134,7 +134,7 @@ class IndexController extends Controller
 		$cloud  = WordCloud::build($totals);
 		Logic\Tally\UserMentions::changeLink($cloud);
 
-		$obj = array_slice($cloud->toArray(), 0, 18);
+		$obj = array_slice($cloud->toArray(), 0, 24);
 		ksort($obj, SORT_NATURAL | SORT_FLAG_CASE);
 
 		$this->view->setVar('obj', $obj);
@@ -143,12 +143,13 @@ class IndexController extends Controller
 
 	public function usersAction()
 	{
+		ini_set('memory_limit', 512 * 1024 * 1024);
 		$totals = Logic\Tally\Users::get($this->config->mongo_db, 1800);
 		$totals = UserNameGroup::normalize($totals);
 		$cloud  = WordCloud::build($totals);
 		Logic\Tally\UserMentions::changeLink($cloud);
 
-		$obj = array_slice($cloud->toArray(), 0, 18);
+		$obj = array_slice($cloud->toArray(), 0, 24);
 		ksort($obj, SORT_NATURAL | SORT_FLAG_CASE);
 
 		$this->view->setVar('obj', $obj);
