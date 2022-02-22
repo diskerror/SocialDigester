@@ -30,7 +30,7 @@ class Tally extends TypedClass
 
 	protected $allHashtags = [TallyWords::class];
 
-	protected $textWords = [TallyWords::class];
+	protected $textWords = [TallyWordsStop::class];
 
 	protected $userMentions = [TallyWords::class];
 

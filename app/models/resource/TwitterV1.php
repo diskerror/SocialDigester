@@ -68,25 +68,15 @@ class TwitterV1
 		switch ($function) {
 			case 'statuses/filter':
 			case 'statuses/sample':
-//				throw new LogicException('Use TwitterV1Stream to handle this function.');
 				return $this->stream($params);
 
-			case 'media/upload':
-			case 'media/metadata/create':
-			case 'media/subtitles/delete':
-			case 'media/subtitles/create':
-				$url = 'https://upload.twitter.com/1.1/' . $function;
-				break;
-
 			case 'statuses/oembed':
-				$url = 'https://publish.twitter.com/oembed';
+				$url = 'https://publish.twitter.com/oembed.json';
 				break;
 
 			default:
-				$url = 'https://api.twitter.com/1.1/' . $function;
+				$url = 'https://api.twitter.com/1.1/' . $function . '.json';
 		}
-
-		$url .= '.json';
 
 		$opts = [
 			CURLOPT_SSH_COMPRESSION => true,

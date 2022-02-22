@@ -6,7 +6,7 @@ use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
 use Resource\MongoCollections\Tallies;
 use Structure\Config\Mongo;
-use Structure\StopWords;
+use Resource\StopWords;
 use Structure\Tally;
 use Structure\TallyWords;
 use Structure\Tweet;
@@ -19,11 +19,13 @@ class TextWords implements TallyInterface
 	{
 		//	Tally the words in the text.
 		$split = preg_split('/[^a-zA-Z0-9_\']/', $tweet->text, null, PREG_SPLIT_NO_EMPTY);
-		foreach ($split as $s) {
-			if (strlen($s) > 2 && !StopWords::contains(strtolower($s))) {
-				$tally->textWords->doTally($s);
-			}
-		}
+//		$words = [];
+//		foreach ($split as $s) {
+//			if (strlen($s) > 2 && !StopWords::contains(strtolower($s))) {
+//				$words[] = $s;
+//			}
+//		}
+		$tally->textWords->countArrayValues($split);
 	}
 
 	/**

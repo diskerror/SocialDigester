@@ -7,9 +7,6 @@
 define('BASE_PATH', __DIR__);
 
 try {
-//	require 'vendor/autoload.php';
-//	require 'app/Loader.php';
-//	Loader::register([__DIR__ . '/app/tasks/']);
 	require 'vendor/diskerror/autoload/autoload.php';
 
 	$cli = new Service\Application\Cli(__DIR__);

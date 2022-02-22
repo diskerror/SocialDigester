@@ -1,6 +1,6 @@
 <?php
 
-namespace Structure;
+namespace Resource;
 
 use Ds\Vector;
 
@@ -19,19 +19,18 @@ class StopWords
 	 */
 	protected static $_list = [
 		'about',
-		'after',
 		'all',
 		'and',
 		'any',
 		'are',
 		'back',
 		'been',
-		'before',
 		'being',
 		'but',
 		'can',
 		'could',
 		'did',
+		'did\'t',
 		'even',
 		'field',
 		'for',
@@ -66,6 +65,7 @@ class StopWords
 		'our',
 		'over',
 		'really',
+		'saw',
 		'see',
 		'she',
 		'since',
@@ -95,16 +95,15 @@ class StopWords
 	];
 
 	/**
-	 * @param $name
-	 * @param $arguments
-	 * @return false|mixed
+	 * @param string $word
+	 * @return bool
 	 */
-	public static function __callStatic($name, $arguments = [])
+	public static function contains(string $word): bool
 	{
 		if (!isset(self::$_vector)) {
 			self::$_vector = new Vector(self::$_list);
 		}
 
-		return call_user_func_array([self::$_vector, $name], $arguments);
+		return self::$_vector->contains($word);
 	}
 }
