@@ -3,9 +3,10 @@
 namespace Resource;
 
 use Service\Curl;
-use Service\CmdReadBuffer;
+use Service\CmdBufferReader;
 use Service\StdIo;
 use Structure\Config\OAuth as cOAuth;
+use UnexpectedValueException;
 
 /**
  * Class TwitterStream
@@ -34,6 +35,8 @@ class TwitterV1
 		'warning'         => 0,
 	];
 
+	private $_streamBuffer;
+
 	/**
 	 * Twitter constructor.
 	 *
@@ -56,8 +59,9 @@ class TwitterV1
 	}
 
 	/**
-	 * Start a stream.
-	 * https://dev.twitter.com/streaming/overview
+	 * Execute Twitter API v1 function.
+	 *
+	 * Returns an associative array or scalar.
 	 *
 	 * @param string $requestMethod
 	 * @param string $function
@@ -68,7 +72,8 @@ class TwitterV1
 		switch ($function) {
 			case 'statuses/filter':
 			case 'statuses/sample':
-				return $this->stream($params);
+				$this->stream($params);
+				return null;
 
 			case 'statuses/oembed':
 				$url = 'https://publish.twitter.com/oembed.json';
@@ -100,16 +105,16 @@ class TwitterV1
 
 		$curl = new Curl($url, $opts);
 
-		return $curl->exec();
+		return self::jsonDecode($curl->exec());
 	}
 
 	/**
 	 * Start a stream.
 	 * https://dev.twitter.com/streaming/overview
 	 *
-	 * @return bool
+	 * @return void
 	 */
-	public function stream(array $params = []): CmdReadBuffer
+	public function stream(array $params = []): void
 	{
 		// URL to Twitter stream API v1.
 		$url = 'https://stream.twitter.com/1.1/statuses/filter.json';    //	POST method
@@ -122,8 +127,52 @@ class TwitterV1
 
 		$oauthHeader = $this->_oauth->getRequestHeader('POST', $url, $params);
 
-		return new CmdReadBuffer(
-			"curl -s -X POST $url$data -H 'Authorization: $oauthHeader' -H 'Accept: application/json'");
+		$this->_streamBuffer = new CmdBufferReader(
+			"curl -s -X POST $url$data -H 'Authorization: $oauthHeader' -H 'Accept: application/json'"
+		);
+	}
+
+	/**
+	 * Read from Twitter stream buffer and return an associative array or scalar.
+	 *
+	 */
+	public function getPacket()
+	{
+		do {
+			$raw = $this->_streamBuffer->read();
+		} while ($raw == '' && !$this->_streamBuffer->isEOF());
+
+		return self::jsonDecode($raw);
+	}
+
+	/**
+	 * Returns an associative array or scalar.
+	 *
+	 */
+	public static function jsonDecode(string $in)
+	{
+		$in = trim($in, "\x00..\x20\x7F");
+
+		switch ($in[0]) {
+			case '[':
+			case '{':
+				break;
+
+			default:
+				return $in;
+		}
+
+		$packet = json_decode($in, true);
+		if (json_last_error() !== JSON_ERROR_NONE) {
+			throw new UnexpectedValueException(json_last_error_msg() . "\nInput: \"" . $in . '"');
+		}
+
+		return $packet;
+	}
+
+	public function streamEOF(): bool
+	{
+		return $this->_streamBuffer->isEOF();
 	}
 
 }

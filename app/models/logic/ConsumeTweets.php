@@ -53,15 +53,19 @@ final class ConsumeTweets
 		$tweetsMongo   = new Tweets($config->mongo_db);
 		$talliesMongo  = new Tallies($config->mongo_db);
 		$messagesMongo = new Messages($config->mongo_db);
+		$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
 		$waitMem   = new ShmemMaster('w');    //	wait between saves
 		$rateMem   = new ShmemMaster('r');    //	rate which good tweets are received
 		$rateTime  = microtime(true);
 		$waitTotal = 0;
 
+		$tweets = new Vector();
+		$tweets->allocate(self::INSERT_COUNT);
+
 		try {
 			//	Send request to start a filtered stream.
-			$sBuffer = $twitter->stream([
+			$twitter->stream([
 				'track'          => SearchTerms::implode(),
 				'language'       => 'en',
 				'stall_warnings' => true,
@@ -73,53 +77,29 @@ final class ConsumeTweets
 				return;
 			}
 
-			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
-
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
-			$tweets = new Vector();
-			$tweets->allocate(self::INSERT_COUNT);
-
-			while ($pidHandler->exists() && !$sBuffer->isEOF()) {
+			while ($pidHandler->exists() && !$twitter->streamEOF()) {
 				$tweets->clear();
 				$tally          = new Tally();
-				$tally->created = new DateTime();
+				$tally->created = new DateTime();    //	This should not be needed.
 
-				$i = 0;
-				while ($i < self::INSERT_COUNT && $pidHandler->exists() && !$sBuffer->isEOF()) {
-					//	get tweet
+				$ic = 0;
+				while ($ic < self::INSERT_COUNT && $pidHandler->exists() && !$twitter->streamEOF()) {
 					$startWait = microtime(true);
-					$raw       = $sBuffer->read();
 
-					//	Check for any data at all.
-					//	use "match" in PHP8
-					if ($raw === '' || $raw === false || $raw === null) {
-						continue;
-					}
+					//	returns an associative array
+					$packet = $twitter->getPacket();
 
-					$raw = trim($raw, "\x00..\x20\x7F");
-
-					//	If we don't receive an object in JSON then this must be plain text.
-					if ($raw[0] !== '{') {
-						$logger->emergency($raw);
-						$logger->warning($raw);
-						$pidHandler->removeIfExists();
-						return;
-					}
-
-					$packet = json_decode($raw, true);
-
-					//	Ignore nulls and falses and empties.
-					//	use "match" in PHP8
-					if ($packet === false || $packet === null || $packet === '' || count($packet) === 0) {
-						continue;
-					}
-
-					//	Log bad data.
-					if (!is_array($packet)) {
-						$logger->info('bad packet' . PHP_EOL . var_export($packet, true));
-						continue;
+					if (is_scalar($packet)) {
+						/**
+						 * If we don't receive an object then this must be
+						 * a plain text message telling us to stop.
+						 */
+						$logger->emergency($packet);
+						$logger->warning($packet);
+						break 2;
 					}
 
 					//	Save Twitter messages.
@@ -147,7 +127,7 @@ final class ConsumeTweets
 						continue;
 					}
 
-					++$i;    //	increment only for tweets to be saved
+					++$ic;    //	increment only for tweets to be saved
 
 					$waitTotal += (microtime(true) - $startWait);
 
@@ -200,12 +180,12 @@ final class ConsumeTweets
 				$waitMem->write($waitTotal / self::INSERT_COUNT);
 				$waitTotal = 0;
 			}
-
-			$logger->info('Stopped capturing tweets.');
 		}
 		catch (Exception $e) {
 			$logger->emergency((string) $e);
 		}
+
+		$logger->info('Stopped capturing tweets.');
 	}
 
 	public static function isRunning(int $maxSecs)

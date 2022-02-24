@@ -8,7 +8,7 @@ namespace Service;
  * @package Service
  *
  */
-class CmdReadBuffer
+class CmdBufferReader
 {
 	private const MAX_READ = 65536;
 
@@ -39,22 +39,6 @@ class CmdReadBuffer
 	public function read(): string
 	{
 		return fgets($this->_res, self::MAX_READ);
-	}
-
-	/**
-	 *
-	 * @return null|boolean|array
-	 */
-	public function readJson()
-	{
-		$str = $this->read();
-		if (false === $str) {
-			return false;
-		}
-
-		$str = trim($str, "\x00..\x20\x7F");
-
-		return json_decode($str, true);
 	}
 
 }

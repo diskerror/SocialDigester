@@ -27,7 +27,7 @@ final class Summary
 	 */
 	public static function get(Mongo $mongo_db, int $window, int $quantity): array
 	{
-		ini_set('memory_limit', 512 * 1024 * 1024);
+		ini_set('memory_limit', 256 * 1024 * 1024);
 
 		$tweets = (new Tweets($mongo_db))->find(
 			[
@@ -44,10 +44,13 @@ final class Summary
 		foreach ($tweets as $tweet) {
 			if (preg_match('/(^039|^rt)/i', $tweet->text)) {
 				$text .= substr($tweet->text, 3) . "\n";
-			} else {
+			}
+			else {
 				$text .= $tweet->text . "\n";
 			}
 		}
+
+		unset($tweets, $tweet);
 
 		$parser = new Parser();
 		$parser->setMinimumWordLength(4);
@@ -55,6 +58,8 @@ final class Summary
 		$parser->setStopWords(new English());
 
 		$text = $parser->parse();
+
+		unset($parser);
 
 		$graph = new Graph();
 		$graph->createGraph($text);
@@ -68,9 +73,11 @@ final class Summary
 			$graph,
 			$text,
 			12,    //	how many words to test
-			32,    //	size of array to return
+			20,    //	size of array to return
 			Summarize::GET_ALL_IMPORTANT
 		));
+
+		unset($graph, $scores);
 
 		$subSummaries = [];
 		$summaryCount = 0;
