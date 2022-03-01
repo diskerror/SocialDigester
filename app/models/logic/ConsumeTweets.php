@@ -22,7 +22,7 @@ use Service\Shmem;
 use Service\ShmemMaster;
 use Service\StdIo;
 use Structure\Config;
-use Structure\SearchTerms;
+use Logic\SearchTerms;
 use Structure\Tally;
 use Structure\Tweet;
 

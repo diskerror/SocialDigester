@@ -8,7 +8,7 @@ use Phalcon\Cache\Backend\Factory as BFactory;
 use Phalcon\Cache\Frontend\Factory as FFactory;
 use Phalcon\Mvc\Controller;
 use Service\StdIo;
-use Structure\SearchTerms;
+use Logic\SearchTerms;
 
 class IndexController extends Controller
 {

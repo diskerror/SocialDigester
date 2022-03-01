@@ -1,6 +1,6 @@
 <?php
 
-namespace Structure;
+namespace Logic;
 
 /**
  *
@@ -11,44 +11,40 @@ class SearchTerms
 	 * @var string[]
 	 */
 	protected static $_terms = [
-		'atf',
-		'attorney',
-		'cia',
+		'baltic',
+		'biden',
 		'congress',
 		'constitution',
-		'constitutionparty',
 		'court',
 		'democracy',
-		'democrat',
 		'democratic',
-		'democraticparty',
-		'democratparty',
 		'diplomacy',
 		'diplomatic',
-		'doj',
-		'fbi',
-		'gop',
+		'eu',
+		'europe',
+		'european',
+		'europeanunion',
 		'government',
-		'green',
-		'greenparty',
-		'ice',
 		'justice',
 		'libertarian',
-		'libertarianparty',
+		'nato',
 		'potus',
 		'presidency',
 		'president',
+		'putin',
 		'representative',
 		'republic',
-		'republican',
-		'republicanparty',
+		'russia',
+		'russian',
 		'scotus',
 		'senate',
 		'senator',
-		'socialdemocrat',
-		'socialdemocraticparty',
 		'supreme',
 		'supremecourt',
+		'ukraine',
+		'ukrainian',
+		'warsawpact',
+		'zelensky',
 	];
 
 	/**

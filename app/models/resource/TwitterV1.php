@@ -44,7 +44,6 @@ class TwitterV1
 	 */
 	public function __construct(cOAuth $oauth)
 	{
-//		$this->_oauth = new Service\OAuth($oauth);
 		$this->_oauth = new \OAuth($oauth->consumer_key, $oauth->consumer_secret);
 		$this->_oauth->setToken($oauth->token, $oauth->token_secret);
 	}
@@ -70,10 +69,10 @@ class TwitterV1
 	public function exec($requestMethod, $function, array $params = [])
 	{
 		switch ($function) {
-			case 'statuses/filter':
-			case 'statuses/sample':
-				$this->stream($params);
-				return null;
+//			case 'statuses/filter':
+//			case 'statuses/sample':
+//				$this->stream($params);
+//				return null;
 
 			case 'statuses/oembed':
 				$url = 'https://publish.twitter.com/oembed.json';
