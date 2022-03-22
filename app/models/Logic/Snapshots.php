@@ -14,7 +14,7 @@ final class Snapshots
 	 *
 	 * @param Config $config
 	 *
-	 * @return array
+	 * @return int
 	 */
 	public static function make(Config $config) : int
 	{
@@ -26,5 +26,6 @@ final class Snapshots
 //		]);
 //		(new \Resource\Snapshots($config->mongo_db))->insertOne($snap);
 //		return $snap->id_;
+		return 0;
 	}
 }

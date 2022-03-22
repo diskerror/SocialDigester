@@ -1,4 +1,6 @@
 <?php
+/** @noinspection ALL */
+/** @noinspection ALL */
 
 namespace Service;
 
@@ -32,8 +34,6 @@ class Shmem
 	}
 
 	/**
-	 * @param int $offset
-	 * @param int $size
 	 * @return string
 	 */
 	public function __invoke(...$args): string
@@ -88,8 +88,8 @@ class Shmem
 
 	/**
 	 * @param string $data
-	 * @param int $size
-	 * @return string
+	 * @param int $offset
+	 * @return void
 	 */
 	public function write(string $data, int $offset = 0): void
 	{

@@ -15,8 +15,8 @@ use Diskerror\Typed\TypedClass;
  */
 class CacheBack extends TypedClass
 {
-	protected $dir      = '';
+	protected $dir      = '/run/shm/digester/';
 	protected $prefix   = '';
 	protected $frontend = null;
-	protected $adapter  = '';
+	protected $adapter  = 'file';
 }

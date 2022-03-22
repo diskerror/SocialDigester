@@ -4,8 +4,8 @@ namespace Logic\Tally;
 
 use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
-use Resource\MongoCollections\Tallies;
-use Structure\Config\Mongo;
+use Resource\CollectionFactory;
+use Structure\Config;
 use Resource\StopWords;
 use Structure\Tally;
 use Structure\TallyWords;
@@ -15,7 +15,7 @@ class TextWords implements TallyInterface
 {
 	private function __construct() { }
 
-	public static function pre(Tweet $tweet, Tally &$tally)
+	public static function pre(Tweet $tweet, Tally $tally): void
 	{
 		//	Tally the words in the text.
 		$split = preg_split('/[^a-zA-Z0-9_\']/', $tweet->text, null, PREG_SPLIT_NO_EMPTY);
@@ -29,14 +29,14 @@ class TextWords implements TallyInterface
 	}
 
 	/**
-	 * @param Mongo $mongo_db
+	 * @param Config $config
 	 * @param int $window
 	 *
 	 * @return TallyWords
 	 */
-	public static function get(Mongo $mongo_db, int $window): TallyWords
+	public static function get(Config $config, int $window): TallyWords
 	{
-		$tallies = (new Tallies($mongo_db))->find(
+		$tallies = CollectionFactory::tallies($config)->find(
 			[
 				'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
 			],

@@ -8,7 +8,6 @@ use Phalcon\Cache\Backend\Factory as BFactory;
 use Phalcon\Cache\Frontend\Factory as FFactory;
 use Phalcon\Mvc\Controller;
 use Service\StdIo;
-use Logic\SearchTerms;
 
 class IndexController extends Controller
 {
@@ -22,7 +21,7 @@ class IndexController extends Controller
 //
 //		if ($output === null) {
 		$this->assets->addJs('js/clouds.js');
-		$this->view->setVar('track', SearchTerms::get());
+		$this->view->setVar('track', require $this->config->configPath . '/SearchTerms.php');
 		$output = $this->view->render('index');
 //			$cache->save('', $output);
 //		}
@@ -39,7 +38,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-		$totals  = Logic\Tally\Hashtags::get($this->config->mongo_db, 60);
+		$totals  = Logic\Tally\Hashtags::get($this->config, 60);
 		$grouped = TextGroup::normalize($totals);
 		$obj     = WordCloud::build($grouped)->toArray();
 
@@ -63,7 +62,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-		$totals  = Logic\Tally\HashtagsAll::get($this->config->mongo_db, 180);
+		$totals  = Logic\Tally\HashtagsAll::get($this->config, 180);
 		$grouped = TextGroup::normalize($totals);
 		$obj     = WordCloud::build($grouped)->toArray();
 
@@ -87,7 +86,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-		$totals  = Logic\Tally\TextWords::get($this->config->mongo_db, 180);
+		$totals  = Logic\Tally\TextWords::get($this->config, 180);
 		$grouped = TextGroup::normalize($totals, 'strtolower');
 		$obj     = WordCloud::build($grouped)->toArray();
 
@@ -111,7 +110,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-		$um    = Logic\Tally\UserMentions::get($this->config->mongo_db, 180);
+		$um    = Logic\Tally\UserMentions::get($this->config, 180);
 		$um    = Logic\UserNameGroup::normalize($um);
 		$cloud = WordCloud::build($um);
 		Logic\Tally\UserMentions::changeLink($cloud);
@@ -129,7 +128,7 @@ class IndexController extends Controller
 
 	public function retweetsAction()
 	{
-		$totals = Logic\Tally\Retweets::get($this->config->mongo_db, 1800);
+		$totals = Logic\Tally\Retweets::get($this->config, 1800);
 		$totals = UserNameGroup::normalize($totals);
 		$cloud  = WordCloud::build($totals);
 		Logic\Tally\UserMentions::changeLink($cloud);
@@ -144,7 +143,7 @@ class IndexController extends Controller
 	public function usersAction()
 	{
 		ini_set('memory_limit', 512 * 1024 * 1024);
-		$totals = Logic\Tally\Users::get($this->config->mongo_db, 1800);
+		$totals = Logic\Tally\Users::get($this->config, 1800);
 		$totals = UserNameGroup::normalize($totals);
 		$cloud  = WordCloud::build($totals);
 		Logic\Tally\UserMentions::changeLink($cloud);
@@ -165,7 +164,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
-		$obj = Logic\Summary::get($this->config->mongo_db, 60, 3);
+		$obj = Logic\Summary::get($this->config, 60, 3);
 
 		$this->view->setVar('obj', $obj);
 		$output = $this->view->render('js');
@@ -178,7 +177,8 @@ class IndexController extends Controller
 
 	public function infoAction()
 	{
-		phpinfo();
+//		phpinfo();
+		var_export($GLOBALS);
 	}
 
 }

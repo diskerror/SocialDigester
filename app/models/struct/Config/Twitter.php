@@ -11,13 +11,11 @@ use Diskerror\Typed\TypedClass;
  *
  * @property string $url
  * @property OAuth $auth
- * @property WordList $track
  *
  * @package Structure\Config
  */
 class Twitter extends TypedClass
 {
-	protected $url   = [TStringTrim::class];
-	protected $auth  = [OAuth::class];
-	protected $track = [WordList::class];
+	protected $url  = [TStringTrim::class, 'https://stream.twitter.com/1.1/'];
+	protected $auth = [OAuth::class];
 }

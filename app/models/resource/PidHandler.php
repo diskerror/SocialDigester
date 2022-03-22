@@ -7,22 +7,15 @@ use Structure\Config\Process;
 
 class PidHandler
 {
-	protected $_fullProcessFileName;
+	protected string $_fullProcessFileName;
 
-	protected $_basePath;
-
-	protected $_procDir;
+	protected string $_basePath;
 
 	/**
 	 * @param Process $config
 	 */
 	public function __construct(Process $config)
 	{
-		$this->_procDir = $config->procDir;
-		if (substr($this->_procDir, -1) !== '/') {
-			$this->_procDir .= '/';
-		}
-
 		$this->_basePath = $config->path;
 		if (substr($this->_basePath, -1) !== '/') {
 			$this->_basePath .= '/';
@@ -67,9 +60,6 @@ class PidHandler
 	public function removeIfExists(): bool
 	{
 		if ($this->exists()) {
-//			$running = file_exists($this->_procDir . file_get_contents($this->_fullProcessFileName));
-//			unlink($this->_fullProcessFileName);
-//			return $running;
 			unlink($this->_fullProcessFileName);
 			return true;
 		}

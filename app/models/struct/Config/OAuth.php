@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Structure\Config;
-
 
 use Diskerror\Typed\Scalar\TString;
 use Diskerror\Typed\TypedClass;

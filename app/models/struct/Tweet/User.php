@@ -13,7 +13,7 @@ use Diskerror\TypedBSON\TypedClass;
  * @property bool $contributors_enabled
  * @property Created $created_at
  * @property string $description
- * @property int $favoriates_count
+ * @property int $favorites_count
  * @property int $followers_count
  * @property int $friends_count
  * @property bool $geo_enabled
@@ -43,7 +43,7 @@ class User extends TypedClass
 //
 //	protected $description          = [TStringNormalize::class];
 //
-//	protected $favourites_count     = 0;
+//	protected $favorites_count     = 0;
 //
 //	protected $followers_count      = 0;
 //

@@ -3,7 +3,7 @@
 	"description": "Consumes a Twitter stream and counts the hashtags, for starters...",
 	"type": "project",
 	"license": "public",
-	"homepage": "http://www.politicator.com/",
+	"homepage": "https://www.politicator.com/",
 	"authors": [
 		{
 			"name": "Reid Woodbury Jr",
@@ -36,7 +36,7 @@
 		"php-science/textrank": "^1.2"
 	},
 	"suggest": {
-		"ext-ds": "*"
+		"ext-ds": "Extension for data structures rather than the PHP array implementation."
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",

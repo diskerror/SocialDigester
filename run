@@ -2,15 +2,12 @@
 <?php
 
 //ini_set('display_errors', '0');
-//error_reporting(E_ERROR);
-
-define('BASE_PATH', __DIR__);
+error_reporting(E_ALL);
 
 try {
 	require 'vendor/diskerror/autoload/autoload.php';
 
-	$cli = new Service\Application\Cli(__DIR__);
-	$cli->init();
+	$cli = new Service\Application\Cli();
 	$cli->run($argv);
 }
 catch (Phalcon\Cli\Dispatcher\Exception $e) {

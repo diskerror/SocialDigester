@@ -8,7 +8,7 @@
 
 namespace Service;
 
-use Zend\Server\Reflection;
+use Laminas\Server\Reflection;
 
 /**
  * Class Reflector

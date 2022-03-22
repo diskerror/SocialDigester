@@ -1,4 +1,5 @@
 <?php
+/** @noinspection ALL */
 
 namespace Service;
 
@@ -7,7 +8,7 @@ class SharedTimer
 	/**
 	 * @var Shmem
 	 */
-	protected $_shmem;
+	protected Shmem $_shmem;
 
 	/**
 	 * @param string $id

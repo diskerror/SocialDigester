@@ -2,7 +2,6 @@
 
 namespace Service\Application;
 
-
 use Phalcon\Cli\Console;
 use Phalcon\Cli\Dispatcher\Exception;
 use Phalcon\Di\FactoryDefault\Cli as FdCli;
@@ -10,18 +9,18 @@ use Service\StdIo;
 
 class Cli extends DiAbstract
 {
+	protected Console $_console;
+
 	/**
-	 * @return Cli
+	 * @return void
 	 */
-	public function init(): self
+	protected function _init(): void
 	{
 		$di = new FdCli();
 
-		parent::_commonDi($di);
+		$this->_commonDi($di);
 
-		$this->_application = new Console($di);
-
-		return $this;
+		$this->_console = new Console($di);
 	}
 
 	/**
@@ -47,7 +46,7 @@ class Cli extends DiAbstract
 				}
 			}
 
-			$this->_application->handle($args);
+			$this->_console->handle($args);
 		}
 		catch (Exception $e) {
 			$message = $e->getMessage();

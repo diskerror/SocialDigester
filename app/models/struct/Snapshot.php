@@ -13,20 +13,16 @@ use Structure\TagCloud\Word;
  * @package Structure
  *
  * @property $_id
- * @property $created
- * @property $track
- * @property $tagCloud
- * @property $summary
+ * @property DateTime $created
+ * @property array $track
+ * @property array $tagCloud
+ * @property array $summary
  */
 class Snapshot extends TypedClass
 {
 	protected $_id;
-
 	protected $created  = [DateTime::class];
-
 	protected $track    = [TypedArray::class, 'string'];
-
 	protected $tagCloud = [TypedArray::class, Word::class];
-
 	protected $summary  = [TypedArray::class, 'string'];
 }

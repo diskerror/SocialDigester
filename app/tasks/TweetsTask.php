@@ -1,4 +1,9 @@
 <?php
+/** @noinspection ALL */
+/** @noinspection ALL */
+/** @noinspection ALL */
+/** @noinspection ALL */
+/** @noinspection ALL */
 
 use Logic\ConsumeTweets;
 use MongoDB\BSON\UTCDateTime;
@@ -45,7 +50,7 @@ class TweetsTask extends TaskMaster
 	{
 		if (!ConsumeTweets::isRunning(6)) {
 			$this->stopAction();
-			$logger = new LoggerFactory(BASE_PATH . '/consume.log');
+			$logger = new LoggerFactory($this->basePath . '/consume.log');
 			$logger->info('Wait time at restart: ' . (new Shmem('w'))());
 			$logger->info('Capture rate at restart: ' . (new Shmem('r'))());
 			sleep(3);

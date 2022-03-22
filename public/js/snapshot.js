@@ -21,4 +21,4 @@ $(function() {
 
 function ToTwitter(hashtags) {
 	window.open('https://twitter.com/search?f=tweets&vertical=news&q=%23' + hashtags.join('%20OR%20%23'), '_blank');
-};
+}

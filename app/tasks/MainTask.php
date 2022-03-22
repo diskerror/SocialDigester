@@ -1,4 +1,9 @@
 <?php
+/** @noinspection SpellCheckingInspection */
+/** @noinspection SpellCheckingInspection */
+/** @noinspection SpellCheckingInspection */
+/** @noinspection SpellCheckingInspection */
+/** @noinspection SpellCheckingInspection */
 
 use Service\StdIo;
 

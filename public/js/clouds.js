@@ -23,7 +23,7 @@ $(function() {
 		],
 		cloudOptions);
 
-	setTimeout(getHashtags, 1400);
+	setTimeout(getHashtags, 400);
 	function getHashtags() {
 		setTimeout(getHashtags, 3400);	//	milliseconds between cloud updates
 
@@ -57,10 +57,10 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			}
 		});
-	};
+	}
 
 
-	setTimeout(getAllHashtags, 1600);
+	setTimeout(getAllHashtags, 500);
 	function getAllHashtags() {
 		setTimeout(getAllHashtags, 3500);	//	milliseconds between cloud updates
 
@@ -80,10 +80,10 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			}
 		});
-	};
+	}
 
 
-	setTimeout(getTextWords, 1800);
+	setTimeout(getTextWords, 600);
 	function getTextWords() {
 		setTimeout(getTextWords, 2300);	//	milliseconds between cloud updates
 		$.ajax({
@@ -102,10 +102,10 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			}
 		});
-	};
+	}
 
 
-	setTimeout(getUserMentions, 2000);
+	setTimeout(getUserMentions, 100);
 	function getUserMentions() {
 		setTimeout(getUserMentions, 4300);	//	milliseconds between cloud updates
 
@@ -125,10 +125,10 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			}
 		});
-	};
+	}
 
 
-	setTimeout(getRetweets, 2800);
+	setTimeout(getRetweets, 200);
 
 	function getRetweets() {
 		setTimeout(getRetweets, 8300);	//	milliseconds between cloud updates
@@ -150,7 +150,7 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			}
 		});
-	};
+	}
 
 
 	setTimeout(getUsers, 3100);
@@ -174,7 +174,7 @@ $(function() {
 				$('[title!=""]').qtip({style: {classes: 'qtip-rounded'}, show: {solo: true}});//.reposition(true);
 			}
 		});
-	};
+	}
 
 
 	setTimeout(getSummary, 900);
@@ -189,14 +189,14 @@ $(function() {
 				$('#text1').html('<p>' + data.join('</p><p>') + '</p>');
 			}
 		});
-	};
+	}
 
 });
 
 function ToTwitter(hashtags) {
 	window.open('https://twitter.com/search?f=tweets&vertical=news&q=%23' + hashtags.join('%20OR%20%23'), '_blank');
-};
+}
 
 function ToTwitterAt(users) {
 	window.open('https://twitter.com/search?f=tweets&vertical=news&q=%40' + users.join('%20OR%20%40'), '_blank');
-};
+}

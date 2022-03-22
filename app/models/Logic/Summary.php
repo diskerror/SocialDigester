@@ -9,8 +9,8 @@ use PhpScience\TextRank\Tool\Parser;
 use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
-use Resource\MongoCollections\Tweets;
-use Structure\Config\Mongo;
+use Resource\CollectionFactory;
+use Structure\Config;
 
 final class Summary
 {
@@ -19,17 +19,17 @@ final class Summary
 	/**
 	 * Generate summary of tweet texts.
 	 *
-	 * @param Mongo $mongo_db
+	 * @param Config $config
 	 * @param int $window
 	 * @param int $quantity
 	 *
 	 * @return array
 	 */
-	public static function get(Mongo $mongo_db, int $window, int $quantity): array
+	public static function get(Config $config, int $window, int $quantity): array
 	{
 		ini_set('memory_limit', 256 * 1024 * 1024);
 
-		$tweets = (new Tweets($mongo_db))->find(
+		$tweets = CollectionFactory::tweets($config)->find(
 			[
 				'created_at' => ['$gt' => new UTCDateTime((time() - $window) * 1000)],
 			],

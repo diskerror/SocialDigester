@@ -1,10 +1,11 @@
 <?php
 
-
 namespace Structure\Tweet;
 
+use DateTimeZone;
+use Diskerror\TypedBSON\DateTime;
 
-class Created extends \Diskerror\TypedBSON\DateTime
+class Created extends DateTime
 {
 	protected static $_days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -19,7 +20,7 @@ class Created extends \Diskerror\TypedBSON\DateTime
 			$time = self::createFromFormat(
 				'* M d H:i:s Y',
 				$matches[1] . $matches[4],
-				new \DateTimeZone($matches[2] . $matches[3])
+				new DateTimeZone($matches[2] . $matches[3])
 			);
 		}
 

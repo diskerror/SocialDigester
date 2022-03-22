@@ -2,7 +2,7 @@
 
 namespace Logic;
 
-use Structure\Config\Mongo;
+use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
 
@@ -14,14 +14,14 @@ interface TallyInterface
 	/**
 	 * @param Tweet $tweet
 	 * @param Tally $tally
-	 * @return mixed
+	 * @return void
 	 */
-	public static function pre(Tweet $tweet, Tally &$tally);
+	public static function pre(Tweet $tweet, Tally $tally): void;
 
 	/**
-	 * @param Mongo $mongo_db
+	 * @param Config $config
 	 * @param int $window
 	 * @return mixed
 	 */
-	public static function get(Mongo $mongo_db, int $window);
+	public static function get(Config $config, int $window);
 }

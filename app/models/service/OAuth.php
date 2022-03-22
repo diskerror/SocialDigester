@@ -46,7 +46,7 @@ class OAuth
 	 *
 	 * @return string
 	 */
-	public function getHeader(string $method, string $url, array $params)
+	public function getHeader(string $method, string $url, array $params): string
 	{
 		$oauth = $this->_baseOauth;
 

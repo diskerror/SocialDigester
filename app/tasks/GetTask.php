@@ -1,4 +1,5 @@
 <?php
+/** @noinspection SpellCheckingInspection */
 
 use Logic\TextGroup;
 use Logic\UserNameGroup;
@@ -35,7 +36,7 @@ class GetTask extends TaskMaster
 	 */
 	public function hashtagsAction()
 	{
-		$totals = Logic\Tally\Hashtags::get($this->config->mongo_db, 60);
+		$totals = Logic\Tally\Hashtags::get($this->config, 60);
 		StdIo::phpOut(array_slice(TextGroup::normalize($totals), 0, 20));
 	}
 
@@ -44,7 +45,7 @@ class GetTask extends TaskMaster
 	 */
 	public function hashtagsAllAction()
 	{
-		$totals = Logic\Tally\HashtagsAll::get($this->config->mongo_db, 180);
+		$totals = Logic\Tally\HashtagsAll::get($this->config, 180);
 		StdIo::phpOut(array_slice(TextGroup::normalize($totals), 0, 20));
 	}
 
@@ -53,7 +54,7 @@ class GetTask extends TaskMaster
 	 */
 	public function textwordsAction()
 	{
-		$totals = Logic\Tally\TextWords::get($this->config->mongo_db, 180);
+		$totals = Logic\Tally\TextWords::get($this->config, 180);
 		StdIo::phpOut(array_slice(TextGroup::normalize($totals, 'strtolower'), 0, 32));
 	}
 
@@ -62,7 +63,7 @@ class GetTask extends TaskMaster
 	 */
 	public function userMentionsAction()
 	{
-		$um = Logic\Tally\UserMentions::get($this->config->mongo_db, 180);
+		$um = Logic\Tally\UserMentions::get($this->config, 180);
 		StdIo::phpOut(array_slice(Logic\UserNameGroup::normalize($um, 'strtolower'), 0, 32));
 	}
 
@@ -72,7 +73,7 @@ class GetTask extends TaskMaster
 	public function summaryAction()
 	{
 		StdIo::outln();
-		StdIo::outln(implode("\n\n", Logic\Summary::get($this->config->mongo_db)));
+		StdIo::outln(implode("\n\n", Logic\Summary::get($this->config, 60, 3)));
 		StdIo::outln();
 	}
 

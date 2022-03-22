@@ -12,17 +12,13 @@ use Logic\Tally\UserMentions;
 use Logic\Tally\Users;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
+use Resource\CollectionFactory;
 use Resource\LoggerFactory;
-use Resource\MongoCollections\Messages;
-use Resource\MongoCollections\Tallies;
-use Resource\MongoCollections\Tweets;
 use Resource\PidHandler;
 use Resource\TwitterV1;
 use Service\Shmem;
 use Service\ShmemMaster;
-use Service\StdIo;
 use Structure\Config;
-use Logic\SearchTerms;
 use Structure\Tally;
 use Structure\Tweet;
 
@@ -46,13 +42,13 @@ final class ConsumeTweets
 
 		$pidHandler = new PidHandler($config->process);
 
-		$logger = new LoggerFactory(BASE_PATH . '/consume.log');
+		$logger = new LoggerFactory($config->basePath . '/consume.log');
 //		$logger = new LoggerFactory('php://stderr');
 
 		$twitter       = new TwitterV1($config->twitter->auth);
-		$tweetsMongo   = new Tweets($config->mongo_db);
-		$talliesMongo  = new Tallies($config->mongo_db);
-		$messagesMongo = new Messages($config->mongo_db);
+		$tweetsMongo   = CollectionFactory::tweets($config);
+		$talliesMongo  = CollectionFactory::tallies($config);
+		$messagesMongo = CollectionFactory::messages($config);
 		$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
 		$waitMem   = new ShmemMaster('w');    //	wait between saves
@@ -66,7 +62,7 @@ final class ConsumeTweets
 		try {
 			//	Send request to start a filtered stream.
 			$twitter->stream([
-				'track'          => SearchTerms::implode(),
+				'track'          => implode(',', require $config->configPath . '/SearchTerms.php'),
 				'language'       => 'en',
 				'stall_warnings' => true,
 			]);
@@ -188,7 +184,7 @@ final class ConsumeTweets
 		$logger->info('Stopped capturing tweets.');
 	}
 
-	public static function isRunning(int $maxSecs)
+	public static function isRunning(int $maxSecs): int
 	{
 		try {
 			return (new Shmem('w'))() < 6 ? 1 : 0;

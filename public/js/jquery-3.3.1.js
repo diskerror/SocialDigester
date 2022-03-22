@@ -132,8 +132,8 @@
 		// Define a local copy of jQuery
 		jQuery = function(selector, context) {
 
-			// The jQuery object is actually just the init constructor 'enhanced'
-			// Need init if jQuery is called (just allow error to be thrown if not included)
+			// The jQuery object is actually just the _init constructor 'enhanced'
+			// Need _init if jQuery is called (just allow error to be thrown if not included)
 			return new jQuery.fn.init(selector, context);
 		},
 
@@ -2930,7 +2930,7 @@
 				return this;
 			}
 
-			// Method init() accepts an alternate rootjQuery
+			// Method _init() accepts an alternate rootjQuery
 			// so migrate can support jQuery.sub (gh-2101)
 			root = root || rootjQuery;
 
@@ -3021,7 +3021,7 @@
 			return jQuery.makeArray(selector, this);
 		};
 
-// Give the init function the jQuery prototype for later instantiation
+// Give the _init function the jQuery prototype for later instantiation
 	init.prototype = jQuery.fn;
 
 // Initialize central reference

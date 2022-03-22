@@ -1,7 +1,7 @@
 <?php
+/** @noinspection SpellCheckingInspection */
 
 namespace Service\Application;
-
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Application;
@@ -18,11 +18,13 @@ use Service\View;
  */
 class Http extends DiAbstract
 {
-	public function init(): self
+	protected Application $_application;
+
+	protected function _init(): void
 	{
 		$di = new FactoryDefault();
 
-		parent::_commonDi($di);
+		$this->_commonDi($di);
 
 		$self = $this;
 
@@ -30,8 +32,8 @@ class Http extends DiAbstract
 //			static $view;
 //			if (!isset($view)) {
 //				$view = new View();
-//				$view->setViewsDir($self->_basePath . '/app/views/');
-//				$view->setLayoutsDir($self->_basePath . '/app/views/layouts/');
+//				$view->setViewsDir($self->basePath . '/app/views/');
+//				$view->setLayoutsDir($self->basePath . '/app/views/layouts/');
 //				$view->setTemplateAfter('default');
 //				$view->start();
 //			}
@@ -42,7 +44,7 @@ class Http extends DiAbstract
 			static $view;
 			if (!isset($view)) {
 				$view = new Simple();
-				$view->setViewsDir($self->_basePath . '/app/views/');
+				$view->setViewsDir($self->basePath . '/app/views/');
 				$view->registerEngines(['.phtml' => Php::class]);
 			}
 			return $view;
@@ -53,7 +55,7 @@ class Http extends DiAbstract
 //			if (!isset($url)) {
 //				$url = new Url();
 //				$url->setBaseUri('/');
-////                $url->setBasePath($this->_basePath);
+////                $url->setBasePath($this->basePath);
 //			}
 //			return $url;
 //		});
@@ -104,8 +106,6 @@ class Http extends DiAbstract
 
 		$this->_application = new Application($di);
 		$this->_application->useImplicitView(false);
-
-		return $this;
 	}
 
 	/**

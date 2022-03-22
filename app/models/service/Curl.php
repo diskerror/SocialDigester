@@ -1,4 +1,8 @@
 <?php
+/** @noinspection SpellCheckingInspection */
+/** @noinspection SpellCheckingInspection */
+/** @noinspection SpellCheckingInspection */
+/** @noinspection SpellCheckingInspection */
 
 namespace Service;
 
@@ -45,12 +49,13 @@ class Curl
 		return $r;
 	}
 
-	protected function strerror()
+	protected function strerror(): string
 	{
 		if (isset($this->_curl)) {
 			$err_num = $this->errno();
 			return curl_strerror($err_num) . ' ' . $err_num . PHP_EOL;
 		}
+		return '';
 	}
 
 	protected function _errorCheck()

@@ -265,7 +265,7 @@
 				}
 			} else {
 
-				// Allow multiple hashes to be passed on init
+				// Allow multiple hashes to be passed on _init
 				if (args.length) {
 					options = $.widget.extend.apply(null, [options].concat(args));
 				}

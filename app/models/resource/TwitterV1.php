@@ -2,19 +2,14 @@
 
 namespace Resource;
 
+use OAuth;
 use Service\Curl;
 use Service\CmdBufferReader;
-use Service\StdIo;
-use Structure\Config\OAuth as cOAuth;
+use Structure\Config\OAuth as sOauth;
 use UnexpectedValueException;
 
 /**
- * Class TwitterStream
- *
- * @package Resource
- *
- * @method filter($in = [])
- * @method sample($in = [])
+ * Class TwitterV1
  */
 class TwitterV1
 {
@@ -35,20 +30,24 @@ class TwitterV1
 		'warning'         => 0,
 	];
 
-	private $_streamBuffer;
+	private OAuth $_oauth;
+
+	private CmdBufferReader $_streamBuffer;
 
 	/**
 	 * Twitter constructor.
 	 *
-	 * @param \OAuth $oauth
+	 * Uses PHP builtin OAuth object.
+	 *
+	 * @param sOauth $oauth
 	 */
-	public function __construct(cOAuth $oauth)
+	public function __construct(sOauth $oauth)
 	{
-		$this->_oauth = new \OAuth($oauth->consumer_key, $oauth->consumer_secret);
+		$this->_oauth = new OAuth($oauth->consumer_key, $oauth->consumer_secret);
 		$this->_oauth->setToken($oauth->token, $oauth->token_secret);
 	}
 
-	public static function isMessage(array $packet)
+	public static function isMessage(array $packet): bool
 	{
 		if (count(array_intersect_key(self::MESSAGE_KEYS, $packet)) > 0) {
 			return true;
@@ -65,8 +64,9 @@ class TwitterV1
 	 * @param string $requestMethod
 	 * @param string $function
 	 * @param array $params
+	 * @return mixed
 	 */
-	public function exec($requestMethod, $function, array $params = [])
+	public function exec(string $requestMethod, string $function, array $params = [])
 	{
 		switch ($function) {
 //			case 'statuses/filter':
@@ -111,6 +111,7 @@ class TwitterV1
 	 * Start a stream.
 	 * https://dev.twitter.com/streaming/overview
 	 *
+	 * @param array $params
 	 * @return void
 	 */
 	public function stream(array $params = []): void

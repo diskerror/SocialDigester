@@ -1,9 +1,11 @@
 <?php
+/** @noinspection ALL */
 
 namespace Logic;
 
 use InvalidArgumentException;
 use Structure\TallyWords;
+use function Diskerror\stem;
 
 class TextGroup
 {
@@ -23,7 +25,7 @@ class TextGroup
 			$group['_sum_'] = array_sum($group);
 		}
 
-		//	Sort on size, decending.
+		//	Sort on size, descending.
 		uasort($normalizedGroups, 'static::_sortCountSumDesc');
 
 		return $normalizedGroups;
@@ -60,7 +62,7 @@ class TextGroup
 				return soundex($s);
 
 			case 'stem':
-				return \Diskerror\stem($s)[0];
+				return stem($s)[0];
 
 			default:
 				throw new InvalidArgumentException('bad normalize technique');

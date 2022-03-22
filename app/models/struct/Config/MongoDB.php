@@ -3,7 +3,6 @@
 namespace Structure\Config;
 
 
-use Diskerror\Typed\Scalar\TString;
 use Diskerror\Typed\TypedClass;
 
 /**
@@ -13,8 +12,8 @@ use Diskerror\Typed\TypedClass;
  * @property string $database
  *
  */
-class Mongo extends TypedClass
+class MongoDB extends TypedClass
 {
-	protected $host     = [TString::class];
-	protected $database = [TString::class];
+	protected $host     = 'mongodb://localhost:27017';
+	protected $database = 'digester';
 }

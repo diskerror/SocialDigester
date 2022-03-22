@@ -4,8 +4,7 @@
 composer.lock
 *.log
 
-/app/config
-!/app/config/config.php
+/app/config/my_config.php
 
 .idea
 

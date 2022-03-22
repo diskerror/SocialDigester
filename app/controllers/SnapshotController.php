@@ -1,6 +1,7 @@
 <?php
 
 use Phalcon\Mvc\Controller;
+use Resource\CollectionFactory;
 use Resource\MongoCollections\Snapshots;
 
 class SnapshotController extends Controller
@@ -9,8 +10,8 @@ class SnapshotController extends Controller
 	{
 		$this->assets->addJs('js/snapshot.js');
 
-		$snapshot = (new Snapshots($this->config->mongo_db))
-			->find(['_id' => (int) $this->dispatcher->getParam('id')]);
+		$snapshot = CollectionFactory::snapshots($this->config)
+									 ->find(['_id' => (int) $this->dispatcher->getParam('id')]);
 
 		if (!$snapshot) {
 			return $this->response->redirect('/', true);

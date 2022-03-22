@@ -22,7 +22,7 @@ class LoggerFactory
 	/**
 	 * @type Logger
 	 */
-	protected $_logger;
+	protected Logger $_logger;
 
 	/**
 	 */
