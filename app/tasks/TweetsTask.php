@@ -48,11 +48,11 @@ class TweetsTask extends TaskMaster
 	 */
 	public function checkRunningAction(): void
 	{
-		if (!ConsumeTweets::isRunning(6)) {
+		if (!ConsumeTweets::detectRunning()) {
 			$this->stopAction();
-			$logger = new LoggerFactory($this->basePath . '/consume.log');
-			$logger->info('Wait time at restart: ' . (new Shmem('w'))());
-			$logger->info('Capture rate at restart: ' . (new Shmem('r'))());
+			$logger = new LoggerFactory($this->config->basePath . '/consume.log');
+//			$logger->info('Wait time at restart: ' . (new Shmem('w'))());
+//			$logger->info('Capture rate at restart: ' . (new Shmem('r'))());
 			sleep(3);
 			$this->startBgAction();
 		}
@@ -77,7 +77,7 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		StdIo::phpOut(new \Structure\Tweet());
+		StdIo::phpOut(new Structure\Tweet());
 
 //		StdIo::jsonOut((new Resource\MongoCollections\Tallies($this->config->mongo_db))->find(
 //			[
@@ -114,19 +114,5 @@ class TweetsTask extends TaskMaster
 //			$t++;
 //		}
 //		StdIo::outln($t);
-	}
-
-	/**
-	 * Returns 1 if consume process is running, zero if not.
-	 */
-	public function isRunningAction()
-	{
-		StdIo::outln(ConsumeTweets::isRunning(6));
-
-//		$t = (new Resource\MongoCollections\Tallies($this->config->mongo_db))->count([
-//			'created_at' => ['$gte' => new UTCDateTime((time() - 6) * 1000), '$lte' => new UTCDateTime()],
-//		]);
-//
-//		StdIo::outln($t /*=== 0 ? 0 : 1*/);
 	}
 }

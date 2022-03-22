@@ -1,11 +1,18 @@
 <?php
 /** @noinspection ALL */
-/** @noinspection ALL */
 
 namespace Service;
 
+use Service\Exception\BadMethodCallException;
 use Service\Exception\RuntimeException;
+use Service\Exception\ShmemOpenException;
+use Service\Exception\UnexpectedValueException;
 
+/**
+ * class Shmem
+ *
+ * This class will NOT remove the shared memory value when going out of scope.
+ */
 class Shmem
 {
 	protected $_shmop;
@@ -21,7 +28,7 @@ class Shmem
 		$this->_shmop = @shmop_open(ftok(__FILE__, $id), $mode, $permissions, $size);
 
 		if ($this->_shmop === false) {
-			throw new RuntimeException('could not open or create shared memory');
+			throw new ShmemOpenException('could not open or create shared memory');
 		}
 	}
 
@@ -38,23 +45,11 @@ class Shmem
 	 */
 	public function __invoke(...$args): string
 	{
-		switch (count($args)) {
-			case 0:
-				$args = [0, 0];
-				break;
-
-			case 1:
-				$args[1] = 0;
-				break;
-
-			case 2;
-				break;
-
-			default:
-				throw new RuntimeException('too many arguments');
+		if (count($args) > 2) {
+			throw new BadMethodCallException('too many arguments');
 		}
 
-		return $this->read($args[0], $args[1]);
+		return $this->read(...$args);
 	}
 
 	/**
@@ -65,7 +60,7 @@ class Shmem
 	public function read(int $offset = 0, int $size = 0): string
 	{
 		if ($size < 0) {
-			throw new RuntimeException('offset cannot be less than zero');
+			throw new UnexpectedValueException('offset cannot be less than zero');
 		}
 		elseif ($size === 0) {
 			$size = $this->size();

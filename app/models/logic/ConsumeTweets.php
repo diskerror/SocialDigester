@@ -16,6 +16,7 @@ use Resource\CollectionFactory;
 use Resource\LoggerFactory;
 use Resource\PidHandler;
 use Resource\TwitterV1;
+use Service\Exception\ShmemOpenException;
 use Service\Shmem;
 use Service\ShmemMaster;
 use Structure\Config;
@@ -180,23 +181,19 @@ final class ConsumeTweets
 		catch (Exception $e) {
 			$logger->emergency((string) $e);
 		}
-
-		$logger->info('Stopped capturing tweets.');
+		finally {
+			$pidHandler->removeIfExists();
+			$logger->info('Stopped capturing tweets.');
+		}
 	}
 
-	public static function isRunning(int $maxSecs): int
+	public static function detectRunning(): int
 	{
 		try {
 			return (new Shmem('w'))() < 6 ? 1 : 0;
 		}
-		catch (Exception $e) {
-			//	If not open then process isn't running.
-			if (strstr($e->getMessage(), 'could not open or create shared memory')) {
-				return 0;
-			}
-			else {
-				throw $e;
-			}
+		catch (ShmemOpenException $e) {
+			return 0;
 		}
 	}
 

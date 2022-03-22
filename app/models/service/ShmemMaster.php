@@ -3,6 +3,11 @@
 
 namespace Service;
 
+/**
+ * class ShmemMaster
+ *
+ * This class WILL REMOVE the shared memory value when going out of scope.
+ */
 class ShmemMaster extends Shmem
 {
 	/**

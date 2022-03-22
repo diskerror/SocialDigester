@@ -1,5 +1,6 @@
 <?php
 
+use Logic\ConsumeTweets;
 use MongoDB\BSON\UTCDateTime;
 use Resource\CollectionFactory;
 use Service\Shmem;
@@ -58,6 +59,16 @@ class AdminTask extends TaskMaster
 	{
 		StdIo::outln((new Resource\PidHandler($this->config->process))->exists() ? 1 : 0);
 	}
+
+
+	/**
+	 * Returns 1 if consume process is running, zero if not.
+	 */
+	public function detectRunningAction()
+	{
+		StdIo::outln(ConsumeTweets::detectRunning());
+	}
+
 
 	public function messagesAction()
 	{
