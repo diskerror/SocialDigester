@@ -2,6 +2,8 @@
 /** @noinspection ALL */
 /** @noinspection ALL */
 
+namespace Config;
+
 return [
 	'baltic',
 	'biden',

@@ -6,7 +6,6 @@ use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
 use Resource\CollectionFactory;
 use Structure\Config;
-use Resource\StopWords;
 use Structure\Tally;
 use Structure\TallyWords;
 use Structure\Tweet;
@@ -45,10 +44,13 @@ class TextWords implements TallyInterface
 			]
 		);
 
-		$totals = new TallyWords();
+		$stopWords = require $config->configPath . '/StopWords.php';
+		$totals    = new TallyWords();
 		foreach ($tallies as $tally) {
 			foreach ($tally->textWords as $k => $v) {
-				$totals->doTally($k, $v);
+				if (!$stopWords->contains(strtolower($k))) {
+					$totals->doTally($k, $v);
+				}
 			}
 		}
 
