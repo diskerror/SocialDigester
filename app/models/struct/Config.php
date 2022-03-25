@@ -8,8 +8,8 @@ use Diskerror\Typed\Scalar\TString;
 use Diskerror\Typed\TypedClass;
 use Structure\Config\Caches;
 use Structure\Config\MongoDB;
+use Structure\Config\TwitterOAuth;
 use Structure\Config\Process;
-use Structure\Config\Twitter;
 
 /**
  * Class Config
@@ -19,7 +19,7 @@ use Structure\Config\Twitter;
  * @property string $basePath
  * @property string $configPath
  * @property MongoDB $mongo_db
- * @property Twitter $twitter
+ * @property TwitterOAuth $twitterOAuth
  * @property Process $process
  * @property Caches $cache
  *
@@ -31,7 +31,7 @@ class Config extends TypedClass
 	protected $basePath       = [TString::class];
 	protected $configPath     = [TString::class];
 	protected $mongo_db       = [MongoDB::class];
-	protected $twitter        = [Twitter::class];
+	protected $twitterOAuth   = [TwitterOAuth::class];
 	protected $process        = [Process::class];
 	protected $cache          = [Caches::class];
 }

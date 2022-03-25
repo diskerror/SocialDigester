@@ -2,7 +2,7 @@
 
 namespace Service;
 
-use Structure\Config\OAuth as sOAuth;
+use Structure\Config\TwitterOAuth;
 
 /**
  * Class OAuth
@@ -24,9 +24,9 @@ class OAuth
 	/**
 	 * OAuth constructor.
 	 *
-	 * @param sOAuth $config
+	 * @param TwitterOAuth $config
 	 */
-	public function __construct(sOAuth $config)
+	public function __construct(TwitterOAuth $config)
 	{
 		$this->_secret =
 			rawurldecode($config->consumer_secret) . '&' . rawurldecode($config->token_secret);

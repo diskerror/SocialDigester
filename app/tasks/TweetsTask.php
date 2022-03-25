@@ -77,7 +77,7 @@ class TweetsTask extends TaskMaster
 	 */
 	public function testAction()
 	{
-		StdIo::phpOut(new Structure\Tweet());
+		StdIo::phpOut($this->config);
 
 //		StdIo::jsonOut((new Resource\MongoCollections\Tallies($this->config->mongo_db))->find(
 //			[

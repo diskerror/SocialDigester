@@ -17,7 +17,7 @@ use Diskerror\Typed\TypedClass;
  */
 class Process extends TypedClass
 {
-	protected $name    = 'digester';
-	protected $path    = '/var/run/';
-	protected $procDir = '/proc/';    //	location of actual PID
+	protected $name    = '';
+	protected $path    = '';
+	protected $procDir = '';    //	location of actual PID
 }

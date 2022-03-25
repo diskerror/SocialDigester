@@ -46,7 +46,7 @@ final class ConsumeTweets
 		$logger = new LoggerFactory($config->basePath . '/consume.log');
 //		$logger = new LoggerFactory('php://stderr');
 
-		$twitter       = new TwitterV1($config->twitter->auth);
+		$twitter       = new TwitterV1($config->twitterOAuth);
 		$tweetsMongo   = CollectionFactory::tweets($config);
 		$talliesMongo  = CollectionFactory::tallies($config);
 		$messagesMongo = CollectionFactory::messages($config);

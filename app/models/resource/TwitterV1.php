@@ -5,7 +5,7 @@ namespace Resource;
 use OAuth;
 use Service\Curl;
 use Service\CmdBufferReader;
-use Structure\Config\OAuth as sOauth;
+use Structure\Config\TwitterOAuth;
 use UnexpectedValueException;
 
 /**
@@ -39,9 +39,9 @@ class TwitterV1
 	 *
 	 * Uses PHP builtin OAuth object.
 	 *
-	 * @param sOauth $oauth
+	 * @param TwitterOAuth $oauth
 	 */
-	public function __construct(sOauth $oauth)
+	public function __construct(TwitterOAuth $oauth)
 	{
 		$this->_oauth = new OAuth($oauth->consumer_key, $oauth->consumer_secret);
 		$this->_oauth->setToken($oauth->token, $oauth->token_secret);

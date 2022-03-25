@@ -15,7 +15,7 @@ use Diskerror\Typed\TypedClass;
  *
  * @package Structure\Config
  */
-class OAuth extends TypedClass
+class TwitterOAuth extends TypedClass
 {
 	protected $consumer_key    = [TString::class];
 	protected $consumer_secret = [TString::class];
