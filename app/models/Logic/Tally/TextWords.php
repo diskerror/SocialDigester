@@ -48,7 +48,7 @@ class TextWords implements TallyInterface
 		$totals    = new TallyWords();
 		foreach ($tallies as $tally) {
 			foreach ($tally->textWords as $k => $v) {
-				if ((strlen($k) > 2 && !$stopWords->contains(strtolower($k))) || $k === 'RT') {
+				if ((strlen($k) > 2 && !$stopWords->contains(strtolower($k)))) {
 					$totals->doTally($k, $v);
 				}
 			}
