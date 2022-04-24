@@ -7,6 +7,6 @@ return new CollectionDef([
 	'name'      => 'tallies',
 	'class'     => Tally::class,
 	'indexKeys' => [
-		['key' => ['created' => 1], 'expireAfterSeconds' => 1800],
+		['key' => ['created' => 1], 'expireAfterSeconds' => 600],
 	],
 ]);

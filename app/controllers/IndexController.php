@@ -20,6 +20,7 @@ class IndexController extends Controller
 //		$output = $cache->get('');
 //
 //		if ($output === null) {
+
 		$this->assets->addJs('js/clouds.js');
 		$this->view->setVar('track', require $this->config->configPath . '/SearchTerms.php');
 		$output = $this->view->render('index');

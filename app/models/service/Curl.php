@@ -1,13 +1,9 @@
 <?php
 /** @noinspection SpellCheckingInspection */
-/** @noinspection SpellCheckingInspection */
-/** @noinspection SpellCheckingInspection */
-/** @noinspection SpellCheckingInspection */
 
 namespace Service;
 
 use Service\Exception\RuntimeException;
-use const PHP_EOL;
 
 class Curl
 {
@@ -53,7 +49,7 @@ class Curl
 	{
 		if (isset($this->_curl)) {
 			$err_num = $this->errno();
-			return curl_strerror($err_num) . ' ' . $err_num . PHP_EOL;
+			return curl_strerror($err_num) . ' ' . $err_num;
 		}
 		return '';
 	}

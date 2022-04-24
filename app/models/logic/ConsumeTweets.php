@@ -22,12 +22,13 @@ use Service\ShmemMaster;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
+use function json_encode;
 
 final class ConsumeTweets
 {
 	//	512 meg memory limit
 	const MEMORY_LIMIT = 512 * 1024 * 1024;
-	const INSERT_COUNT = 64;    //	best values are powers of 2
+	const INSERT_COUNT = 256;    //	best values are powers of 2
 
 	private final function __construct() { }
 
@@ -43,13 +44,14 @@ final class ConsumeTweets
 
 		$pidHandler = new PidHandler($config->process);
 
-		$logger = new LoggerFactory($config->basePath . '/consume.log');
+		$logger   = new LoggerFactory($config->basePath . '/consume.log');
+		$messages = new LoggerFactory($config->basePath . '/messages.log');
 //		$logger = new LoggerFactory('php://stderr');
 
-		$twitter       = new TwitterV1($config->twitterOAuth);
-		$tweetsMongo   = CollectionFactory::tweets($config);
-		$talliesMongo  = CollectionFactory::tallies($config);
-		$messagesMongo = CollectionFactory::messages($config);
+		$twitter      = new TwitterV1($config->twitterOAuth);
+		$tweetsMongo  = CollectionFactory::tweets($config);
+		$talliesMongo = CollectionFactory::tallies($config);
+//		$messagesMongo = CollectionFactory::messages($config);
 		$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
 		$waitMem   = new ShmemMaster('w');    //	wait between saves
@@ -95,7 +97,7 @@ final class ConsumeTweets
 						 * a plain text message telling us to stop.
 						 */
 						$logger->emergency($packet);
-						$logger->warning($packet);
+//						$logger->warning($packet);
 						break 2;
 					}
 
@@ -104,11 +106,13 @@ final class ConsumeTweets
 					if ($twitter::isMessage($packet)) {
 						$packet['created'] = new UTCDateTime((microtime(true) * 1000));
 						try {
-							$messagesMongo->insertOne($packet);
+//							$messagesMongo->insertOne($packet);
+							unset($packet->_id);
+							$messages->info(json_encode($packet));
 						}
 						catch (Exception $e) {
 							$logger->emergency(
-								'Mongo insert into messages: ' . $e->getMessage() . PHP_EOL .
+								$e->getMessage() . PHP_EOL .
 								json_encode($packet, JSON_PRETTY_PRINT)
 							);
 						}

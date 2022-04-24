@@ -21,7 +21,7 @@
 		"ext-intl": "*",
 		"ext-json": "*",
 		"ext-mbstring": "*",
-		"ext-mongodb": "1.12.*",
+		"ext-mongodb": "1.*",
 		"ext-oauth": "*",
 		"ext-pcntl": "*",
 		"ext-shmop": "*",
