@@ -22,7 +22,7 @@ class Users implements TallyInterface
 
 	/**
 	 * @param Config $config
-	 * @param int $window
+	 * @param int    $window
 	 *
 	 * @return TallyWords
 	 */

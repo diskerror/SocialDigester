@@ -16,7 +16,7 @@ final class Snapshots
 	 *
 	 * @return int
 	 */
-	public static function make(Config $config) : int
+	public static function make(Config $config): int
 	{
 //		$snap = new Snapshot([
 //			'id_'      => time(),

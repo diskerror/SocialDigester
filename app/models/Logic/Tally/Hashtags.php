@@ -25,6 +25,7 @@ final class Hashtags implements TallyInterface
 	/**
 	 * @param Tweet $tweet
 	 * @param Tally $tally
+	 *
 	 * @return mixed|void
 	 */
 	public static function pre(Tweet $tweet, Tally $tally): void
@@ -47,7 +48,7 @@ final class Hashtags implements TallyInterface
 
 	/**
 	 * @param Config $config
-	 * @param int $window
+	 * @param int    $window
 	 *
 	 * @return TallyWords
 	 */

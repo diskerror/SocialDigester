@@ -3,6 +3,7 @@
 /** @noinspection ALL */
 /** @noinspection ALL */
 /** @noinspection ALL */
+
 /** @noinspection ALL */
 
 use Logic\ConsumeTweets;
