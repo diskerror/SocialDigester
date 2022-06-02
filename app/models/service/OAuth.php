@@ -42,7 +42,7 @@ class OAuth
 	/**
 	 * @param string $method
 	 * @param string $url
-	 * @param array $params
+	 * @param array  $params
 	 *
 	 * @return string
 	 */

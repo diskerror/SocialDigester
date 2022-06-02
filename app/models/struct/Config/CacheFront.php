@@ -9,7 +9,7 @@ use Diskerror\Typed\TypedClass;
 /**
  * Class CacheFront
  *
- * @property int $lifetime
+ * @property int    $lifetime
  * @property string $adapter
  */
 class CacheFront extends TypedClass

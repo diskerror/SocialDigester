@@ -3,8 +3,5 @@
 ._*
 composer.lock
 *.log
-
 /app/config/my_config.php
-
 .idea
-

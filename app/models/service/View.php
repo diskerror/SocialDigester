@@ -8,7 +8,7 @@ class View extends \Phalcon\Mvc\View
 	/**
 	 * @param string $first
 	 * @param string $second
-	 * @param array $params
+	 * @param array  $params
 	 *
 	 * @return void
 	 */

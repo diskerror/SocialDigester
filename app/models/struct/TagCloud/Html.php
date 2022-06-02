@@ -6,11 +6,11 @@ use Diskerror\TypedBSON\TypedClass;
 
 class Html extends TypedClass
 {
-	protected $url        = '';
+	protected $url = '';
 
-	protected $class      = '';
+	protected $class = '';
 
-	protected $title      = '';
+	protected $title = '';
 
 	protected $data_myvar = '';
 }

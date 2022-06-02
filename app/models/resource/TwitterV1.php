@@ -63,7 +63,8 @@ class TwitterV1
 	 *
 	 * @param string $requestMethod
 	 * @param string $function
-	 * @param array $params
+	 * @param array  $params
+	 *
 	 * @return mixed
 	 */
 	public function exec(string $requestMethod, string $function, array $params = [])
@@ -112,6 +113,7 @@ class TwitterV1
 	 * https://dev.twitter.com/streaming/overview
 	 *
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public function stream(array $params = []): void

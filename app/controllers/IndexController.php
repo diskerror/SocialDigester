@@ -129,7 +129,7 @@ class IndexController extends Controller
 
 	public function retweetsAction()
 	{
-		$totals = Logic\Tally\Retweets::get($this->config, 1800);
+		$totals = Logic\Tally\Retweets::get($this->config, 600);
 		$totals = UserNameGroup::normalize($totals);
 		$cloud  = WordCloud::build($totals);
 		Logic\Tally\UserMentions::changeLink($cloud);

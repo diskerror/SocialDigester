@@ -31,10 +31,10 @@ class TweetsTask extends TaskMaster
 	{
 		switch (pcntl_fork()) {
 			case -1:
-				throw new RuntimeException('could not fork');
+				throw new RuntimeException('could not fork (-1)');
 
 			case 0:
-				sleep(3);
+				sleep(1);
 				Logic\ConsumeTweets::exec($this->config);
 				break;
 
@@ -48,12 +48,19 @@ class TweetsTask extends TaskMaster
 	 */
 	public function checkRunningAction(): void
 	{
-		if (!ConsumeTweets::detectRunning()) {
+		try {
+			$rate = (new Shmem('r'))();
+		}
+		catch (Throwable $t) {
+			$rate = 0;
+		}
+
+		if (!ConsumeTweets::detectRunning() || $rate > 59) {
 			$this->stopAction();
 			$logger = new LoggerFactory($this->config->basePath . '/consume.log');
-//			$logger->info('Wait time at restart: ' . (new Shmem('w'))());
-//			$logger->info('Capture rate at restart: ' . (new Shmem('r'))());
-			sleep(3);
+			$logger->info('Wait time at restart: ' . (new Shmem('w'))());
+			$logger->info('Capture rate at restart: ' . (new Shmem('r'))());
+			sleep(5);
 			$this->startBgAction();
 		}
 	}

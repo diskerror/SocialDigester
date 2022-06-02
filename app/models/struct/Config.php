@@ -14,14 +14,14 @@ use Structure\Config\Process;
 /**
  * Class Config
  *
- * @property string $userConfigName
- * @property string $version
- * @property string $basePath
- * @property string $configPath
- * @property MongoDB $mongo_db
+ * @property string       $userConfigName
+ * @property string       $version
+ * @property string       $basePath
+ * @property string       $configPath
+ * @property MongoDB      $mongo_db
  * @property TwitterOAuth $twitterOAuth
- * @property Process $process
- * @property Caches $cache
+ * @property Process      $process
+ * @property Caches       $cache
  *
  */
 class Config extends TypedClass

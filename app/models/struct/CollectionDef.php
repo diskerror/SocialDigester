@@ -9,7 +9,7 @@ use Diskerror\Typed\TypedClass;
 /**
  * @property string $name
  * @property string $class
- * @property array $indexKeys
+ * @property array  $indexKeys
  */
 class CollectionDef extends TypedClass
 {

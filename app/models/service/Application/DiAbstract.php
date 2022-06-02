@@ -4,6 +4,7 @@ namespace Service\Application;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager;
+use Service\Cache;
 use Structure\Config;
 
 /**
@@ -19,11 +20,18 @@ abstract class DiAbstract
 	public string $basePath;
 
 	/**
+	 * @var Cache
+	 */
+	public Cache $cache;
+
+	/**
 	 * DiAbstract constructor.
 	 */
 	final public function __construct()
 	{
 		$this->basePath = realpath(__DIR__ . '/../../../..');
+
+		$this->cache = new Cache(require $this->basePath . '/app/config/cachePath.php', 'digester-');
 
 		$this->_init();
 	}
@@ -43,13 +51,25 @@ abstract class DiAbstract
 			static $config;
 
 			if (!isset($config)) {
-				$config = require $self->basePath . '/app/config/config.php';
+				$configDirPath    = $self->basePath . '/app/config';
+				$configFileName   = $configDirPath . '/config.php';
+				$myConfigFileName = $configDirPath . '/my_config.php';
+				$config           = $self->cache->config;
 
-				$config->basePath = $self->basePath;
+				if (
+					$config === null ||
+					filemtime($configFileName) > $self->cache->getModTime('config') ||
+					(file_exists($myConfigFileName) && filemtime($configFileName) > $self->cache->getModTime('config'))
+				) {
+					$config = require $configFileName;
 
-				$myConfigFile = $config->configPath . '/my_config.php';
-				if (file_exists($myConfigFile)) {
-					$config->replace(require $myConfigFile);
+					$config->basePath = $self->basePath;
+
+					if (file_exists($myConfigFileName)) {
+						$config->replace(require $myConfigFileName);
+					}
+
+					$self->cache->config = $config;
 				}
 			}
 

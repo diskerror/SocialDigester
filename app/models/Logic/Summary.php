@@ -7,9 +7,9 @@ use MongoDB\BSON\UTCDateTime;
 use PhpScience\TextRank\Tool\Graph;
 use PhpScience\TextRank\Tool\Parser;
 use PhpScience\TextRank\Tool\Score;
-use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\Summarize;
 use Resource\CollectionFactory;
+use Service\StopWords;
 use Structure\Config;
 
 final class Summary
@@ -20,8 +20,8 @@ final class Summary
 	 * Generate summary of tweet texts.
 	 *
 	 * @param Config $config
-	 * @param int $window
-	 * @param int $quantity
+	 * @param int    $window
+	 * @param int    $quantity
 	 *
 	 * @return array
 	 */
@@ -35,27 +35,24 @@ final class Summary
 			],
 			[
 				'sort'       => ['created_at' => -1],
-				'limit'      => 5000,
+				'limit'      => 600,
 				'projection' => ['text' => 1],
 			]
 		);
 
 		$text = '';
 		foreach ($tweets as $tweet) {
-			if (preg_match('/(^039|^rt)/i', $tweet->text)) {
-				$text .= substr($tweet->text, 3) . "\n";
-			}
-			else {
-				$text .= $tweet->text . "\n";
-			}
+			$text .= preg_replace('/^\\s*(@\w+: |^039 ?|^rt ?)(@\w+: |)/i', '',
+					trim($tweet->text, "\x00..\x20")) . PHP_EOL;
 		}
 
 		unset($tweets, $tweet);
 
 		$parser = new Parser();
-		$parser->setMinimumWordLength(4);
+		$parser->setMinimumWordLength(3);
 		$parser->setRawText($text);
-		$parser->setStopWords(new English());
+//        $parser->setStopWords(new English());
+		$parser->setStopWords(new StopWords($config->configPath));
 
 		$text = $parser->parse();
 
@@ -73,8 +70,8 @@ final class Summary
 			$graph,
 			$text,
 			12,    //	how many words to test
-			20,    //	size of array to return
-			Summarize::GET_ALL_IMPORTANT
+			12,    //	size of array to return
+			Summarize::GET_FIRST_IMPORTANT_AND_FOLLOWINGS
 		));
 
 		unset($graph, $scores);
@@ -83,9 +80,9 @@ final class Summary
 		$summaryCount = 0;
 		$outputArr    = [];
 		while (!$summaries->isEmpty()) {
-			//	remove leading "@user: " if any
-			$summary = preg_replace('/^@\w+: /', '', $summaries->pop());
-			$sub     = substr($summary, 0, 64);
+			$summary = $summaries->pop();
+
+			$sub = substr($summary, 0, 64);
 			if (in_array($sub, $subSummaries, true)) {
 				continue;
 			}

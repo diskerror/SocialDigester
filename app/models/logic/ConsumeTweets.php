@@ -2,7 +2,7 @@
 
 namespace Logic;
 
-use Diskerror\TypedBSON\DateTime;
+use Diskerror\TypedBSON\BsonOptions;
 use Ds\Vector;
 use Exception;
 use Logic\Tally\Hashtags;
@@ -22,7 +22,6 @@ use Service\ShmemMaster;
 use Structure\Config;
 use Structure\Tally;
 use Structure\Tweet;
-use function json_encode;
 
 final class ConsumeTweets
 {
@@ -42,27 +41,36 @@ final class ConsumeTweets
 		mb_internal_encoding('UTF-8');
 		ini_set('memory_limit', self::MEMORY_LIMIT);
 
-		$pidHandler = new PidHandler($config->process);
-
 		$logger   = new LoggerFactory($config->basePath . '/consume.log');
 		$messages = new LoggerFactory($config->basePath . '/messages.log');
 //		$logger = new LoggerFactory('php://stderr');
 
-		$twitter      = new TwitterV1($config->twitterOAuth);
-		$tweetsMongo  = CollectionFactory::tweets($config);
-		$talliesMongo = CollectionFactory::tallies($config);
-//		$messagesMongo = CollectionFactory::messages($config);
-		$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
-
-		$waitMem   = new ShmemMaster('w');    //	wait between saves
-		$rateMem   = new ShmemMaster('r');    //	rate which good tweets are received
-		$rateTime  = microtime(true);
-		$waitTotal = 0;
-
-		$tweets = new Vector();
-		$tweets->allocate(self::INSERT_COUNT);
-
 		try {
+			//	Set PID file to indicate whether we should keep running.
+			$pidHandler = new PidHandler($config->process);
+			if ($pidHandler->setFile() === false) {
+				$logger->warning('Process "' . $config->process->path . $config->process->name . '" is already running or not stopped properly.');
+				$pidHandler->removeIfExists();
+				sleep(5);
+				if ($pidHandler->setFile() === false) {
+					throw new Exception('Problem setting PID file.');
+				}
+			}
+
+			$twitter      = new TwitterV1($config->twitterOAuth);
+			$tweetsMongo  = CollectionFactory::tweets($config);
+			$talliesMongo = CollectionFactory::tallies($config);
+//			$messagesMongo = CollectionFactory::messages($config);
+			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
+
+			$waitMem   = new ShmemMaster('w');    //	wait between saves
+			$rateMem   = new ShmemMaster('r');    //	rate which good tweets are received
+			$rateTime  = microtime(true);
+			$waitTotal = 0;
+
+			$tweets = new Vector();
+			$tweets->allocate(self::INSERT_COUNT);
+
 			//	Send request to start a filtered stream.
 			$twitter->stream([
 				'track'          => implode(',', require $config->configPath . '/SearchTerms.php'),
@@ -70,19 +78,13 @@ final class ConsumeTweets
 				'stall_warnings' => true,
 			]);
 
-			//	Set PID file to indicate whether we should keep running.
-			if ($pidHandler->setFile() === false) {
-				$logger->error('Process "' . $config->process->path . '/' . $config->process->name . '" is already running or not stopped properly');
-				return;
-			}
-
 			//	Announce that we're running.
 			$logger->info('Started capturing tweets.');
 
 			while ($pidHandler->exists() && !$twitter->streamEOF()) {
 				$tweets->clear();
-				$tally          = new Tally();
-				$tally->created = new DateTime();    //	This should not be needed.
+				$tally = new Tally();
+				$tally->toBsonOptions->add(BsonOptions::CAST_ID_TO_OBJECTID);
 
 				$ic = 0;
 				while ($ic < self::INSERT_COUNT && $pidHandler->exists() && !$twitter->streamEOF()) {
@@ -96,25 +98,24 @@ final class ConsumeTweets
 						 * If we don't receive an object then this must be
 						 * a plain text message telling us to stop.
 						 */
-						$logger->emergency($packet);
-//						$logger->warning($packet);
-						break 2;
+						throw new Exception($packet);
 					}
 
 					//	Save Twitter messages.
 					//	Packet _id is time in ms.
 					if ($twitter::isMessage($packet)) {
-						$packet['created'] = new UTCDateTime((microtime(true) * 1000));
-						try {
-//							$messagesMongo->insertOne($packet);
-							unset($packet->_id);
-							$messages->info(json_encode($packet));
-						}
-						catch (Exception $e) {
-							$logger->emergency(
-								$e->getMessage() . PHP_EOL .
-								json_encode($packet, JSON_PRETTY_PRINT)
-							);
+						if (!array_key_exists('limit', $packet)) {
+							$packet['created'] = new UTCDateTime((microtime(true) * 1000));
+							try {
+//								$messagesMongo->insertOne($packet);
+								$messages->info(json_encode($packet));
+							}
+							catch (Exception $e) {
+								$logger->emergency(
+									$e->getMessage() . PHP_EOL .
+									json_encode($packet, JSON_PRETTY_PRINT)
+								);
+							}
 						}
 						continue;
 					}
@@ -150,19 +151,19 @@ final class ConsumeTweets
 					Retweets::pre($tweet, $tally);
 
 					//	Save tweet for full-text analysis.
-					$tweets->push($tweet->bsonSerialize());
+					$tweets->push($tweet);
 				}
 
 				try {
 					//	convert to Mongo compatible object and insert
 					$tweetsMongo->insertMany($tweets->toArray(), $insertOptions);
-					$talliesMongo->insertOne($tally->bsonSerialize(), $insertOptions);
+					$talliesMongo->insertOne($tally, $insertOptions);
 				}
 				catch (Exception $e) {
 					$m = $e->getMessage();
 
 					if (preg_match('/Authentication/i', $m)) {
-						$logger->emergency('Mongo ' . $m);
+						throw new Exception('Mongo ' . $m);
 					}
 					else {
 						//	ignore duplicates but log everything else
@@ -185,10 +186,9 @@ final class ConsumeTweets
 		catch (Exception $e) {
 			$logger->emergency((string) $e);
 		}
-		finally {
-			$pidHandler->removeIfExists();
-			$logger->info('Stopped capturing tweets.');
-		}
+
+		$pidHandler->removeIfExists();
+		$logger->info('Stopped capturing tweets.');
 	}
 
 	public static function detectRunning(): int

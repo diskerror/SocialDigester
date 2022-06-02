@@ -12,9 +12,9 @@ use Diskerror\Typed\TypedClass;
  *
  * @package Structure\Tweet
  *
- * @property $full_text string
+ * @property $full_text          string
  * @property $display_text_range array
- * @property $entities Entities
+ * @property $entities           Entities
  */
 class ExtendedTweet extends TypedClass
 {

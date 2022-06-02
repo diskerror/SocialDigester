@@ -15,7 +15,7 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"require": {
-		"php": "^7.4",
+		"php": "7.4.*",
 		"ext-phalcon": "^4.1",
 		"ext-curl": "*",
 		"ext-intl": "*",
@@ -26,21 +26,21 @@
 		"ext-pcntl": "*",
 		"ext-shmop": "*",
 		"diskerror/autoload": "dev-main",
-		"diskerror/typedbson": "dev-master",
-		"laminas/laminas-code": "4.4.*",
-		"laminas/laminas-json": "^3.3",
-		"laminas/laminas-server": "^2.10.0",
-		"laminas/laminas-stdlib": "^3.6",
-		"mongodb/mongodb": "^1.8",
-		"php-ds/php-ds": "^1.3",
-		"php-science/textrank": "^1.2"
+		"diskerror/typedbson": "dev-php73",
+		"laminas/laminas-code": "~4.4.3",
+		"laminas/laminas-json": "~3.3.0",
+		"laminas/laminas-server": "~2.10.0",
+		"laminas/laminas-stdlib": "~3.6.4",
+		"mongodb/mongodb": "~1.12.0",
+		"php-ds/php-ds": "~1.3.0",
+		"php-science/textrank": "~1.2.1"
 	},
 	"suggest": {
 		"ext-ds": "Extension for data structures rather than the PHP array implementation."
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"phalcon/ide-stubs": "^4.1"
+		"phalcon/ide-stubs": "~4.1.0"
 	},
 	"autoload": {
 		"classmap": ["app/tasks", "app/controllers"],

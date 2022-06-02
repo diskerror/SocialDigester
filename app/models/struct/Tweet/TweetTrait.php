@@ -9,32 +9,32 @@ use Diskerror\Typed\Scalar\TStringNormalize;
  *
  * @package Structure\Tweet
  *
- * @property Created $created_at
- * @property $contributors
- * @property Entities $entities
+ * @property Created          $created_at
+ * @property                  $contributors
+ * @property Entities         $entities
  * @property ExtendedEntities $extended_entities
- * @property int $favorite_count
- * @property string $filter_level
- * @property string $in_reply_to_screen_name
- * @property string $in_reply_to_status_id_str
- * @property string $in_reply_to_user_id_str
- * @property bool $is_quote_status
- * @property string $lang
- * @property Place $place
- * @property bool $possibly_sensitive
- * @property int $retweet_count
- * @property string $source
- * @property string $text
- * @property bool $truncated
- * @property User $user
+ * @property int              $favorite_count
+ * @property string           $filter_level
+ * @property string           $in_reply_to_screen_name
+ * @property string           $in_reply_to_status_id_str
+ * @property string           $in_reply_to_user_id_str
+ * @property bool             $is_quote_status
+ * @property string           $lang
+ * @property Place            $place
+ * @property bool             $possibly_sensitive
+ * @property int              $retweet_count
+ * @property string           $source
+ * @property string           $text
+ * @property bool             $truncated
+ * @property User             $user
  */
 trait TweetTrait
 {
-	protected $created_at                = [Created::class];
+	protected $created_at = [Created::class];
 
 //	protected $contributors              = null;
 
-	protected $entities                  = [Entities::class];
+	protected $entities = [Entities::class];
 
 //	protected $extended_entities         = [ExtendedEntities::class];
 
@@ -50,7 +50,7 @@ trait TweetTrait
 
 //	protected $is_quote_status           = false;
 
-	protected $lang                      = 'en';
+	protected $lang = 'en';
 
 //	protected $place                     = [Place::class];
 
@@ -60,7 +60,7 @@ trait TweetTrait
 
 //	protected $source                    = '';
 
-	protected $text                      = [TStringNormalize::class];
+	protected $text = [TStringNormalize::class];
 
 //	protected $truncated                 = false;
 

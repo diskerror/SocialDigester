@@ -7,11 +7,11 @@ use Diskerror\TypedBSON\TypedClass;
 
 /**
  * @property string $text
- * @property array $indices
+ * @property array  $indices
  */
 class Hashtag extends TypedClass
 {
-	protected $text    = [TStringNormalize::class];
+	protected $text = [TStringNormalize::class];
 
 //	protected $indices = [TypedArray::class, 'int'];
 }

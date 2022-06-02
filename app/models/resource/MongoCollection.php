@@ -55,7 +55,7 @@ class MongoCollection
 	/**
 	 * MongoCollection constructor.
 	 *
-	 * @param MongoDB $config
+	 * @param MongoDB       $config
 	 * @param CollectionDef $collDefs
 	 */
 	public function __construct(MongoDB $config, CollectionDef $collDefs)

@@ -20,8 +20,8 @@ class Shmem
 	/**
 	 * @param string $id
 	 * @param string $mode
-	 * @param int $permissions
-	 * @param int $size
+	 * @param int    $permissions
+	 * @param int    $size
 	 */
 	public function __construct(string $id, string $mode = 'a', int $permissions = 0666, int $size = 0)
 	{
@@ -55,6 +55,7 @@ class Shmem
 	/**
 	 * @param int $offset
 	 * @param int $size
+	 *
 	 * @return string
 	 */
 	public function read(int $offset = 0, int $size = 0): string
@@ -83,7 +84,8 @@ class Shmem
 
 	/**
 	 * @param string $data
-	 * @param int $offset
+	 * @param int    $offset
+	 *
 	 * @return void
 	 */
 	public function write(string $data, int $offset = 0): void

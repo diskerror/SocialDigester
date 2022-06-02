@@ -12,7 +12,7 @@ use Structure\Tweet\TweetTrait;
  *
  * @package Structure
  *
- * @property Retweet $retweeted_status
+ * @property Retweet       $retweeted_status
  * @property ExtendedTweet $extended_tweet
  */
 class Tweet extends TypedClass

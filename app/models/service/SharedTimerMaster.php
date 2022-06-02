@@ -7,8 +7,8 @@ class SharedTimerMaster extends SharedTimer
 	/**
 	 * @param string $id
 	 * @param string $mode
-	 * @param int $permissions
-	 * @param int $size
+	 * @param int    $permissions
+	 * @param int    $size
 	 */
 	public function __construct(string $id, string $mode = 'c', int $permissions = 0666, int $size = 1024)
 	{

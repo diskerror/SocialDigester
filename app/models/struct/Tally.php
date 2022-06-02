@@ -11,7 +11,7 @@ use Diskerror\TypedBSON\TypedClass;
  *
  * @package Structure
  *
- * @property DateTime $created
+ * @property DateTime   $created
  * @property TallyWords $uniqueHashtags
  * @property TallyWords $allHashtags
  * @property TallyWords $textWords
@@ -21,10 +21,7 @@ use Diskerror\TypedBSON\TypedClass;
  */
 class Tally extends TypedClass
 {
-	protected $_jsonOptionDefaults =
-		ArrayOptions::OMIT_EMPTY | ArrayOptions::OMIT_RESOURCE | ArrayOptions::KEEP_JSON_EXPR;
-
-	protected $created = [DateTime::class];
+	protected $created = [DateTime::class, 'now'];
 
 	protected $uniqueHashtags = [TallyWords::class];
 

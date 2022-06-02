@@ -12,11 +12,11 @@ use Structure\TagCloud\Word;
  *
  * @package Structure
  *
- * @property $_id
+ * @property          $_id
  * @property DateTime $created
- * @property array $track
- * @property array $tagCloud
- * @property array $summary
+ * @property array    $track
+ * @property array    $tagCloud
+ * @property array    $summary
  */
 class Snapshot extends TypedClass
 {

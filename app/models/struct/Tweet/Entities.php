@@ -8,15 +8,15 @@ use Structure\Tweet\Entities\Urls;
 use Structure\Tweet\Entities\UserMentions;
 
 /**
- * @property Hashtags $hashtags
- * @property Urls $urls
+ * @property Hashtags     $hashtags
+ * @property Urls         $urls
  * @property UserMentions $user_mentions
- * @property $symbols
- * @property $polls
+ * @property              $symbols
+ * @property              $polls
  */
 class Entities extends TypedClass
 {
-	protected $hashtags      = [Hashtags::class];
+	protected $hashtags = [Hashtags::class];
 
 //	protected $urls          = [Urls::class];
 

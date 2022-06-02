@@ -84,7 +84,7 @@
 		</svg>
 	</article>
 	<article id='retweets'>
-		<p>Total count of users who are retweeted over 30 minutes.</p>
+		<p>Total count of users who are retweeted over 10 minutes.</p>
 		<svg viewBox='0 0 30 30' class='bg'>
 			<use xlink:href='#consumer'></use>
 		</svg>
@@ -115,11 +115,13 @@
 			Consumes Twitter tweets,<br>does some counting,<br>and displays a summary.
 		</div>
 	</div>
-	<?php if (isset($created)): ?>
+	<?php
+	if (isset($created)): ?>
 		<div style="text-align:center;margin:auto;width:420px;height:50px">
 			<p>Snapshot taken on <?= $created ?></p>
 		</div>
-	<?php endif; ?>
+	<?php
+	endif; ?>
 </footer>
 
 </body>

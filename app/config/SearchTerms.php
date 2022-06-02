@@ -1,5 +1,6 @@
 <?php
 /** @noinspection ALL */
+
 /** @noinspection ALL */
 
 namespace Config;
@@ -21,6 +22,7 @@ return [
 	'government',
 	'justice',
 	'libertarian',
+	'musk',
 	'nato',
 	'potus',
 	'presidency',

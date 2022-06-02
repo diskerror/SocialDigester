@@ -17,7 +17,7 @@ class TallyWords extends TypedArray
 	 * Add word to array.
 	 *
 	 * @param string $word
-	 * @param float $q
+	 * @param float  $q
 	 */
 	public function doTally(string $word, float $q = 1): void
 	{
