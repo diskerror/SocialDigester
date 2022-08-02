@@ -11,7 +11,7 @@ use Diskerror\Typed\TypedClass;
  * @property string $class
  * @property array  $indexKeys
  */
-class CollectionDef extends TypedClass
+class CollectionDefinition extends TypedClass
 {
 	protected $name      = [TString::class];
 	protected $class     = [TString::class];

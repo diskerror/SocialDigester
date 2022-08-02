@@ -5,7 +5,7 @@ namespace Logic\Tally;
 use Logic\TallyInterface;
 use LogicException;
 use MongoDB\BSON\UTCDateTime;
-use Resource\CollectionFactory;
+use Resource\MongoCollection;
 use Structure\Config;
 use Structure\Tally;
 use Structure\TallyWords;
@@ -28,7 +28,7 @@ final class HashtagsAll implements TallyInterface
 	 */
 	public static function get(Config $config, int $window): TallyWords
 	{
-		$tallies = CollectionFactory::tallies($config)->find(
+		$tallies = (new MongoCollection($config, 'tallies'))->find(
 			[
 				'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
 			],

@@ -2,7 +2,7 @@
 
 use Logic\ConsumeTweets;
 use MongoDB\BSON\UTCDateTime;
-use Resource\CollectionFactory;
+use Resource\MongoCollection;
 use Service\Shmem;
 use Service\StdIo;
 
@@ -13,7 +13,7 @@ class AdminTask extends TaskMaster
 	 */
 	public function rateAction()
 	{
-		StdIo::outf('%.2f tweets per second' . PHP_EOL, (new Shmem('r'))());
+		StdIo::outf('%.2f (%.2f) tweets per second' . PHP_EOL, (new Shmem('r'))(), (new Shmem('i'))());
 	}
 
 	/**
@@ -37,10 +37,10 @@ class AdminTask extends TaskMaster
 	 */
 	public function indexDbAction()
 	{
-		CollectionFactory::tweets($this->config)->doIndex();
-		CollectionFactory::tallies($this->config)->doIndex();
-		CollectionFactory::snapshots($this->config)->doIndex();
-		CollectionFactory::messages($this->config)->doIndex();
+		(new MongoCollection($this->config, 'tweets'))->doIndex();
+		(new MongoCollection($this->config, 'tallies'))->doIndex();
+		(new MongoCollection($this->config, 'snapshots'))->doIndex();
+		(new MongoCollection($this->config, 'messages'))->doIndex();
 	}
 
 	/**
@@ -48,8 +48,8 @@ class AdminTask extends TaskMaster
 	 */
 	public function clearTweetsAction()
 	{
-		CollectionFactory::tweets($this->config)->drop();
-		CollectionFactory::tallies($this->config)->drop();
+		(new MongoCollection($this->config, 'tweets'))->drop();
+		(new MongoCollection($this->config, 'tallies'))->drop();
 	}
 
 	/**
@@ -73,7 +73,7 @@ class AdminTask extends TaskMaster
 	public function messagesAction()
 	{
 		StdIo::jsonOut(
-			CollectionFactory::messages($this->config)->find([
+			(new MongoCollection($this->config, 'messages'))->find([
 				'created' => ['$gt' => new UTCDateTime((time() - 3600) * 1000)],
 			])
 		);

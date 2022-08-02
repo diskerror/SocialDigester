@@ -56,12 +56,10 @@ class TweetsTask extends TaskMaster
 			$rate = 0;
 		}
 
-		if (!ConsumeTweets::detectRunning() || $rate > 59) {
+		if (!ConsumeTweets::detectRunning() || $rate > 80) {
 			$this->stopAction();
 			$logger = new LoggerFactory($this->config->basePath . '/consume.log');
-			$logger->info('Wait time at restart: ' . (new Shmem('w'))());
-			$logger->info('Capture rate at restart: ' . (new Shmem('r'))());
-			sleep(5);
+			sleep(4);
 			$this->startBgAction();
 		}
 	}

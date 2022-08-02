@@ -56,10 +56,10 @@ class TextGroup
 				return strtolower($s);
 
 			case 'metaphone':
-				return metaphone($s);
+				return strlen($s) > 3 ? metaphone($s) : strtolower($s);
 
 			case 'soundex':
-				return soundex($s);
+				return strlen($s) > 3 ? soundex($s) : strtolower($s);
 
 			case 'stem':
 				return stem($s)[0];

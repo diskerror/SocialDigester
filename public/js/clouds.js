@@ -23,23 +23,10 @@ $(function() {
 		],
 		cloudOptions);
 
-	setTimeout(getHashtags, 400);
+	setTimeout(getHashtags, 100);
+
 	function getHashtags() {
 		setTimeout(getHashtags, 3400);	//	milliseconds between cloud updates
-
-		// (function(i, s, o, g, r, a, m) {
-		// 	i['GoogleAnalyticsObject'] = r;
-		// 	i[r] = i[r] || function() {
-		// 		(i[r].q = i[r].q || []).push(arguments)
-		// 	}, i[r].l = 1 * new Date();
-		// 	a = s.createElement(o);
-		// 	m = s.getElementsByTagName(o)[0];
-		// 	a.async = 1;
-		// 	a.src = g;
-		// 	m.parentNode.insertBefore(a, m)
-		// })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-		// ga('create', 'UA-76466106-1', 'auto');
-		// ga('send', 'pageview');
 
 		$.ajax({
 			url: '/index/tagCloud',
@@ -60,9 +47,10 @@ $(function() {
 	}
 
 
-	setTimeout(getAllHashtags, 500);
+	setTimeout(getAllHashtags, 200);
+
 	function getAllHashtags() {
-		setTimeout(getAllHashtags, 3500);	//	milliseconds between cloud updates
+		setTimeout(getAllHashtags, 3600);	//	milliseconds between cloud updates
 
 		$.ajax({
 			url: '/index/tagCloudAll',
@@ -83,7 +71,8 @@ $(function() {
 	}
 
 
-	setTimeout(getTextWords, 600);
+	setTimeout(getTextWords, 400);
+
 	function getTextWords() {
 		setTimeout(getTextWords, 2300);	//	milliseconds between cloud updates
 		$.ajax({
@@ -106,6 +95,7 @@ $(function() {
 
 
 	setTimeout(getUserMentions, 100);
+
 	function getUserMentions() {
 		setTimeout(getUserMentions, 4300);	//	milliseconds between cloud updates
 
@@ -128,10 +118,10 @@ $(function() {
 	}
 
 
-	setTimeout(getRetweets, 200);
+	setTimeout(getRetweets, 500);
 
 	function getRetweets() {
-		setTimeout(getRetweets, 8300);	//	milliseconds between cloud updates
+		setTimeout(getRetweets, 5300);	//	milliseconds between cloud updates
 
 		$.ajax({
 			url: '/index/retweets',
@@ -153,10 +143,10 @@ $(function() {
 	}
 
 
-	setTimeout(getUsers, 3100);
+	setTimeout(getUsers, 90);
 
 	function getUsers() {
-		setTimeout(getUsers, 9400);	//	milliseconds between cloud updates
+		setTimeout(getUsers, 9800);	//	milliseconds between cloud updates
 
 		$.ajax({
 			url: '/index/users',
@@ -177,7 +167,7 @@ $(function() {
 	}
 
 
-	setTimeout(getSummary, 900);
+	getSummary();
 
 	function getSummary() {
 		setTimeout(getSummary, 14000);

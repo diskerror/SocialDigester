@@ -29,7 +29,7 @@ class TallyWords extends TypedArray
 	 *
 	 * @param array $in
 	 */
-	public function countArrayValues(array $in): void
+	public function countValues(array $in): void
 	{
 		$counted = array_count_values($in);
 		array_walk($counted, [$this, '_doTally']);

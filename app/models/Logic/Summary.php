@@ -8,7 +8,7 @@ use PhpScience\TextRank\Tool\Graph;
 use PhpScience\TextRank\Tool\Parser;
 use PhpScience\TextRank\Tool\Score;
 use PhpScience\TextRank\Tool\Summarize;
-use Resource\CollectionFactory;
+use Resource\MongoCollection;
 use Service\StopWords;
 use Structure\Config;
 
@@ -29,7 +29,7 @@ final class Summary
 	{
 		ini_set('memory_limit', 256 * 1024 * 1024);
 
-		$tweets = CollectionFactory::tweets($config)->find(
+		$tweets = (new MongoCollection($config, 'tweets'))->find(
 			[
 				'created_at' => ['$gt' => new UTCDateTime((time() - $window) * 1000)],
 			],

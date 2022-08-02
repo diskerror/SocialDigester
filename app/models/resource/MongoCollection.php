@@ -3,12 +3,11 @@
 namespace Resource;
 
 use Diskerror\TypedBSON\TypedArray;
-use LogicException;
+use Exception;
 use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Database;
-use Structure\CollectionDef;
-use Structure\Config\MongoDB;
+use Structure\Config;
 
 /**
  * Class MongoCollection
@@ -43,26 +42,21 @@ class MongoCollection
 	 *
 	 * @var array
 	 */
-	protected array $_indexKeys = [];
-
-	/**
-	 * An array of index options to be applied to all indexes.
-	 *
-	 * @var array
-	 */
-	protected array $_indexOptions = [];
+	protected array $_indexKeys;
 
 	/**
 	 * MongoCollection constructor.
 	 *
-	 * @param MongoDB       $config
-	 * @param CollectionDef $collDefs
+	 * @param Config $config
+	 * @param string $collection
 	 */
-	public function __construct(MongoDB $config, CollectionDef $collDefs)
+	public function __construct(Config $config, string $collection)
 	{
 		if (!isset(self::$_thisDb)) {
-			self::$_thisDb = (new Client($config->host))->selectDatabase($config->database);
+			self::$_thisDb = (new Client($config->mongo_db->host))->selectDatabase($config->mongo_db->database);
 		}
+
+		$collDefs = require $config->configPath . '/' . ucwords(strtolower($collection)) . 'Collection.php';
 
 		$this->_collectionName = $collDefs->name;
 		$this->_class          = $collDefs->class;
@@ -77,9 +71,15 @@ class MongoCollection
 	 */
 	public function doIndex(): void
 	{
-		$this->_collection->insertOne([]);    //	Creates collection if it doesn't exist.
-		$this->_collection->dropIndexes();    //	Start clean if collection existed.
-		$this->_collection->deleteMany([]);
+		try {
+			$this->_collection->dropIndexes();
+		}
+		catch (Exception $e) {
+			//	Collection probably didn't exist.
+			//	This will create the collection.
+			$this->_collection->insertOne([]);
+			$this->_collection->drop();
+		}
 		$this->_collection->createIndexes($this->_indexKeys);
 	}
 

@@ -1,9 +1,9 @@
 <?php
 
-use Structure\CollectionDef;
+use Structure\CollectionDefinition;
 use Structure\Snapshot;
 
-return new CollectionDef([
+return new CollectionDefinition([
 	'name'      => 'snapshots',
 	'class'     => Snapshot::class,
 	'indexKeys' => [

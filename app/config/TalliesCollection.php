@@ -1,9 +1,9 @@
 <?php
 
-use Structure\CollectionDef;
+use Structure\CollectionDefinition;
 use Structure\Tally;
 
-return new CollectionDef([
+return new CollectionDefinition([
 	'name'      => 'tallies',
 	'class'     => Tally::class,
 	'indexKeys' => [

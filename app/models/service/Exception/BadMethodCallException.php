@@ -2,9 +2,7 @@
 
 namespace Service\Exception;
 
-use BadMethodCallException as BMCE;
-
-class BadMethodCallException extends BMCE
+class BadMethodCallException extends \BadMethodCallException
 {
 
 }

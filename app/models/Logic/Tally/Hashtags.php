@@ -6,7 +6,7 @@ namespace Logic\Tally;
 use Ds\Set;
 use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
-use Resource\CollectionFactory;
+use Resource\MongoCollection;
 use Structure\Config;
 use Structure\Tally;
 use Structure\TallyWords;
@@ -43,7 +43,7 @@ final class Hashtags implements TallyInterface
 		}
 
 		//	Count unique hashtags for this tweet.
-		$tally->uniqueHashtags->countArrayValues($uniqueHashtags->toArray());
+		$tally->uniqueHashtags->countValues($uniqueHashtags->toArray());
 	}
 
 	/**
@@ -54,7 +54,7 @@ final class Hashtags implements TallyInterface
 	 */
 	public static function get(Config $config, int $window): TallyWords
 	{
-		$tallies = CollectionFactory::tallies($config)->find(
+		$tallies = (new MongoCollection($config, 'tallies'))->find(
 			[
 				'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
 			],

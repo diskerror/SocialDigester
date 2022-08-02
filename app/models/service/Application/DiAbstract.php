@@ -26,10 +26,12 @@ abstract class DiAbstract
 
 	/**
 	 * DiAbstract constructor.
+	 *
+	 * @param string $basePath
 	 */
-	final public function __construct()
+	final public function __construct(string $basePath)
 	{
-		$this->basePath = realpath(__DIR__ . '/../../../..');
+		$this->basePath = realpath($basePath);
 
 		$this->cache = new Cache(require $this->basePath . '/app/config/cachePath.php', 'digester-');
 

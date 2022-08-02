@@ -12,8 +12,8 @@ use Logic\Tally\UserMentions;
 use Logic\Tally\Users;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\WriteConcern;
-use Resource\CollectionFactory;
 use Resource\LoggerFactory;
+use Resource\MongoCollection;
 use Resource\PidHandler;
 use Resource\TwitterV1;
 use Service\Exception\ShmemOpenException;
@@ -26,8 +26,8 @@ use Structure\Tweet;
 final class ConsumeTweets
 {
 	//	512 meg memory limit
-	const MEMORY_LIMIT = 512 * 1024 * 1024;
-	const INSERT_COUNT = 256;    //	best values are powers of 2
+	const MEMORY_LIMIT = 256 * 1024 * 1024;
+	const INSERT_COUNT = 32;    //	best values are powers of 2
 
 	private final function __construct() { }
 
@@ -41,8 +41,7 @@ final class ConsumeTweets
 		mb_internal_encoding('UTF-8');
 		ini_set('memory_limit', self::MEMORY_LIMIT);
 
-		$logger   = new LoggerFactory($config->basePath . '/consume.log');
-		$messages = new LoggerFactory($config->basePath . '/messages.log');
+		$logger = new LoggerFactory($config->basePath . '/consume.log');
 //		$logger = new LoggerFactory('php://stderr');
 
 		try {
@@ -51,20 +50,21 @@ final class ConsumeTweets
 			if ($pidHandler->setFile() === false) {
 				$logger->warning('Process "' . $config->process->path . $config->process->name . '" is already running or not stopped properly.');
 				$pidHandler->removeIfExists();
-				sleep(5);
+				sleep(1);
 				if ($pidHandler->setFile() === false) {
 					throw new Exception('Problem setting PID file.');
 				}
 			}
 
 			$twitter      = new TwitterV1($config->twitterOAuth);
-			$tweetsMongo  = CollectionFactory::tweets($config);
-			$talliesMongo = CollectionFactory::tallies($config);
-//			$messagesMongo = CollectionFactory::messages($config);
+			$tweetsMongo  = new MongoCollection($config, 'tweets');
+			$talliesMongo = new MongoCollection($config, 'tallies');
+//			$messagesMongo = new MongoCollection($config, 'messages');
 			$insertOptions = ['writeConcern' => new WriteConcern(0, 100, false)];
 
 			$waitMem   = new ShmemMaster('w');    //	wait between saves
-			$rateMem   = new ShmemMaster('r');    //	rate which good tweets are received
+			$rateMem   = new ShmemMaster('r');    //	average rate which good tweets are received
+			$rateIMem  = new ShmemMaster('i');    //	instantainious rate
 			$rateTime  = microtime(true);
 			$waitTotal = 0;
 
@@ -93,29 +93,32 @@ final class ConsumeTweets
 					//	returns an associative array
 					$packet = $twitter->getPacket();
 
-					if (is_scalar($packet)) {
+					if ($packet === '') {
+						continue;
+					}
+
+					if (is_scalar($packet) or null === $packet) {
 						/**
-						 * If we don't receive an object then this must be
+						 * If we don't receive an object then this is likely
 						 * a plain text message telling us to stop.
 						 */
-						throw new Exception($packet);
+						throw new Exception(json_encode($packet, JSON_PRETTY_PRINT));
 					}
 
 					//	Save Twitter messages.
 					//	Packet _id is time in ms.
 					if ($twitter::isMessage($packet)) {
-						if (!array_key_exists('limit', $packet)) {
-							$packet['created'] = new UTCDateTime((microtime(true) * 1000));
-							try {
-//								$messagesMongo->insertOne($packet);
-								$messages->info(json_encode($packet));
-							}
-							catch (Exception $e) {
-								$logger->emergency(
-									$e->getMessage() . PHP_EOL .
-									json_encode($packet, JSON_PRETTY_PRINT)
-								);
-							}
+						$packet['created'] = new UTCDateTime();
+
+						try {
+//							$messagesMongo->insertOne($packet);
+							$logger->info(json_encode($packet));
+						}
+						catch (Exception $e) {
+							$logger->emergency(
+								$e->getMessage() . PHP_EOL .
+								json_encode($packet, JSON_PRETTY_PRINT)
+							);
 						}
 						continue;
 					}
@@ -174,8 +177,10 @@ final class ConsumeTweets
 					exit;
 				}
 
-				$now = microtime(true);
-				$rateMem->write(self::INSERT_COUNT / ($now - $rateTime));
+				$now         = microtime(true);
+				$currentRate = self::INSERT_COUNT / ($now - $rateTime);
+				$rateIMem->write($currentRate);
+				$rateMem->write((0.8 * (float) $rateMem->read()) + (0.2 * $currentRate));
 				$rateTime = $now;
 
 				//	average wait to read pack per inner loop

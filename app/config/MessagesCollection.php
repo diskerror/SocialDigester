@@ -1,8 +1,8 @@
 <?php
 
-use Structure\CollectionDef;
+use Structure\CollectionDefinition;
 
-return new CollectionDef([
+return new CollectionDefinition([
 	'name'      => 'messages',
 	'class'     => '',
 	'indexKeys' => [

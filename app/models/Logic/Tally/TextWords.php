@@ -4,7 +4,7 @@ namespace Logic\Tally;
 
 use Logic\TallyInterface;
 use MongoDB\BSON\UTCDateTime;
-use Resource\CollectionFactory;
+use Resource\MongoCollection;
 use Structure\Config;
 use Structure\Tally;
 use Structure\TallyWords;
@@ -24,7 +24,7 @@ class TextWords implements TallyInterface
 //				$words[] = $s;
 //			}
 //		}
-		$tally->textWords->countArrayValues($split);
+		$tally->textWords->countValues($split);
 	}
 
 	/**
@@ -35,7 +35,7 @@ class TextWords implements TallyInterface
 	 */
 	public static function get(Config $config, int $window): TallyWords
 	{
-		$tallies = CollectionFactory::tallies($config)->find(
+		$tallies = (new MongoCollection($config, 'tallies'))->find(
 			[
 				'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
 			],

@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 try {
 	require 'vendor/diskerror/autoload/autoload.php';
 
-	$cli = new Service\Application\Cli();
+	$cli = new Service\Application\Cli(__DIR__);
 	$cli->run($argv);
 }
 catch (Phalcon\Cli\Dispatcher\Exception $e) {
