@@ -59,13 +59,13 @@
 
 
 <section id="clouds">
-	<article id="cloud1">
+	<article id="hashtags">
 		<p>Count of hashtags for the last minute<br>counted once per tweet.</p>
 		<svg viewBox="0 0 30 30" class="bg">
 			<use xlink:href="#consumer"></use>
 		</svg>
 	</article>
-	<article id="cloud2">
+	<article id="all_hashtags">
 		<p>Average count of all hashtags per minute<br>for the last 3 minutes.</p>
 		<svg viewBox="0 0 30 30" class="bg">
 			<use xlink:href="#consumer"></use>
@@ -99,7 +99,7 @@
 
 
 <aside class="summary">
-	<div id="text1" style="width:100%;">
+	<div id="summaries" style="width:100%;">
 		<?= isset($summary) ? '<p>' . implode("</p><p>", $summary) . '</p>' : '' ?>
 	</div>
 </aside>

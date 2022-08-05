@@ -5,7 +5,7 @@ $(function() {
 		delay: 0
 	};
 
-	$('#cloud1').jQCloud(
+	$('#hashtags').jQCloud(
 		[
 			{text: 'Politicator.com', weight: 10},
 			{text: 'What ARE they saying?', weight: 5},
@@ -14,7 +14,7 @@ $(function() {
 		],
 		cloudOptions);
 
-	$('#cloud2').jQCloud(
+	$('#all_hashtags').jQCloud(
 		[
 			{text: 'Politicator.com', weight: 10},
 			{text: 'SAY WHAT?', weight: 5},
@@ -33,9 +33,9 @@ $(function() {
 			dataType: 'json',
 			success: function(data) {
 				if (data.length !== 0) {
-					$('#cloud1').jQCloud('update', data);
+					$('#hashtags').jQCloud('update', data);
 				} else {
-					$('#cloud1').jQCloud('update', [
+					$('#hashtags').jQCloud('update', [
 						{text: 'I’m sleeping...', weight: 10},
 						{text: ' « snore » ', weight: 6},
 						{text: ' ', weight: 1}
@@ -57,9 +57,9 @@ $(function() {
 			dataType: 'json',
 			success: function(data) {
 				if (data.length !== 0) {
-					$('#cloud2').jQCloud('update', data);
+					$('#all_hashtags').jQCloud('update', data);
 				} else {
-					$('#cloud2').jQCloud('update', [
+					$('#all_hashtags').jQCloud('update', [
 						{text: 'I’m sleeping...', weight: 10},
 						{text: ' « snore » ', weight: 6},
 						{text: ' ', weight: 1}
@@ -176,7 +176,7 @@ $(function() {
 			url: '/index/summary',
 			dataType: 'json',
 			success: function(data) {
-				$('#text1').html('<p>' + data.join('</p><p>') + '</p>');
+				$('#summaries').html('<p>' + data.join('</p><p>') + '</p>');
 			}
 		});
 	}
