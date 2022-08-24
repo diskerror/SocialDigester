@@ -28,6 +28,8 @@ class Users implements TallyInterface
 	 */
 	public static function get(Config $config, int $window): TallyWords
 	{
+		ini_set('memory_limit', '1G');
+
 		$tallies = (new MongoCollection($config, 'tallies'))->find(
 			[
 				'created' => ['$gte' => new UTCDateTime((time() - $window) * 1000)],
