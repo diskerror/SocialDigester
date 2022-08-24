@@ -79,13 +79,13 @@ class GetTask extends TaskMaster
 
 	public function usersAction()
 	{
-		$totals = Logic\Tally\Users::get($this->config->mongo_db, 600);
+		$totals = Logic\Tally\Users::get($this->config, 600);
 		StdIo::phpOut(array_slice(UserNameGroup::normalize($totals), 0, 10));
 	}
 
 	public function retweetsAction()
 	{
-		$totals = Logic\Tally\Retweets::get($this->config->mongo_db, 600);
+		$totals = Logic\Tally\Retweets::get($this->config, 600);
 		StdIo::phpOut(array_slice(UserNameGroup::normalize($totals), 0, 10));
 	}
 
