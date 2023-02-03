@@ -55,7 +55,7 @@ class StdIo
 	 * Four things are changed:
 	 * 1) Objects are changed to an array;
 	 * 2) Usage of array() is changed to [];
-	 * 3) Indexes numbers are removed from indexed arrays that are contiguous and start at zero;
+	 * 3) Index numbers are removed from indexed arrays with contiguous numbering and start at zero;
 	 * 4) Change the formatting from 2 to 4 spaces per tab.
 	 *
 	 * (For best results we should build our own "var_export" from scratch.)
